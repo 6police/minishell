@@ -6,7 +6,7 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 18:01:28 by joamiran          #+#    #+#             */
-/*   Updated: 2025/01/15 19:28:12 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/01/15 21:11:34 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,6 @@ typedef struct env_var
 	char *key;                  // environment variable
 	char *value;                // value of the environment variable
 	bool exported; 				// if only 'a' goes to export only, if a= goes to env aswell
-
 	struct env_var *next;       // next environment variable
 	struct env_var *prev;       // previous environment variable
 }				t_env_var;
@@ -203,7 +202,7 @@ void    print_env(t_env *env);              // function to print the environment
 void execute_command(t_cmd *cmd, t_shell *shell);    // function to execute the command
 
 // builtins
-void	cd_shell(t_cmd *cmd, t_env *env);   // function to change the directory
+void	cd_shell(char *cmd, t_env *env);   // function to change the directory
 void	echo_shell(t_cmd *cmd);             // function to print the arguments
 void	pwd_shell(void);                    // function to print the current directory
 void	export_shell(t_cmd *cmd, t_env *env); // function to export an environment variable
