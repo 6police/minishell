@@ -6,7 +6,7 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 18:01:28 by joamiran          #+#    #+#             */
-/*   Updated: 2025/01/15 19:28:12 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/01/15 20:46:17 by joamiran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,8 +206,13 @@ void execute_command(t_cmd *cmd, t_shell *shell);    // function to execute the 
 void	cd_shell(t_cmd *cmd, t_env *env);   // function to change the directory
 void	echo_shell(t_cmd *cmd);             // function to print the arguments
 void	pwd_shell(void);                    // function to print the current directory
-void	export_shell(t_cmd *cmd, t_env *env); // function to export an environment variable
 void	exit_shell(t_shell *shell);         // function to exit the shell
+
+void export_var(char *var, t_env *env);  // function to export an environment variable
+void export_no_args(t_env *env);         // function to export all environment variables
+void export_bi(char *value, t_shell *shell); // function to export the environment variables
+
+
 // unset
 t_env_var	*find_env_var(t_env *env, char *key);       // function to find an environment variable
 void		remove_env_var(t_env *env, char *key);          // function to remove an environment variable

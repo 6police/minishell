@@ -6,7 +6,7 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 18:07:52 by joamiran          #+#    #+#             */
-/*   Updated: 2025/01/15 20:06:15 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/01/15 20:45:15 by joamiran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,12 @@ void	parse_tokens(t_shell *shell) // this function is not complete
         ft_printf("Token %d: %s\n", i, shell->tokens[i]);
 		if (ft_strcmp(shell->tokens[i], "env") == 0)
 			print_env(shell->env);
+        if (ft_strcmp(shell->tokens[i], "exit") == 0)
+            exit(0);
+        if (ft_strcmp(shell->tokens[i], "export") == 0)
+            export_bi(shell->tokens[i + 1], shell);
+        if (ft_strcmp(shell->tokens[i], "unset") == 0)
+            unset_env_var(shell, shell->tokens[i + 1]);
 		i++;
     }
 }
@@ -52,4 +58,4 @@ void	parse(t_shell *shell)
     else
         ft_printf_fd(2, "Error"); // print error message
 }
-oalaoalaoalaoal
+
