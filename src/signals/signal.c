@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 01:05:05 by nuno              #+#    #+#             */
-/*   Updated: 2025/01/06 22:59:32 by nuno             ###   ########.fr       */
+/*   Updated: 2025/01/15 19:25:07 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ Signals to Handle
 		Interrupts the current process.
 		it should interrupt the current command input or running child process
 
-	SIGQUIT (Ctrl+):
+	SIGQUIT (Ctrl+\):
 		Sends a quit signal. Typically terminates the process and creates a core dump.
 		ignore it while idle or allow child processes to handle it.
 

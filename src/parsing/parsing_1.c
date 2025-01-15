@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joamiran <joamiran@student.42lisboa.com>   +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 18:07:52 by joamiran          #+#    #+#             */
-/*   Updated: 2024/12/19 19:42:12 by joamiran         ###   ########.fr       */
+/*   Updated: 2025/01/15 19:49:25 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,9 @@ void	parse_tokens(t_shell *shell) // this function is not complete
     while (shell->tokens[i])
     {
         ft_printf("Token %d: %s\n", i, shell->tokens[i]);
-        i++;
+		if (ft_strcmp(shell->tokens[i], "env") == 0)
+			print_env(shell->env);
+		i++;
     }
 }
 

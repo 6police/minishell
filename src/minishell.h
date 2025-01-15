@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 18:01:28 by joamiran          #+#    #+#             */
-/*   Updated: 2025/01/13 20:42:26 by nuno             ###   ########.fr       */
+/*   Updated: 2025/01/15 19:28:12 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,17 @@
 # define HD_TEMP_FILE ".hd_temp"
 # define HISTORY ".minishell_history"
 
+typedef enum	e_exit_status
+{
+	EXITSUCCESS = 0,	// Successful execution
+	EXITFAILURE = 1,	// General failure (often used by programs to indicate an error)
+
+	// Shell-specific exit codes (for shell-like environments)
+	EXIT_COMMAND_NOT_FOUND = 127,  // Command not found (shell scripts)
+
+	SIG = 128 //+ SIGSEGV,			// + signal - For all the other SIG's 
+}	t_exit_status;
+
 // struct to store the here document information
 typedef struct here_doc
 {
@@ -102,6 +113,7 @@ typedef struct env_var
 {
 	char *key;                  // environment variable
 	char *value;                // value of the environment variable
+	bool exported; 				// if only 'a' goes to export only, if a= goes to env aswell
 
 	struct env_var *next;       // next environment variable
 	struct env_var *prev;       // previous environment variable
@@ -119,14 +131,15 @@ typedef struct shell
 {
 	t_here_doc	*hd;
 
-	t_env *env;                 // environment variables
-	char *line;                 // line read from the input
-	char *history_file;         // file to store the history
+	t_env	*env;                 // environment variables
+	char	*line;                 // line read from the input
+	char	*history_file;         // file to store the history
 
-	char **tokens;              // tokens from the line
+	char	**tokens;              // tokens from the line
 
 	int ret;                    // return value
 	int status;                 // status of the shell
+	int exit_value;
 
 	t_fds *fds;                 // file descriptors
 	t_cmd **cmds;               // commands

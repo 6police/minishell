@@ -6,7 +6,7 @@
 /*   By: joamiran <joamiran@student.42lisboa.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 17:31:01 by joamiran          #+#    #+#             */
-/*   Updated: 2025/01/03 18:00:16 by joamiran         ###   ########.fr       */
+/*   Updated: 2024/12/19 19:44:35 by joamiran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,8 +146,6 @@ void	free_shell(t_shell *shell)
         free_env(shell->env);
     if (shell->fds)
         close_fds(shell->fds);
-    if (shell->tokens)
-        free_tokens(shell->tokens);
     free(shell);
 }
 
