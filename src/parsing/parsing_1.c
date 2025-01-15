@@ -6,7 +6,7 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 18:07:52 by joamiran          #+#    #+#             */
-/*   Updated: 2025/01/15 19:49:25 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/01/15 20:06:15 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,3 +52,4 @@ void	parse(t_shell *shell)
     else
         ft_printf_fd(2, "Error"); // print error message
 }
+oalaoalaoalaoal
