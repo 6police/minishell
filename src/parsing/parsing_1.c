@@ -6,7 +6,7 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 18:07:52 by joamiran          #+#    #+#             */
-/*   Updated: 2025/01/15 20:45:15 by joamiran         ###   ########.fr       */
+/*   Updated: 2025/02/10 19:21:31 by joamiran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ void	parse_tokens(t_shell *shell) // this function is not complete
             unset_env_var(shell, shell->tokens[i + 1]);
 		i++;
     }
+    shell->cmds = malloc(sizeof(t_cmd *) * (i + 1));
+
 }
 
 // parse the line and tokens

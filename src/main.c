@@ -6,7 +6,7 @@
 /*   By: joamiran <joamiran@student.42lisboa.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 20:56:43 by joamiran          #+#    #+#             */
-/*   Updated: 2024/12/18 21:40:58 by joamiran         ###   ########.fr       */
+/*   Updated: 2025/02/10 18:28:46 by joamiran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,35 @@ int main(int argc, char **argv, char **env)
 {
     (void)argv;
 
-    // if it has any arguments, print the error message
-    if (argc > 1)
-    {
-        ft_putstr_fd("Error: minishell does not accept arguments\n", 2);
-        //print monke to error
-        ft_putstr_fd(monke, 2);
 
+    // if it has any arguments, print the error message
+    if (argc == 1)
+    {
+        t_shell *shell;
+        
+        shell = init_shell(env);
+        run_shell(shell);
+    }
+    else if (argc == 2)
+    {
+        if ((ft_strncmp(argv[1], "-d", 2) == 0) || (ft_strncmp(argv[1], "--debug", 7) == 0))
+        {
+            t_shell *shell;
+
+            shell = init_shell(env);
+            run_shell_debug(shell);
+        }
+        else
+        {
+            ft_putstr_fd(EMOJI_CROSS EMOGI_CROSS " Error: minishell does not accept arguments\n", 2);
+            return (1);
+        }
+    }
+    else
+    {
+        ft_putstr_fd(EMOJI_CROSS EMOJI_CROSS " Error: minishell does not accept arguments\n", 2);
         return (1);
     }
-
-    t_shell *shell;
-    
-    shell = init_shell(env);
-
-    run_shell(shell);
-    return (0);
+    return (0);    
 }
 

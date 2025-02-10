@@ -6,11 +6,11 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 01:03:47 by nuno              #+#    #+#             */
-/*   Updated: 2025/01/13 20:42:19 by nuno             ###   ########.fr       */
+/*   Updated: 2025/02/10 18:34:11 by joamiran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/* #include "../minishell.h"
+#include "../minishell.h"
 
 static void execute_builtin(t_cmd *cmd, t_shell *shell);
 static void execute_external(t_cmd *cmd, t_shell *shell);
@@ -70,4 +70,4 @@ static void execute_external(t_cmd *cmd, t_shell *shell)
 	{
 		waitpid(pid, &status, 0);
 	}
-} */
+}
