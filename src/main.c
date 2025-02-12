@@ -36,7 +36,7 @@ int main(int argc, char **argv, char **env)
         }
         else
         {
-            ft_putstr_fd(EMOJI_CROSS EMOGI_CROSS " Error: minishell does not accept arguments\n", 2);
+            ft_putstr_fd(EMOJI_CROSS EMOJI_CROSS " Error: minishell does not accept arguments\n", 2);
             return (1);
         }
     }

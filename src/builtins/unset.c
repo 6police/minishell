@@ -21,7 +21,7 @@ t_env_var	*find_env_var(t_env *env, char *key)
 	tmp = env->head;
 	while (tmp)
 	{
-		if (ft_strcmp(tmp->key, key) == 0)
+		if (ft_strncmp(tmp->key, key, ft_strlen(tmp->key)) == 0)
 			return (tmp);
 		tmp = tmp->next;
 	}

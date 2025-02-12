@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-void	run_shell_debug(t_shell *shell)
+void run_shell_debug(t_shell *shell)
 {
 	// setup the signal handler
 	setup_signals();
@@ -20,36 +20,27 @@ void	run_shell_debug(t_shell *shell)
 	while (1)
 	{
 		// read the input
-		shell->line = readline(PROMPT);
+		shell->line = readline(PROMPT RED "DEBUG" RESET EMOJI_HAMMER);
 		if (!shell->line)
-			exit_shell(shell);
+		{
+			printf(EMOJI_BRAIN "exiting shell\n");
+			exit_shell(shell, 1);
+		}
 		if (shell->line)
 		{
-			parse(shell); // parse the line and tokens
+			parse(shell, 1); // parse the line and tokens
 			if (shell->tokens)
 			{
-				//???	execute_command(shell->cmds, shell);
-						// execute the command
-				if (validate_command(shell->tokens)
-                {
-					// execute the command
-					// execute_command(shell);
-                }
-                else
-                {
-					// print an error message
-					ft_putstr_fd("minishell: command not found: ", 2);
-					ft_putstr_fd(shell->tokens->content, 2);
-					ft_putstr_fd("\n", 2);
-                }
 				free_tokens(shell->tokens); // free the tokens
+				printf(EMOJI_COOL "tokens cleared \n");
 				free(shell->line);
+				printf(EMOJI_COOL "line cleared \n");
 			}
 		}
 	}
 }
 
-void	run_shell(t_shell *shell)
+void run_shell(t_shell *shell)
 {
 	// setup the signal handler
 	setup_signals();
@@ -59,13 +50,15 @@ void	run_shell(t_shell *shell)
 		// read the input
 		shell->line = readline(PROMPT);
 		if (!shell->line)
-			exit_shell(shell);
+			exit_shell(shell, 0);
 		if (shell->line)
 		{
-			parse(shell); // parse the line and tokens
-/*			if (shell->tokens)
+			parse(shell, 0); // parse the line and tokens
+			if (shell->tokens)
 			{
-			}*/
+				printf(EMOJI_COOL "PLACEHOLDER \n something will happen here\n");
+			}
+
 			free_tokens(shell->tokens); // free the tokens
 			free(shell->line);
 		}
