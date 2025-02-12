@@ -6,7 +6,7 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 18:09:42 by joamiran          #+#    #+#             */
-/*   Updated: 2025/02/10 18:31:03 by joamiran         ###   ########.fr       */
+/*   Updated: 2025/02/12 18:32:58 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void run_shell(t_shell *shell)
 			{
 				printf(EMOJI_COOL "PLACEHOLDER \n something will happen here\n");
 			}
+
 			free_tokens(shell->tokens); // free the tokens
 			free(shell->line);
 		}

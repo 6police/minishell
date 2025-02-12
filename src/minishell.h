@@ -6,7 +6,7 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 18:01:28 by joamiran          #+#    #+#             */
-/*   Updated: 2025/02/10 18:35:25 by joamiran         ###   ########.fr       */
+/*   Updated: 2025/02/12 21:00:56 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <linux/types.h>
 
 # ifndef PATH_MAX
 #  define PATH_MAX 4096
@@ -221,9 +222,12 @@ void	print_export(t_env *env); // function to print the exported environment
 void	execute_command(t_cmd *cmd, t_shell *shell);
 		// function to execute the command
 
-// builtins
-//void	cd_shell(t_cmd *cmd, t_env *env); // function to change the directory
-//void	echo_shell(t_cmd *cmd);           // function to print the arguments
+
+//cd.c
+void	cd_shell(t_cmd *cmd, t_env *env); // function to change the directory
+//echo.c
+void	echo_shell(t_cmd *cmd);           // function to print the arguments
+//pwd.c
 void	pwd_shell(void);                 
 		// function to print the current directory
 void	exit_shell(t_shell *shell, int debug);       // function to exit the shell
@@ -251,9 +255,9 @@ void	unset_vars(t_shell *shell, char **keys);
 // env.c
 void	assign_env_var(t_env_var *env_var, char *env);
 		// function to assign an environment variable
-void	add_env_var(t_env **env);                     
+void	add_env_var(t_env **env);
 		// function to add an environment variable
-t_env	*copy_env(char **env);                       
+t_env	*copy_env(char **env);
 		// function to copy the environment
 
 // sort_env.c
