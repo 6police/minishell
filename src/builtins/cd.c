@@ -1,21 +1,10 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   cd.c                                               :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/06 23:04:45 by nuno              #+#    #+#             */
-/*   Updated: 2025/01/15 21:05:36 by nneves-a         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../minishell.h"
 
-char	*cd(char *cmd, t_env *env);
-void	change_dir(char *path, t_env *env);
+static char	*cd(t_cmd *cmd, t_env *env);
+static void	change_dir(char *path, t_env *env);
+static void update_pwd_env_vars(t_env *env, t_env_var *oldpwd, t_env_var *pwd);
 
-void	cd_shell(char *cmd, t_env *env)
+void	cd_shell(t_cmd *cmd, t_env *env)
 {
 	char *path;
 
@@ -25,49 +14,77 @@ void	cd_shell(char *cmd, t_env *env)
 	change_dir(path, env);
 }
 
-char	*cd(char *cmd, t_env *env)
+static char	*cd(t_cmd *cmd, t_env *env)
 {
 	t_env_var	*home;
-	char		*path;
 
-	if (!cmd) // No argument: go to $HOME
+	if (!cmd->args[1])
 	{
 		home = find_env_var(env, "HOME");
 		if (!home || !home->value)
 		{
-			ft_putstr_fd("cd: HOME not set\n", STDERR_FILENO);
+			ft_putstr_fd("minishell: cd: HOME not set\n", STDERR_FILENO);
 			return (NULL);
 		}
-		path = home->value;
+		return (home->value);
 	}
-	else
-		path = cmd;
-	return (path);
+	else if (strcmp(cmd->args[1], "-") == 0)
+	{
+		return ("-");
+	}
+	return (cmd->args[1]);
 }
-void	change_dir(char *path, t_env *env)
+
+static void change_dir(char *path, t_env *env)
 {
-	char		cwd[PATH_MAX];
 	t_env_var	*oldpwd;
 	t_env_var	*pwd;
+	char		*new_path;
 
-	if (chdir(path) == 0)
+	oldpwd = find_env_var(env, "OLDPWD");
+	pwd = find_env_var(env, "PWD");
+	new_path = path;
+	if (strcmp(path, "-") == 0)
 	{
-		if (getcwd(cwd, sizeof(cwd)))
+		if (!oldpwd || !oldpwd->value || oldpwd->value[0] == '\0')
 		{
-			oldpwd = find_env_var(env, "OLDPWD");
-			pwd = find_env_var(env, "PWD");
-			if (oldpwd)
-			{
-				free(oldpwd->value);
-				if (pwd)
-					oldpwd->value = ft_strdup(pwd->value);
-				else
-					oldpwd->value = ft_strdup("");
-			}
-			if (pwd)
-				free(pwd->value), pwd->value = ft_strdup(cwd);
+			ft_putstr_fd("minishell: cd: OLDPWD not set\n", STDERR_FILENO);
+			return;
+		}
+		new_path = oldpwd->value;
+		ft_putstr_fd(new_path, STDOUT_FILENO);
+		ft_putstr_fd("\n", STDOUT_FILENO);
+	}
+	if (chdir(new_path) != 0)
+	{
+		ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
+		ft_putstr_fd(new_path, STDERR_FILENO); // joao troca por printf_fd
+		ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
+		return;
+	}
+	update_pwd_env_vars(env, oldpwd, pwd);
+}
+
+static void update_pwd_env_vars(t_env *env, t_env_var *oldpwd, t_env_var *pwd)
+{
+	char cwd[PATH_MAX];
+
+	if (getcwd(cwd, sizeof(cwd)))
+	{
+		if (oldpwd)
+		{
+			free(oldpwd->value);
+			if (pwd && pwd->value)
+				oldpwd->value = ft_strdup(pwd->value);
+			else
+				oldpwd->value = ft_strdup("");
+			export("OLDPWD", oldpwd->value, env);
+		}
+		if (pwd)
+		{
+			free(pwd->value);
+			pwd->value = ft_strdup(cwd);
+			export("PWD", pwd->value, env);
 		}
 	}
-	else
-		printf("minishell: cd: %s: No sush file or directory", path);
 }
