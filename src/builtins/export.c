@@ -27,43 +27,58 @@ void	export_var(char *var, t_env *env)
 		assign_env_var(env_var, var);
 }
 
-void export_no_args(t_env *env)
+
+void	export_no_args(t_env *env)
 {
     t_env_var	*env_var;
+
+    sort_env_list(env);
 
     env_var = env->head;
     while (env_var)
     {
-        if (env_var->exported)
-        {
-            if (env_var->value)
-                ft_printf("declare -x %s=\"%s\"\n", env_var->key, env_var->value);
-            else
-                ft_printf("declare -x %s\n", env_var->key);
-        }
+        if (!env_var->value)
+            printf("declare -x " RED"%s"RESET "=\n", env_var->key);
+        else
+            printf("declare -x  " RED"%s"RESET  "=\"%s\"\n", env_var->key, env_var->value);
         env_var = env_var->next;
     }
 }
 
-void	export_bi(char *value, t_shell *shell)
+void export(char *var, char  *value, t_env *env)
 {
-	char	**vars;
-	int		i;
+    char *var_value;
 
-    vars = ft_split(value, ' ');
-
-    if (!vars[1])
+    if (!var)
     {
-        export_no_args(shell->env);
-        free(vars);
+        export_no_args(env); 
         return ;
     }
-    
-	i = 0;
-	while (vars[i])
-	{
-		export_var(vars[i], shell->env);
-		i++;
-	}
-	free(vars);
+    if (!value)
+    {
+        export_var(var, env);
+        return ;
+    }
+    var_value = ft_strjoin(var, "=");
+    var_value = ft_strjoin(var_value, value);
+    export_var(var_value, env);
+    free(var_value);
+}
+
+void export_builtin(t_shell *shell)
+{
+    int i;
+
+    if (!shell->tokens[1])
+    {
+        export_no_args(shell->env);
+        return ;
+    }
+
+    i = 1;
+    while (shell->tokens[i])
+    {
+        export(shell->tokens[i], NULL, shell->env);
+        i++;
+    }
 }

@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-char	*cd(char *cmd, t_env *env);
+/* char	*cd(char *cmd, t_env *env);
 void	change_dir(char *path, t_env *env);
 
 void	cd_shell(char *cmd, t_env *env)
@@ -71,3 +71,4 @@ void	change_dir(char *path, t_env *env)
 	else
 		printf("minishell: cd: %s: No sush file or directory", path);
 }
+ */

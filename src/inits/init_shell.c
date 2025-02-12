@@ -31,6 +31,6 @@ t_shell	*init_shell(char **env)
 	// initialize the file descriptors
 	// initialize the commands
 	ft_printf("Shell initialized\n");
-    ft_print_harambe();
+    ft_print_minishell();
 	return (shell);
 }

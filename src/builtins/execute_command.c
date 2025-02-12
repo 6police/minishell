@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
+/* 
 static void execute_builtin(t_cmd *cmd, t_shell *shell);
 static void execute_external(t_cmd *cmd, t_shell *shell);
 
@@ -23,7 +23,7 @@ void execute_command(t_shell *shell)
 		// execute the built-in command
 		execute_builtin(shell);
 	}
-	else
+ 	else
 	{
 		// execute the external command
 		execute_external(shell);
@@ -71,3 +71,4 @@ static void execute_external(t_cmd *cmd, t_shell *shell)
 		waitpid(pid, &status, 0);
 	}
 }
+ */

@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-void echo_shell(t_cmd *cmd)
+/* void echo_shell(t_cmd *cmd)
 {
 	int newline;
 	int i;
@@ -33,4 +33,4 @@ void echo_shell(t_cmd *cmd)
 	}
 	if (newline)
 		ft_putchar_fd('\n', STDOUT_FILENO);
-}
+} */

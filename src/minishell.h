@@ -161,6 +161,7 @@ void	run_shell_debug(t_shell *shell);
 // initializes the shell struct
 t_shell	*init_shell(char **env); // function to initialize the shell
 void	ft_print_harambe(void);     // function to print harambe
+void	ft_print_minishell(void);   // function to print minishell
 
 // utils.c
 void	new_prompt(void); // function to print the prompt
@@ -168,7 +169,7 @@ void	new_prompt(void); // function to print the prompt
 // parse.c
 void	parse_line(t_shell *shell);      // function to parse the line
 void	parse_tokens(t_shell *shell);    // function to parse the tokens
-void	parse(t_shell *shell);          
+void	parse(t_shell *shell, int debug);          
 		// function to parse the line and tokens
 char	**split_with_quotes(char *line);
 		// function to split the line with quotes
@@ -209,29 +210,34 @@ void	free_env_var(t_env_var *env_var);
 		// function to free an environment variable
 void	free_env(t_env *env);             // function to free the environment
 void	free_tokens(char **tokens);       // function to free the tokens
-void	free_shell(t_shell *shell);       // function to free the shell
-void	clean_exit(t_shell *shell);       // function to exit the shell
+void	free_shell(t_shell *shell, int debug);       // function to free the shell
+void	clean_exit(t_shell *shell, int debug);       // function to exit the shell
 
 // debug.c
 void	print_env(t_env *env); // function to print the environment
+void	print_export(t_env *env); // function to print the exported environment
 
 // execute_command.c
 void	execute_command(t_cmd *cmd, t_shell *shell);
 		// function to execute the command
 
 // builtins
-void	cd_shell(t_cmd *cmd, t_env *env); // function to change the directory
-void	echo_shell(t_cmd *cmd);           // function to print the arguments
+//void	cd_shell(t_cmd *cmd, t_env *env); // function to change the directory
+//void	echo_shell(t_cmd *cmd);           // function to print the arguments
 void	pwd_shell(void);                 
 		// function to print the current directory
-void	exit_shell(t_shell *shell);       // function to exit the shell
+void	exit_shell(t_shell *shell, int debug);       // function to exit the shell
 
 void	export_var(char *var, t_env *env);     
 		// function to export an environment variable
 void	export_no_args(t_env *env);            
 		// function to export all environment variables
-void	export_bi(char *value, t_shell *shell);
+void	export(char *var, char *value, t_env *env);
 		// function to export the environment variables
+void	export_builtin(t_shell *shell);        
+		// function to export the environment variables
+void	alphabetize(t_env *env);                
+		// function to alphabetize the environment variables
 
 // unset
 t_env_var	*find_env_var(t_env *env, char *key);
@@ -249,6 +255,14 @@ void	add_env_var(t_env **env);
 		// function to add an environment variable
 t_env	*copy_env(char **env);                       
 		// function to copy the environment
+
+// sort_env.c
+void	swap_env_var(t_env_var *a, t_env_var *b, t_env *env);
+		// function to swap the position of two environment variables
+void	sort_env_list(t_env *env);
+		// function to sort the linked list by ASCII order
+
+
 // ls.c
 void	ls_shell(t_cmd *cmd); // function to list the files in the directory
 
