@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 13:21:44 by nuno              #+#    #+#             */
-/*   Updated: 2025/01/13 20:37:36 by nuno             ###   ########.fr       */
+/*   Updated: 2025/01/15 21:10:40 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void echo_shell(t_cmd *cmd)
+/* void echo_shell(t_cmd *cmd)
 {
 	int newline;
 	int i;
@@ -33,4 +33,4 @@ void echo_shell(t_cmd *cmd)
 	}
 	if (newline)
 		ft_putchar_fd('\n', STDOUT_FILENO);
-}
+} */

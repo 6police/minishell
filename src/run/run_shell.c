@@ -3,20 +3,44 @@
 /*                                                        :::      ::::::::   */
 /*   run_shell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 18:09:42 by joamiran          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/01/09 04:23:04 by nuno             ###   ########.fr       */
-=======
-/*   Updated: 2025/01/03 17:55:14 by joamiran         ###   ########.fr       */
->>>>>>> develop
+/*   Updated: 2025/02/10 18:31:03 by joamiran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	run_shell(t_shell *shell)
+void run_shell_debug(t_shell *shell)
+{
+	// setup the signal handler
+	setup_signals();
+	// for now it just starts the shell
+	while (1)
+	{
+		// read the input
+		shell->line = readline(PROMPT RED "DEBUG" RESET EMOJI_HAMMER);
+		if (!shell->line)
+		{
+			printf(EMOJI_BRAIN "exiting shell\n");
+			exit_shell(shell, 1);
+		}
+		if (shell->line)
+		{
+			parse(shell, 1); // parse the line and tokens
+			if (shell->tokens)
+			{
+				free_tokens(shell->tokens); // free the tokens
+				printf(EMOJI_COOL "tokens cleared \n");
+				free(shell->line);
+				printf(EMOJI_COOL "line cleared \n");
+			}
+		}
+	}
+}
+
+void run_shell(t_shell *shell)
 {
 	// setup the signal handler
 	setup_signals();
@@ -26,42 +50,16 @@ void	run_shell(t_shell *shell)
 		// read the input
 		shell->line = readline(PROMPT);
 		if (!shell->line)
-			exit_shell(shell);
+			exit_shell(shell, 0);
 		if (shell->line)
 		{
-			parse(shell); // parse the line and tokens
+			parse(shell, 0); // parse the line and tokens
 			if (shell->tokens)
 			{
-			//???	execute_command(shell->cmds, shell); // execute the command
-                // check the validity of the command
-                if (strcmp(shell->tokens[0], "exit") == 0)
-                {
-                    exit_shell(shell);
-                }
-                else if (strcmp(shell->tokens[0], "env") == 0)
-                {
-                   print_env(shell->env);
-                }
-                else if (strcmp(shell->tokens[0], "unset") == 0)
-                {
-                    unset_vars(shell, shell->tokens + 1);
-                }
-               // check the validity of the command
-               // if (validate_command(shell->tokens)
-               // {
-               //     // execute the command
-               //     //execute_command(shell);
-               // }
-               // else
-               // {
-               //     // print an error message
-               //     ft_putstr_fd("minishell: command not found: ", 2);
-               //     ft_putstr_fd(shell->tokens->content, 2);
-               //     ft_putstr_fd("\n", 2);
-               // }
-				free_tokens(shell->tokens); // free the tokens
-				free(shell->line);
+				printf(EMOJI_COOL "PLACEHOLDER \n something will happen here\n");
 			}
+			free_tokens(shell->tokens); // free the tokens
+			free(shell->line);
 		}
 	}
 }

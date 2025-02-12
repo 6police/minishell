@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug_1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joamiran <joamiran@student.42lisboa.com>   +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 22:20:32 by joamiran          #+#    #+#             */
-/*   Updated: 2024/12/19 19:57:10 by joamiran         ###   ########.fr       */
+/*   Updated: 2025/01/15 21:10:24 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,21 @@ void print_env(t_env *env)
 
     tmp = env->head;
     while (tmp)
-    {
-        printf("%s=%s\n", tmp->key, tmp->value);
-        tmp = tmp->next;
-    }
+	{
+		if (tmp->value)
+			printf(RED"%s"RESET"=%s\n", tmp->key, tmp->value);
+		tmp = tmp->next;
+	}
 }
 
+void print_export(t_env *env)
+{
+	t_env_var *tmp;
 
-
+	tmp = env->head;
+	while (tmp)
+	{
+		printf("%s=%s\n", tmp->key, tmp->value);
+		tmp = tmp->next;
+	}
+}

@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 20:00:06 by joamiran          #+#    #+#             */
-/*   Updated: 2025/01/09 02:51:24 by nuno             ###   ########.fr       */
+/*   Updated: 2025/01/15 21:17:59 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
 
+#include "../minishell.h"
 
 // function to find the env variable in the list
 t_env_var	*find_env_var(t_env *env, char *key)
@@ -21,13 +21,12 @@ t_env_var	*find_env_var(t_env *env, char *key)
 	tmp = env->head;
 	while (tmp)
 	{
-		if (ft_strcmp(tmp->key, key) == 0)
-		return (tmp);
+		if (ft_strncmp(tmp->key, key, ft_strlen(tmp->key)) == 0)
+			return (tmp);
 		tmp = tmp->next;
 	}
 	return (NULL);
 }
-
 
 // function to remove a variable from the list
 void	remove_env_var(t_env *env, char *key)
@@ -41,14 +40,14 @@ void	remove_env_var(t_env *env, char *key)
 	{
 		if (ft_strcmp(tmp->key, key) == 0)
 		{
-		if (prev)
-			prev->next = tmp->next;
-		else
-			env->head = tmp->next;
-		if (!tmp->next)
-			env->last = prev;
-		free_env_var(tmp);
-		return ;
+			if (prev)
+				prev->next = tmp->next;
+			else
+				env->head = tmp->next;
+			if (!tmp->next)
+				env->last = prev;
+			free_env_var(tmp);
+			return ;
 		}
 		prev = tmp;
 		tmp = tmp->next;
@@ -56,7 +55,7 @@ void	remove_env_var(t_env *env, char *key)
 }
 
 // function to unset an environment variable
-void unset_env_var(t_shell *shell, char *key)
+void	unset_env_var(t_shell *shell, char *key)
 {
 	t_env_var	*env_var;
 
@@ -66,7 +65,7 @@ void unset_env_var(t_shell *shell, char *key)
 }
 
 // function to unset multiple environment variables
-void unset_vars(t_shell *shell, char **keys)
+void	unset_vars(t_shell *shell, char **keys)
 {
 	int	i;
 
