@@ -1,4 +1,4 @@
-#include "../minishell.h"
+#include "ft_signal.h"
 
 void	siginfo_handler(int sig, siginfo_t *info, void *context);
 

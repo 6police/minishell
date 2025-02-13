@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "ft_builtins.h"
 /* 
 static void execute_builtin(t_cmd *cmd, t_shell *shell);
 static void execute_external(t_cmd *cmd, t_shell *shell);

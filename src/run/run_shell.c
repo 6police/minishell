@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "ft_run.h"
 
 void run_shell_debug(t_shell *shell)
 {

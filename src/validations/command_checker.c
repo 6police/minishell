@@ -1,5 +1,5 @@
 
-# include "../minishell.h"
+# include "ft_validations.h"
 
 char *checkforpath(char *cmd, t_env *env)
 {

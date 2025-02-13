@@ -1,16 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: joamiran <joamiran@student.42lisboa.com>   +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/18 17:31:01 by joamiran          #+#    #+#             */
-/*   Updated: 2024/12/19 19:44:35 by joamiran         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "../minishell.h"
+#include "ft_free.h"
 
 // free one array
 void free_array(char **array)
@@ -185,6 +173,6 @@ void clean_exit(t_shell *shell, int debug)
 
     if (shell)
         free_shell(shell, debug);
-
+    fflush(stdout);
     exit(status);
 }

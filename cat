@@ -1,0 +1,20 @@
+total 136
+drwxr-xr-x  8 joamiran 2024_lisboa  4096 Feb 13 21:17 .
+drwxr-xr-x 14 joamiran 2024_lisboa  4096 Feb 10 17:03 ..
+drwxr-xr-x  2 joamiran 2024_lisboa  4096 Jan 15 20:03 assets
+-rw-r--r--  1 joamiran 2024_lisboa     0 Feb 13 21:17 cat
+drwxr-xr-x  8 joamiran 2024_lisboa  4096 Feb 13 20:21 .git
+-rw-r--r--  1 joamiran 2024_lisboa   448 Feb 10 19:47 .gitignore
+drwxr-xr-x  3 joamiran 2024_lisboa    20 Jan 15 20:03 inc
+-rw-r--r--  1 joamiran 2024_lisboa  9434 Jan 15 20:03 index.html
+-rw-r--r--  1 joamiran 2024_lisboa  1061 Jan 15 20:03 LICENSE
+-rwxr-xr-x  1 joamiran 2024_lisboa  2680 Feb 12 17:59 Makefile
+-rwxr-xr-x  1 joamiran 2024_lisboa 74432 Feb 13 20:47 minishell
+drwxr-xr-x 12 joamiran 2024_lisboa   163 Feb 13 18:42 obj
+-rw-r--r--  1 joamiran 2024_lisboa     0 Feb 13 21:17 pwd
+-rw-r--r--  1 joamiran 2024_lisboa    97 Jan 15 20:03 README.md
+-rw-r--r--  1 joamiran 2024_lisboa    95 Jan 15 20:03 read.supp
+-rwxr-xr-x  1 joamiran 2024_lisboa   118 Jan 15 20:03 run.sh
+drwxr-xr-x 12 joamiran 2024_lisboa  4096 Feb 13 18:22 src
+-rw-r--r--  1 joamiran 2024_lisboa  2023 Feb 10 17:53 styles.css
+drwxr-xr-x  2 joamiran 2024_lisboa    75 Jan 15 20:07 .vscode

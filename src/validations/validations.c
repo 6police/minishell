@@ -1,16 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   validations.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/30 16:24:35 by joamiran          #+#    #+#             */
-/*   Updated: 2025/01/15 21:10:22 by nneves-a         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-# include "../minishell.h"
+# include "ft_validations.h"
 
 // Check if the command is empty
 bool is_empty(char *command)

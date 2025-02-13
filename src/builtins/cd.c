@@ -1,4 +1,4 @@
-#include "../minishell.h"
+#include "ft_builtins.h"
 
 static char *cd(t_cmd *cmd, t_env *env);
 static void change_dir(char *path, t_env *env);
@@ -78,13 +78,13 @@ static void update_pwd_env_vars(t_env *env, t_env_var *oldpwd, t_env_var *pwd)
 				oldpwd->value = ft_strdup(pwd->value);
 			else
 				oldpwd->value = ft_strdup("");
-			export("OLDPWD", oldpwd->value, env);
+			ft_export("OLDPWD", oldpwd->value, env);
 		}
 		if (pwd)
 		{
 			free(pwd->value);
 			pwd->value = ft_strdup(cwd);
-			export("PWD", pwd->value, env);
+			ft_export("PWD", pwd->value, env);
 		}
 	}
 }

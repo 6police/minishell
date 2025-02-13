@@ -1,4 +1,4 @@
-#include "../minishell.h"
+#include "ft_builtins.h"
 
 void pwd_shell()
 {

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "ft_parsing.h"
 
 // parsing the line into tokens
 void parse_line(t_shell *shell)
@@ -43,6 +43,15 @@ void parse_tokens(t_shell *shell) // this function is not complete
             export_builtin(shell);
         if (ft_strcmp(shell->tokens[i], "unset") == 0)
             unset_env_var(shell, shell->tokens[i + 1]);
+        if (ft_strcmp(shell->tokens[i], "pwd") == 0)
+            pwd_shell();
+        if (ft_strcmp(shell->tokens[i], "cd") == 0)
+        {
+            t_cmd *cmd =(t_cmd*) malloc(sizeof(t_cmd));
+            cmd->name = "cd";
+            cmd->args = shell->tokens;
+            cd_shell(cmd, shell->env);
+        }
         i++;
     }
     shell->cmds = malloc(sizeof(t_cmd *) * (i + 1));

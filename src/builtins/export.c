@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "ft_builtins.h"
 
 void	export_var(char *var, t_env *env)
 {
@@ -45,7 +45,7 @@ void	export_no_args(t_env *env)
     }
 }
 
-void export(char *var, char  *value, t_env *env)
+void ft_export(char *var, char  *value, t_env *env)
 {
     char *var_value;
 
@@ -78,7 +78,7 @@ void export_builtin(t_shell *shell)
     i = 1;
     while (shell->tokens[i])
     {
-        export(shell->tokens[i], NULL, shell->env);
+        ft_export(shell->tokens[i], NULL, shell->env);
         i++;
     }
 }
