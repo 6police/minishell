@@ -1,6 +1,6 @@
 #include "../minishell.h"
 
-/* void echo_shell(t_cmd *cmd)
+void echo_shell(t_cmd *cmd)
 {
 	int newline;
 	int i;
@@ -10,14 +10,13 @@
 	i = 1;
 	a = 1;
 
-/*	while (cmd->args[a])
+	while (cmd->args[a])
 	{
-		if (cmd->args[a] == "*")
-		{
-			
-		}
+		// if arg == * (wildcard)
+		if (ft_strcmp(cmd->args[a], "*") == 0)
+			printf("PLACEHOLDER FOR WILDCARD");
 		a++;
-	}*/
+	}
 	if (cmd->args[1] && ft_strcmp(cmd->args[1], "-n") == 0)
 	{
 		newline = 0;
@@ -32,4 +31,4 @@
 	}
 	if (newline)
 		ft_putchar_fd('\n', STDOUT_FILENO);
-} */
+}
