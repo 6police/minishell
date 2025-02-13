@@ -1,23 +1,22 @@
 #include "../minishell.h"
 
-static char	*cd(t_cmd *cmd, t_env *env);
-static void	change_dir(char *path, t_env *env);
+static char *cd(t_cmd *cmd, t_env *env);
+static void change_dir(char *path, t_env *env);
 static void update_pwd_env_vars(t_env *env, t_env_var *oldpwd, t_env_var *pwd);
 
-
-void	cd_shell(t_cmd *cmd, t_env *env)
+void cd_shell(t_cmd *cmd, t_env *env)
 {
 	char *path;
 
 	path = cd(cmd, env);
 	if (!path)
-		return ;
+		return;
 	change_dir(path, env);
 }
 
-static char	*cd(t_cmd *cmd, t_env *env)
+static char *cd(t_cmd *cmd, t_env *env)
 {
-	t_env_var	*home;
+	t_env_var *home;
 
 	if (!cmd->args[1])
 	{
@@ -38,9 +37,9 @@ static char	*cd(t_cmd *cmd, t_env *env)
 
 static void change_dir(char *path, t_env *env)
 {
-	t_env_var	*oldpwd;
-	t_env_var	*pwd;
-	char		*new_path;
+	t_env_var *oldpwd;
+	t_env_var *pwd;
+	char *new_path;
 
 	oldpwd = find_env_var(env, "OLDPWD");
 	pwd = find_env_var(env, "PWD");
@@ -89,4 +88,3 @@ static void update_pwd_env_vars(t_env *env, t_env_var *oldpwd, t_env_var *pwd)
 		}
 	}
 }
- */
