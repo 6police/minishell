@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: joamiran <joamiran@student.42lisboa.com>   +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/18 17:31:01 by joamiran          #+#    #+#             */
-/*   Updated: 2024/12/19 19:44:35 by joamiran         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../minishell.h"
 
 // free one array
@@ -176,15 +164,15 @@ void free_shell(t_shell *shell, int debug)
 // exit the shell
 void clean_exit(t_shell *shell, int debug)
 {
-    int status;
+	int status;
 
-    status = shell->status;
+	status = shell->status;
 
-    if (debug)
-        printf(EMOJI_BRAIN "exiting shell\n");
+	if (debug)
+		printf(EMOJI_BRAIN "exiting shell\n");
 
-    if (shell)
-        free_shell(shell, debug);
-
-    exit(status);
+	if (shell)
+		free_shell(shell, debug);
+	clear_history();
+	exit(status);
 }
