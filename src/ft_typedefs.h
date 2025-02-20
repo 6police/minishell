@@ -108,6 +108,8 @@ typedef struct shell
 	int status; // status of the shell
 	int			exit_value;
 
+    int         *separators; // separators for the parsing
+
 	t_fds *fds;   // file descriptors
 	t_cmd **cmds; // commands
 }				t_shell;

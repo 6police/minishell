@@ -2,7 +2,6 @@
 # define FT_PARSING_H
 
 # include "../minishell.h"
-
 // parsing
 
 // parsing the line into tokens

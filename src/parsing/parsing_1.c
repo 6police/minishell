@@ -59,37 +59,28 @@ static void	print_tokens(t_shell *shell)
 	}
 }
 
-// parse the line and tokens
-// void	parse(t_shell *shell, int debug)
-// {
-// 	parse_line(shell); // parse the line
-// 	if (shell->tokens)
-// 	{
-// 		if (debug == 1)
-// 			print_tokens(shell); // print the tokens
-// 		parse_tokens(shell);     // parse the tokens
-// 	}
-// 	else
-// 		ft_printf_fd(2, "Error"); // print error message
-// }
-
 // parse the line according to priority
 void parse(t_shell *shell, int debug)
 {
-    int char_set[1] = {59};
     int sub = 7;
-
-    parse_line(shell, char_set, sub); // parse the line
+    
+    parse_line(shell, &shell->separators[0], sub); // parse the line
     if (shell->tokens)
     {
         if (debug == 1)
             print_tokens(shell); // print the tokens
-        parse_tokens(shell);     // parse the tokens
+        parse_line(shell, &shell->separators[1], sub); // parse the tokens
+        if (debug == 1)
+            print_tokens(shell); // print the tokens
     }
     else
         ft_printf_fd(2, "Error"); // print error message
 }
 
+
+
+/*
 ---> TODO <---
 NOW I NEED TO SPLIT BY PIPES
 THEN BY SPACES
+*/
