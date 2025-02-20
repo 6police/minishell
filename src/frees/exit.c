@@ -1,4 +1,4 @@
-#include "../minishell.h"
+#include "ft_free.h"
 
 // free one array
 void free_array(char **array)
@@ -175,4 +175,5 @@ void clean_exit(t_shell *shell, int debug)
 		free_shell(shell, debug);
 	clear_history();
 	exit(status);
+
 }

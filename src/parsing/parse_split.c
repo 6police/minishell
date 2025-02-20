@@ -1,114 +1,76 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   parse_split.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/19 18:25:14 by joamiran          #+#    #+#             */
-/*   Updated: 2025/02/13 17:31:45 by nneves-a         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
-#include "../minishell.h"
+#include "ft_parsing.h"
 
-// function to check if there are quotes or double quotes
-int look_for_quotes(char *line)
-{
-	int i;
 
-	i = 0;
-	while (line[i])
-	{
-		if (line[i] == '\'' || line[i] == '\"')
-			return (1);
-		i++;
-	}
-	return (0);
-}
 // function to count the number of quotes
 int count_quotes(char *line)
 {
 	int i;
 	int count;
 
-	i = 0;
-	count = 0;
-	while (line[i])
-	{
-		if (line[i] == '\'' || line[i] == '\"')
-			count++;
-		i++;
-	}
-	return (count);
+    i = 0;
+    count = 0;
+    while (line[i])
+    {
+        if ((line[i] == '\'' || line[i] == '\"') && !count)
+            count = line[i];
+        else if (count && line[i] == count)
+            count = 0;
+        i++;
+    }
+    return (count);
 }
 
-// function to handle quotes and double quotes
-// split the line into tokens
-// if there is a quote or double quote then the token should be everything inside the quotes
-// if there is a space inside the quotes then it should be considered part of the token
-// if theres quotes inside quotes then it should be considered part of the token
-//
-char **split_with_quotes(char *line)
+// function to mark and switch a set of characters in the line for another
+void mark_and_replace(char *line, int *char_set, int sub)
 {
-	if (!line)
-		return (NULL);
-	if (count_quotes(line) % 2 != 0)
-	{
-		(ft_printf_fd(2, "Error: Odd number of quotes\n"));
-		return (NULL);
-	}
+    int i;
+    int j;
 
-	char **tokens;
-	int i;
+    i = -1;
+    j = -1;
+    while (char_set[++i])
+    {
+        while (line[++j])
+        {
+            if (line[j] == char_set[i])
+                line[j] = sub;
+        }
+        j = -1;
+    }
+    // {
+    //     if ((line[i] == '\'' || line[i] == '\"') && !c)
+    //         c = line[i];
+    //     else if (c && line[i] == c)
+    //         c = 0;
+    //     else if (line[i] == ' ' && !c)
+    //         line[i] = sub;
+    // }
 
-	i = 0;
-	tokens = malloc(sizeof(char *) * (count_quotes(line) / 2 + 1));
-	if (!tokens)
-		return (NULL);
-
-	// split the line into tokens
-	while (*line)
-	{
-		if (*line == '\'' || *line == '\"')
-		{
-			line++;
-			tokens[i] = ft_strchr(line, *line);
-			if (!tokens[i])
-			{
-				free(tokens);
-				return (NULL);
-			}
-			*tokens[i] = '\0';
-			line++;
-			i++;
-		}
-		else
-		{
-			tokens[i] = line;
-			line = ft_strchr(line, ' ');
-			if (!line)
-				break;
-			*line = '\0';
-			line++;
-			i++;
-		}
-	}
-	tokens[i] = NULL;
-	return (tokens);
 }
-    // split the line into tokens
-// need to use split but take into consideration the quotes and double quotes
-// if there is a quote or double quote then the token should be everything inside the quotes
-// if there is a space inside the quotes then it should be considered part of the token
-// if theres quotes inside quotes then it should be considered part of the token
-char **ft_parse_split(char *line)
+
+// ok so now we must split tokens in order of priority
+// first is the ; -> takes precedence over all
+// then the | -> takes precedence over the rest
+
+
+// function to split the line into tokens
+//char **ft_parse_split(char *line)
+//{
+//    if (!line)
+//        return (NULL);
+//    if (count_quotes(line) != 0)
+//        return (ft_printf_fd(2, "Error: Odd number of quotes\n"), NULL);
+//    return (mark_quotes(line), ft_split(line, 7)); // split the line into tokens
+//}
+
+char **ft_parse_split (char *line, int *char_set, int sub)
 {
     if (!line)
         return (NULL);
-
-    if (look_for_quotes(line) != 0)             // if there are quotes or double quotes
-        return (split_with_quotes(line));       // split the line into tokens
-    else
-        return (ft_split(line, ' '));           // split the line into tokens
+    if (count_quotes(line) != 0)
+        return (ft_printf_fd(2, "Error: Odd number of quotes\n"), NULL);
+    mark_and_replace(line, char_set, sub);
+    printf("line: %s\n", line);
+    return (ft_split(line, sub));
 }
