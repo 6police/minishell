@@ -1,10 +1,12 @@
+
 #include "ft_parsing.h"
+
 
 // function to count the number of quotes
 int count_quotes(char *line)
 {
-    int i;
-    int count;
+	int i;
+	int count;
 
     i = 0;
     count = 0;
@@ -44,6 +46,7 @@ void mark_and_replace(char *line, int *char_set, int sub)
     //     else if (line[i] == ' ' && !c)
     //         line[i] = sub;
     // }
+
 }
 
 // ok so now we must split tokens in order of priority
