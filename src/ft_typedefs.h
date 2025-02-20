@@ -39,14 +39,23 @@ typedef struct here_doc
 	int fd; // file descriptor
 }				t_here_doc;
 
+typedef enum s_type{
+    HEREDOC,
+    APPEND,
+    CREATE,
+    READ
+}               t_type;
+
+// struct to store the command information
 // struct to store the redirection information
 typedef struct redir
 {
-	char *input;    // input redirection
-	char *output;   // output redirection
-	char *error;    // error redirection
-	char *here_doc; // here document
+    int  fd;
+    t_type type;
+    char *name;// type of redirection
+    struct readir *next;
 }				t_redir;
+
 
 // struct to store the command information
 typedef struct cmd
@@ -64,6 +73,7 @@ typedef struct cmd
 	t_redir **redirs; // redirections
 	int		last_fd;
 	int		last_read;
+    bool    has_heredoc;
 }				t_cmd;
 
 // struct to store the file descriptors

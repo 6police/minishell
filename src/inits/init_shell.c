@@ -6,7 +6,7 @@ int *init_separator(void)
     int *separators;
 
     // allocate memory for the separators
-    separators = ft_calloc(6, sizeof(int));
+    separators = ft_calloc(7, sizeof(int));
     if (!separators)
     {
         ft_putstr_fd("Error: malloc failed\n", 2);
@@ -19,6 +19,7 @@ int *init_separator(void)
     separators[3] = '>'; // output redirection
     separators[4] = '\''; // single quote
     separators[5] = '\"'; // double quote
+    separators[6] = ' '; // space
     return (separators);
 }
 

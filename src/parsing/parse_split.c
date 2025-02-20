@@ -26,14 +26,20 @@ void mark_and_replace(char *line, int *char_set, int sub)
 {
     int i;
     int j;
+    int c;
 
     i = -1;
     j = -1;
+    c = 0;
     while (char_set[++i])
     {
         while (line[++j])
         {
-            if (line[j] == char_set[i])
+            if ((line[j] == '\'' || line[j] == '\"') && !c)
+                c = line[j];
+            else if (c && line[j] == c)
+                c = 0;
+            else if (line[j] == char_set[i] && !c)
                 line[j] = sub;
         }
         j = -1;
