@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   run_shell.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/17 18:09:42 by joamiran          #+#    #+#             */
-/*   Updated: 2025/02/12 18:32:58 by nneves-a         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../minishell.h"
 
 void run_shell_debug(t_shell *shell)
@@ -28,6 +16,7 @@ void run_shell_debug(t_shell *shell)
 		}
 		if (shell->line)
 		{
+			add_history(shell->line);
 			parse(shell, 1); // parse the line and tokens
 			if (shell->tokens)
 			{
