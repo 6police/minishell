@@ -6,20 +6,19 @@ int *init_separator(void)
     int *separators;
 
     // allocate memory for the separators
-    separators = ft_calloc(7, sizeof(int));
+    separators = ft_calloc(6, sizeof(int));
     if (!separators)
     {
         ft_putstr_fd("Error: malloc failed\n", 2);
         exit(1);
     }
     // assign the values for the separators
-    separators[0] = ';'; // semicolon
-    separators[1] = '|'; // pipe
-    separators[2] = '<'; // input redirection
-    separators[3] = '>'; // output redirection
-    separators[4] = '\''; // single quote
-    separators[5] = '\"'; // double quote
-    separators[6] = ' '; // space
+    separators[0] = '|'; // pipe
+    separators[1] = '<'; // input redirection
+    separators[2] = '>'; // output redirection
+    separators[3] = '\''; // single quote
+    separators[4] = '\"'; // double quote
+    separators[5] = ' '; // space
     return (separators);
 }
 
@@ -40,6 +39,7 @@ t_shell	*init_shell(char **env)
 	ft_printf("Copying the environment\n");
     shell->env = copy_env(env);
     shell->separators = init_separator();
+    shell->token = NULL;
     ft_printf("Environment copied\n");
 	// initialize the file descriptors
 	// initialize the commands

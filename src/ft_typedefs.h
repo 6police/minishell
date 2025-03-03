@@ -103,6 +103,12 @@ typedef struct env
 	t_env_var *last; // last of the environment variables
 }				t_env;
 
+typedef struct token
+{
+	char **token;
+	struct token *next;
+}               t_token;
+
 // struct to store the shell information
 typedef struct shell
 {
@@ -113,6 +119,9 @@ typedef struct shell
 	char *history_file; // file to store the history
 
 	char **tokens; // tokens from the line
+
+	t_token *token;
+
 
 	int ret;    // return value
 	int status; // status of the shell

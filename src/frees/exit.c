@@ -31,12 +31,8 @@ void close_fds(t_fds *fds)
 // free ONE redir
 void free_redir(t_redir *redir)
 {
-
-    if (redir->input)
-        free(redir->input);
-    if (redir->output)
-        free(redir->output);
-    free(redir);
+    if (redir)
+        free(redir);
 }
 
 // free ALL redirs
