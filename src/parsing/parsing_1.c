@@ -65,7 +65,8 @@ void	parse(t_shell *shell, int debug)
 	int sub;
 	int i;
 	int j;
-	t_token *head_token;
+	//char **tokenss;
+	//t_token *head_token;
 
 	j = 0;
 	i = 0;
@@ -75,28 +76,44 @@ void	parse(t_shell *shell, int debug)
 	if (debug)
 		print_tokens(shell);
 
-	head_token = init_token(shell->tokens);
-	if (!head_token)
-	{
-		ft_putstr_fd("Error: malloc failed\n", 2);
-		exit(1);
-	}
-	shell->token = head_token;
+	// head_token = init_token(shell->tokens);
+	// if (!head_token)
+	// {
+	// 	ft_putstr_fd("Error: malloc failed\n", 2);
+	// 	exit(1);
+	// }
+	// shell->token = head_token;
+	// if (debug)
+	// 	ft_printf("token: %s\n", shell->token->token[0]);
+	// while (shell->token)
+	// {
+	// 	tokenss = parse_line(shell->token->token[0], shell->separators[5], sub);
+	// 	shell->token->token = tokenss;
+	// 	if (debug)
+	// 	{
+	// 		while (shell->token->token[j])
+	// 		{
+	// 			ft_printf("token: %s\n", shell->token->token[j]);
+	// 			j++;
+	// 			ft_printf("j: %d\n---\n", j);
+	// 		}
+	// 	}
+	// 	shell->token = shell->token->next;
+	// 	j = 0;
+	// }
+
+	shell->cmds = build_cmds(shell);
 	if (debug)
 	{
-		while (shell->token)
+		while (shell->cmds[j])
 		{
-			ft_printf("token: %s\n", shell->token->token[0]);
-			char **tokenss = parse_line(shell->token->token[0], shell->separators[5], sub);
-			shell->token->token = tokenss;
-			while(shell->token->token[j])
+			ft_printf("cmd: %s\n", shell->cmds[j]->name);
+			while (shell->cmds[j]->args[i])
 			{
-				ft_printf("token: %s\n", shell->token->token[j]);
-				j++;
-				ft_printf("j: %d\n---\n", j);
+				ft_printf("args: %s\n", shell->cmds[j]->args[i]);
+				i++;
 			}
-			shell->token = shell->token->next;
-			j = 0;
+			j++;
 		}
 	}
 }

@@ -118,9 +118,9 @@ typedef struct shell
 	char *line;         // line read from the input
 	char *history_file; // file to store the history
 
-	char **tokens; // tokens from the line
+	char **tokens; // tokens from the line after pipe separation
 
-	t_token *token;
+	t_token *token; // tokens from the line after parsing
 
 
 	int ret;    // return value

@@ -20,9 +20,18 @@ int count_quotes(char *line);
 // mark a character in the line and switch for another
 void mark_and_replace(char *line, int letter, int sub);
 
+// mark the pipes
+void mark_pipes(char *line);
+
 // split the line into tokens
 char **ft_parse_split(char *line, int letter, int sub);
 
+
+
 t_token *init_token(char **tokens);
+
+t_cmd **build_cmds(t_shell *shell);
+
+
 
 #endif
