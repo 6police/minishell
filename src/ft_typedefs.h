@@ -17,6 +17,8 @@
 # define HD_TEMP_FILE ".hd_temp"
 # define HISTORY ".minishell_history"
 
+typedef void (*builtin_func_t)(t_shell *, t_cmd *); // Define a type for the function pointer
+
 typedef enum e_exit_status
 {
 	EXITSUCCESS = 0, // Successful execution
@@ -65,8 +67,11 @@ typedef struct cmd
 	char *path;  // path to the command,
 
     bool    is_builtin; // if the command is a built-in command
+	bool	is_valid;   // if the command is valid
 
-
+	//pointer for the builtin functions
+    builtin_func_t builtin_func; // Function pointer to the built-in function
+	
 	struct cmd *next; // next command
 	struct cmd *prev; // previous command
 
