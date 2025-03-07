@@ -38,7 +38,7 @@ void	parse_tokens(t_shell *shell) // this function is not complete
 			t_cmd *cmd = (t_cmd *)malloc(sizeof(t_cmd));
 			cmd->name = "cd";
 			cmd->args = shell->tokens;
-			cd_shell(cmd, shell->env);
+			cd_shell(shell, cmd);
 		}
 		i++;
 	}

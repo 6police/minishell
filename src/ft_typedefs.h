@@ -55,7 +55,7 @@ typedef struct cmd
 	char **args; // arguments
 	char *path;  // path to the command,
 
-    bool    is_builtin; // if the command is a built-in command
+	bool is_builtin; // if the command is a built-in command
 
 
 	struct cmd *next; // next command
