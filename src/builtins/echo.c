@@ -1,11 +1,12 @@
 #include "ft_builtins.h"
 
-void echo_shell(t_cmd *cmd)
+void echo_shell(t_cmd *cmd, t_shell *shell)
 {
 	int newline;
 	int i;
 	int	a;
 
+	(void)shell;
 	newline = 1;
 	i = 1;
 	a = 1;

@@ -17,7 +17,12 @@
 # define HD_TEMP_FILE ".hd_temp"
 # define HISTORY ".minishell_history"
 
-typedef void (*builtin_func_t)(t_shell *, t_cmd *); // Define a type for the function pointer
+typedef struct env t_env;
+typedef struct shell t_shell;
+typedef struct cmd t_cmd; // Define a type for the function pointer
+
+
+
 
 typedef enum e_exit_status
 {
@@ -60,7 +65,7 @@ typedef struct redir
 
 
 // struct to store the command information
-typedef struct cmd
+struct cmd
 {
 	char *name;  // command name
 	char **args; // arguments
@@ -70,7 +75,7 @@ typedef struct cmd
 	bool	is_valid;   // if the command is valid
 
 	//pointer for the builtin functions
-    builtin_func_t builtin_func; // Function pointer to the built-in function
+    void (*builtin_func)(t_cmd *cmd, t_shell *shell); // Function pointer to the built-in function
 	
 	struct cmd *next; // next command
 	struct cmd *prev; // previous command
@@ -79,7 +84,7 @@ typedef struct cmd
 	int		last_fd;
 	int		last_read;
     bool    has_heredoc;
-}				t_cmd;
+};
 
 // struct to store the file descriptors
 typedef struct fds
@@ -102,11 +107,11 @@ typedef struct env_var
 }				t_env_var;
 
 // struct to store the environment variables
-typedef struct env
+struct env
 {
 	t_env_var *head; // head of the environment variables
 	t_env_var *last; // last of the environment variables
-}				t_env;
+};
 
 typedef struct token
 {
@@ -115,7 +120,7 @@ typedef struct token
 }               t_token;
 
 // struct to store the shell information
-typedef struct shell
+struct shell
 {
 	t_here_doc	*hd;
 
@@ -127,6 +132,7 @@ typedef struct shell
 
 	t_token *token; // tokens from the line after parsing
 
+	int debug; // debug mode
 
 	int ret;    // return value
 	int status; // status of the shell
@@ -135,7 +141,7 @@ typedef struct shell
     int         *separators; // separators for the parsing
 
 	t_fds *fds;   // file descriptors
-	t_cmd **cmds; // commands
-}				t_shell;
+	t_cmd *cmds; // commands
+};
 
 #endif

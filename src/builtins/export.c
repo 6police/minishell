@@ -65,10 +65,11 @@ void ft_export(char *var, char  *value, t_env *env)
     free(var_value);
 }
 
-void export_builtin(t_shell *shell)
+void export_builtin(t_cmd *cmd, t_shell *shell)
 {
     int i;
 
+    (void)cmd;
     if (!shell->tokens[1])
     {
         export_no_args(shell->env);

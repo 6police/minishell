@@ -30,7 +30,7 @@ char **ft_parse_split(char *line, int letter, int sub);
 
 t_token *init_token(char **tokens);
 
-t_cmd **build_cmds(t_shell *shell);
+t_cmd *build_cmds(t_shell *shell);
 
 
 

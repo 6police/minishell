@@ -21,7 +21,7 @@ void free_redirs(t_redir **redirs);
 void free_cmd(t_cmd *cmd);
 
 // free ALL cmds
-void free_cmds(t_cmd **cmds);
+void free_cmds(t_cmd *cmds);
 
 // free ONE env var
 void free_env_var(t_env_var *env_var);

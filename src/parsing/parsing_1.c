@@ -15,7 +15,7 @@ char	**parse_line(char *line, int letter, int sub)
 }
 
 // parsing to make tokens so we can later parse the tokens into commands
-void	parse_tokens(t_shell *shell) // this function is not complete
+/* void	parse_tokens(t_shell *shell) // this function is not complete
 {
 	// for now it just prints the tokens
 	int i;
@@ -26,9 +26,9 @@ void	parse_tokens(t_shell *shell) // this function is not complete
 		if (ft_strcmp(shell->tokens[i], "env") == 0)
 			print_env(shell->env);
 		if (ft_strcmp(shell->tokens[i], "exit") == 0)
-			exit_shell(shell, 1);
+			exit_shell(&(t_cmd){0},shell);
 		if (ft_strcmp(shell->tokens[i], "export") == 0)
-			export_builtin(shell);
+			export_builtin(&(t_cmd){0},shell);
 		if (ft_strcmp(shell->tokens[i], "unset") == 0)
 			unset_env_var(shell, shell->tokens[i + 1]);
 		if (ft_strcmp(shell->tokens[i], "pwd") == 0)
@@ -43,7 +43,7 @@ void	parse_tokens(t_shell *shell) // this function is not complete
 		i++;
 	}
 	// shell->cmds = malloc(sizeof(t_cmd *) * (i + 1));
-}
+} */
 
 // print the tokens
 static void	print_tokens(t_shell *shell)
@@ -105,15 +105,18 @@ void	parse(t_shell *shell, int debug)
 	shell->cmds = build_cmds(shell);
 	if (debug)
 	{
-		while (shell->cmds[j])
+		while (shell->cmds)
 		{
-			ft_printf("cmd: %s\n", shell->cmds[j]->name);
-			while (shell->cmds[j]->args[i])
+			int k = 0;
+			ft_printf("cmd: %s\n", shell->cmds->name);
+			while (shell->cmds->args[j])
 			{
-				ft_printf("args: %s\n", shell->cmds[j]->args[i]);
-				i++;
+				ft_printf("args: %s\n", shell->cmds->args[k]);
+				k++;
 			}
-			j++;
+			ft_printf("path: %s\n", shell->cmds->path);
+			ft_printf("is_builtin: %d\n", shell->cmds->is_builtin);
+			shell->cmds = shell->cmds->next;
 		}
 	}
 }

@@ -23,6 +23,7 @@ int main(int argc, char **argv, char **env)
         t_shell *shell;
         
         shell = init_shell(env);
+        shell->debug = 0;
         run_shell(shell);
     }
     else if (argc == 2)
@@ -32,6 +33,7 @@ int main(int argc, char **argv, char **env)
             t_shell *shell;
 
             shell = init_shell(env);
+            shell->debug = 1;
             run_shell_debug(shell);
         }
         else
