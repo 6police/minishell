@@ -162,17 +162,17 @@ void free_shell(t_shell *shell, int debug)
 }
 
 // exit the shell
-void clean_exit(t_shell *shell, int debug)
+void clean_exit(t_shell *shell)
 {
 	int status;
 
 	status = shell->status;
 
-	if (debug)
+	if (shell->debug)
 		printf(EMOJI_BRAIN "exiting shell\n");
 
 	if (shell)
-		free_shell(shell, debug);
+		free_shell(shell, shell->debug);
 	clear_history();
 	exit(status);
 

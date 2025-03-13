@@ -1,6 +1,6 @@
 #include "ft_builtins.h"
 
-void echo_shell(t_cmd *cmd)
+void echo_shell(t_shell *shell, t_cmd *cmd)
 {
 	int newline;
 	int i;
@@ -9,7 +9,8 @@ void echo_shell(t_cmd *cmd)
 	newline = 1;
 	i = 1;
 	a = 1;
-
+	if (!shell)
+		return ;
 	while (cmd->args[a])
 	{
 		// if arg == * (wildcard)

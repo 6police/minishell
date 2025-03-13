@@ -1,6 +1,8 @@
 #include "ft_builtins.h"
 
-void exit_shell(t_shell *shell, int debug)
+void exit_shell(t_shell *shell, t_cmd *cmd)
 {
-  clean_exit(shell, debug);
-} 
+	if (!shell)
+		return ;
+	clean_exit(shell);
+}

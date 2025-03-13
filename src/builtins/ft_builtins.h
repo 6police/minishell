@@ -5,11 +5,11 @@
 
 // cd.c
 // cd builtin
-void	cd_shell(t_cmd *cmd, t_env *env);
+void	cd_shell(t_shell *shell, t_cmd *cmd);
 
 // echo.c
 // echo builtin
-void	echo_shell(t_cmd *cmd);
+void	echo_shell(t_shell *shell, t_cmd *cmd);
 
 // pwd.c
 // pwd builtin
@@ -45,7 +45,9 @@ void	unset_vars(t_shell *shell, char **keys);
 // exit builtin
 void	exit_shell(t_shell *shell, int debug);
 
-// execute_command.c
-// execute the command
+// check_external_or_bi.c
+
+// exeternal_cmd.c
+void execute_external(t_shell *shell, t_cmd *cmd);
 
 #endif
