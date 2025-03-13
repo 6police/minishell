@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 
-#include "../minishell.h"
+#include "ft_builtins.h"
 
 // function to find the env variable in the list
 t_env_var	*find_env_var(t_env *env, char *key)

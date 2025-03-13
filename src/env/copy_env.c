@@ -1,16 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   copy_env.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/17 20:18:13 by joamiran          #+#    #+#             */
-/*   Updated: 2025/01/15 19:41:54 by nneves-a         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "../minishell.h"
+#include "ft_env.h"
 
 // function to assign the key and value to the environment variable
 void	assign_env_var(t_env_var *env_var, char *env)
