@@ -38,6 +38,6 @@ void free_shell(t_shell *shell, int debug);
 //exit functions
 
 // exit the shell
-void clean_exit(t_shell *shell, int debug);
+void clean_exit(t_shell *shell);
 
 #endif

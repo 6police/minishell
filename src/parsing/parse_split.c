@@ -23,11 +23,9 @@ int	count_quotes(char *line)
 // function to mark and switch a set of characters in the line for another
 void	mark_and_replace(char *line, int letter, int sub)
 {
-	int	i;
 	int	j;
 	int	c;
 
-	i = -1;
 	j = -1;
 	c = 0;
 	while (line[++j])

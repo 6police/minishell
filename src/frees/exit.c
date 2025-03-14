@@ -66,9 +66,6 @@ void free_cmd(t_cmd *cmd)
 // free ALL cmds
 void free_cmds(t_cmd *cmds)
 {
-    int i;
-
-    i = 0;
     while (cmds->next)
     {
         free_cmd(cmds);

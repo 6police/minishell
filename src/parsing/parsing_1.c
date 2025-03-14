@@ -63,13 +63,11 @@ static void	print_tokens(t_shell *shell)
 void	parse(t_shell *shell, int debug)
 {
 	int sub;
-	int i;
 	int j;
 	//char **tokenss;
 	//t_token *head_token;
 
 	j = 0;
-	i = 0;
 	sub = 7; // the character to replace the separator
 
 	shell->tokens = parse_line(shell->line, shell->separators[0], sub);
