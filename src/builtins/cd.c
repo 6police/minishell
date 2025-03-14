@@ -4,7 +4,7 @@ static char *cd(t_cmd *cmd, t_env *env);
 static void change_dir(char *path, t_env *env);
 static void update_pwd_env_vars(t_env *env, t_env_var *oldpwd, t_env_var *pwd);
 
-void cd_shell(t_shell *shell, t_cmd *cmd)
+void cd_shell(t_cmd *cmd, t_shell *shell)
 {
 	char *path;
 
@@ -12,6 +12,7 @@ void cd_shell(t_shell *shell, t_cmd *cmd)
 	if (!path)
 		return;
 	change_dir(path, shell->env);
+	return ;
 }
 
 static char *cd(t_cmd *cmd, t_env *env)

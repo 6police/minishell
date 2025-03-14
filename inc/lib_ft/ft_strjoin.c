@@ -20,6 +20,20 @@ string, which is the result of the concatenation
 of ’s1’ and ’s2’.
 */
 
+static void	word_copy(char *s1, char *s2, size_t *i)
+{
+	size_t	j;
+
+	j = *i;
+	while (*s2)
+	{
+		s1[j] = *s2;
+		j++;
+		s2++;
+	}
+	*i = j;
+}
+
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	char	*new_str;
@@ -33,18 +47,10 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	new_str = malloc((sizeof(char) * (ft_strlen(str1) + ft_strlen(str2))) + 1);
 	if (!new_str)
 		return (NULL);
-	while (*s1)
-	{
-		new_str[i] = *s1;
-		s1++;
-		i++;
-	}
-	while (*s2)
-	{
-		new_str[i] = *s2;
-		s2++;
-		i++;
-	}
+	if (s1)
+		word_copy(new_str, str1, &i);
+	if (s2)
+		word_copy(new_str, str2, &i);
 	new_str[i] = '\0';
 	return (new_str);
 }

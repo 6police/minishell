@@ -1,7 +1,9 @@
 #include "ft_builtins.h"
 
-void pwd_shell()
+void pwd_shell(t_cmd *cmd, t_shell *shell)
 {
+	(void)cmd;
+	(void)shell;
 	char cwd[PATH_MAX];
 	
 	if (getcwd(cwd, sizeof(cwd)))

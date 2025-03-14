@@ -5,15 +5,15 @@
 
 // cd.c
 // cd builtin
-void	cd_shell(t_shell *shell, t_cmd *cmd);
+void	cd_shell(t_cmd *cmd, t_shell *shell);
 
 // echo.c
 // echo builtin
-void	echo_shell(t_shell *shell, t_cmd *cmd);
+void	echo_shell(t_cmd *cmd, t_shell *shell);
 
 // pwd.c
 // pwd builtin
-void	pwd_shell(void);
+void	pwd_shell(t_cmd *cmd, t_shell *shell);
 
 // export.c
 // export an environment variable
@@ -26,7 +26,7 @@ void	export_no_args(t_env *env);
 void    ft_export(char *var, char *value, t_env *env);
 
 // export builtin
-void	export_builtin(t_shell *shell);
+void	export_builtin(t_cmd *cmd, t_shell *shell);
 
 // unset.c
 // find an environment variable
@@ -39,11 +39,11 @@ void	remove_env_var(t_env *env, char *key);
 void	unset_env_var(t_shell *shell, char *key);
 
 // unset multiple environment variables
-void	unset_vars(t_shell *shell, char **keys);
+void	unset_vars(t_cmd *cmd, t_shell *shell);
 
 // exit.c
 // exit builtin
-void	exit_shell(t_shell *shell, int debug);
+void	exit_shell(t_cmd *cmd, t_shell *shell);
 
 // check_external_or_bi.c
 
