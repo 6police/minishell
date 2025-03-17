@@ -64,8 +64,8 @@ void	parse(t_shell *shell, int debug)
 {
 	int sub;
 	int j;
-	//char **tokenss;
-	//t_token *head_token;
+	// char **tokenss;
+	// t_token *head_token;
 
 	j = 0;
 	sub = 7; // the character to replace the separator
@@ -73,47 +73,12 @@ void	parse(t_shell *shell, int debug)
 	shell->tokens = parse_line(shell->line, shell->separators[0], sub);
 	if (debug)
 		print_tokens(shell);
-
-	// head_token = init_token(shell->tokens);
-	// if (!head_token)
-	// {
-	// 	ft_putstr_fd("Error: malloc failed\n", 2);
-	// 	exit(1);
-	// }
-	// shell->token = head_token;
-	// if (debug)
-	// 	ft_printf("token: %s\n", shell->token->token[0]);
-	// while (shell->token)
-	// {
-	// 	tokenss = parse_line(shell->token->token[0], shell->separators[5], sub);
-	// 	shell->token->token = tokenss;
-	// 	if (debug)
-	// 	{
-	// 		while (shell->token->token[j])
-	// 		{
-	// 			ft_printf("token: %s\n", shell->token->token[j]);
-	// 			j++;
-	// 			ft_printf("j: %d\n---\n", j);
-	// 		}
-	// 	}
-	// 	shell->token = shell->token->next;
-	// 	j = 0;
-	// }
-
 	shell->cmds = build_cmds(shell);
 	if (debug)
 	{
 		while (shell->cmds)
 		{
-			int k = 0;
-			ft_printf("cmd: %s\n", shell->cmds->name);
-			while (shell->cmds->args[j])
-			{
-				ft_printf("args: %s\n", shell->cmds->args[k]);
-				k++;
-			}
-			ft_printf("path: %s\n", shell->cmds->path);
-			ft_printf("is_builtin: %d\n", shell->cmds->is_builtin);
+			print_command(shell->cmds);
 			shell->cmds = shell->cmds->next;
 		}
 	}
