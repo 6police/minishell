@@ -1,7 +1,6 @@
 #ifndef FT_TYPEDEFS_H
 # define FT_TYPEDEFS_H
 
-
 # define PROMPT monke " minishell _$ "
 # define PROMPT_SIZE 11
 
@@ -17,24 +16,21 @@
 # define HD_TEMP_FILE ".hd_temp"
 # define HISTORY ".minishell_history"
 
-typedef struct env t_env;
-typedef struct shell t_shell;
+typedef struct env		t_env;
+typedef struct shell	t_shell;
 typedef struct cmd t_cmd; // Define a type for the function pointer
-
-
-
 
 typedef enum e_exit_status
 {
 	EXITSUCCESS = 0, // Successful execution
 	EXITFAILURE = 1,
-		// General failure (often used by programs to indicate an error)
+	// General failure (often used by programs to indicate an error)
 
 	// Shell-specific exit codes (for shell-like environments)
 	EXIT_COMMAND_NOT_FOUND = 127, // Command not found (shell scripts)
 
 	SIG = 128 //+ SIGSEGV,			// + signal - For all the other SIG's
-}				t_exit_status;
+}						t_exit_status;
 
 // struct to store the here document information
 typedef struct here_doc
@@ -44,46 +40,47 @@ typedef struct here_doc
 	char *file;    // file to store the here document
 
 	int fd; // file descriptor
-}				t_here_doc;
+}						t_here_doc;
 
-typedef enum s_type{
-    HEREDOC,
-    APPEND,
-    CREATE,
-    READ
-}               t_type;
+typedef enum s_type
+{
+	HEREDOC,
+	APPEND,
+	CREATE,
+	READ
+}						t_type;
 
 // struct to store the command information
 // struct to store the redirection information
 typedef struct redir
 {
-    int  fd;
-    t_type type;
-    char *name;// type of redirection
-    struct readir *next;
-}				t_redir;
-
+	int					fd;
+	t_type				type;
+	char *name; // type of redirection
+	struct readir		*next;
+}						t_redir;
 
 // struct to store the command information
-struct cmd
+struct					cmd
 {
 	char *name;  // command name
 	char **args; // arguments
 	char *path;  // path to the command,
 
-    bool    is_builtin; // if the command is a built-in command
-	bool	is_valid;   // if the command is valid
+	bool is_builtin; // if the command is a built-in command
+	bool is_valid;   // if the command is valid
 
-	//pointer for the builtin functions
-    void (*builtin_func)(t_cmd *cmd, t_shell *shell); // Function pointer to the built-in function
-	
+	// pointer for the builtin functions
+	void (*builtin_func)(t_cmd *cmd, t_shell *shell);
+		// Function pointer to the built-in function
+
 	struct cmd *next; // next command
 	struct cmd *prev; // previous command
 
 	t_redir **redirs; // redirections
-	int		last_fd;
-	int		last_read;
-    bool    has_heredoc;
+	int					last_fd;
+	int					last_read;
+	bool				has_heredoc;
 };
 
 // struct to store the file descriptors
@@ -93,7 +90,7 @@ typedef struct fds
 	int fd_out;      // file descriptor for the output
 	int fd_err;      // file descriptor for the error
 	int fd_here_doc; // file descriptor for the here document
-}				t_fds;
+}						t_fds;
 
 // struct to store the environment variable and its value
 typedef struct env_var
@@ -104,10 +101,10 @@ typedef struct env_var
 
 	struct env_var *next; // next environment variable
 	struct env_var *prev; // previous environment variable
-}				t_env_var;
+}						t_env_var;
 
 // struct to store the environment variables
-struct env
+struct					env
 {
 	t_env_var *head; // head of the environment variables
 	t_env_var *last; // last of the environment variables
@@ -115,14 +112,14 @@ struct env
 
 typedef struct token
 {
-	char **token;
-	struct token *next;
-}               t_token;
+	char				**token;
+	struct token		*next;
+}						t_token;
 
 // struct to store the shell information
-struct shell
+struct					shell
 {
-	t_here_doc	*hd;
+	t_here_doc			*hd;
 
 	t_env *env;         // environment variables
 	char *line;         // line read from the input
@@ -130,17 +127,19 @@ struct shell
 
 	char **tokens; // tokens from the line after pipe separation
 
+	bool is_pipe; // if the command has a pipe
+
 	t_token *token; // tokens from the line after parsing
 
 	int debug; // debug mode
 
 	int ret;    // return value
 	int status; // status of the shell
-	int			exit_value;
+	int					exit_value;
 
-    int         *separators; // separators for the parsing
+	int *separators; // separators for the parsing
 
-	t_fds *fds;   // file descriptors
+	t_fds *fds;  // file descriptors
 	t_cmd *cmds; // commands
 };
 

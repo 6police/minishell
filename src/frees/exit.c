@@ -143,7 +143,7 @@ void	free_shell(t_shell *shell, int debug)
 			printf("freeing fds\n");
 		close_fds(shell->fds);
 	}
-	if (shell->tokens)
+	if (shell->tokens && shell->tokens[0])
 	{
 		if (debug)
 			printf("freeing tokens\n");

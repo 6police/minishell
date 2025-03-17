@@ -43,6 +43,11 @@ void	print_command(t_cmd *cmd)
 	int i;
 
 	i = 0;
+
+	ft_printf("is_command_path ???\n");
+	ft_printf("%d\n", is_command_path(cmd->name));
+	ft_printf("\n --- \n");
+
 	ft_printf("name: %s\n", cmd->name);
 	ft_printf("args: ");
 	print_args(cmd);
@@ -53,10 +58,13 @@ void	print_command(t_cmd *cmd)
 	ft_printf("last_fd: %d\n", cmd->last_fd);
 	ft_printf("last_read: %d\n", cmd->last_read);
 	ft_printf("has_heredoc: %d\n", cmd->has_heredoc);
+
 	// print function pointer
 	ft_printf("builtin_func: %p\n", cmd->builtin_func);
 	ft_printf("\n");
-	ft_printf("next: %s\n", cmd->next->name);
-	ft_printf("prev: %s\n", cmd->prev->name);
+	if (cmd->next)
+		ft_printf("next: %s\n", cmd->next->name);
+	if (cmd->prev)
+		ft_printf("prev: %s\n", cmd->prev->name);
 	ft_printf("\n");
 }

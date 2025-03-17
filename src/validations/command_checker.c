@@ -21,10 +21,10 @@ char	*ft_strjoin2(char *paths, char *cmd)
 
 char	*checkforpath(char *cmd, t_env *env)
 {
-	t_env_var *tmp;
-	int i;
-	char **paths;
-	char *full_cmd;
+	t_env_var	*tmp;
+	int			i;
+	char		**paths;
+	char		*full_cmd;
 
 	tmp = find_env_var(env, "PATH");
 	if (!tmp || !tmp->value || !tmp->value[0])
@@ -44,4 +44,13 @@ char	*checkforpath(char *cmd, t_env *env)
 	}
 	free_split(paths);
 	return (NULL);
+}
+
+// check if command sent is in path format
+// ex: /bin/ls
+bool	is_command_path(char *cmd)
+{
+	if (access(cmd, F_OK) == 0)
+		return (true);
+	return (false);
 }

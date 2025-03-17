@@ -5,25 +5,28 @@
 // we will use the following function to convert the linked list to an array of strings
 
 // Function to count the number of environment variables
-static size_t count_env_vars(t_env *env)
+static size_t	count_env_vars(t_env *env)
 {
-    size_t count = 0;
-    t_env_var *current = env->head;
-    while (current)
-    {
-        count++;
-        current = current->next;
-    }
-    return count;
+	size_t		count;
+	t_env_var	*current;
+
+	count = 0;
+	current = env->head;
+	while (current)
+	{
+		count++;
+		current = current->next;
+	}
+	return (count);
 }
 
 // Function to convert the linked list to an array of strings
-static char **convert_env_to_array(t_env *env)
+static char	**convert_env_to_array(t_env *env)
 {
-	size_t i;
-	char **envp;
-	t_env_var *current;
-	char *temp;
+	size_t		i;
+	char		**envp;
+	t_env_var	*current;
+	char		*temp;
 
 	i = 0;
 	envp = (char **)malloc(sizeof(char *) * (count_env_vars(env) + 1));
@@ -57,15 +60,15 @@ static char **convert_env_to_array(t_env *env)
 }
 
 // function to execute the command
-void execute_external(t_shell *shell, t_cmd *cmd)
+void	execute_external(t_cmd *cmd, t_shell *shell)
 {
 	pid_t	pid;
 	int		status;
-	int i;
+	int		i;
 	char	**envp;
 
-	i = 0;
 	envp = convert_env_to_array(shell->env);
+	i = 0;
 	pid = fork();
 	if (pid == 0)
 	{
@@ -81,12 +84,11 @@ void execute_external(t_shell *shell, t_cmd *cmd)
 		ft_putstr_fd("minishell: fork failed\n", 2);
 	else
 		waitpid(pid, &status, 0);
-
 	// Free the allocated memory
-	while(envp[i])
-	{
-		free(envp[i]);
-		i++;
-	}
+	/* 	while (envp[i])
+		{
+			free(envp[i]);
+			i++;
+		} */
 	free(envp);
 }

@@ -55,24 +55,39 @@ static void	check_builtin(t_cmd *cmd)
 		cmd->is_builtin = true;
 	if (ft_strcmp(cmd->name, "cd") == 0)
 		cmd->is_builtin = true;
+	if (ft_strcmp(cmd->name, "echo") == 0)
+		cmd->is_builtin = true;
 }
 
 void	build_cmd(t_cmd *cmd, char **args, t_shell *shell)
 {
 	char	*path;
 
-	path = checkforpath(cmd->name, shell->env);
-	if (path)
+	if (is_command_path(cmd->name))
 	{
-		cmd->path = path;
+		cmd->path = cmd->name;
 		cmd->is_valid = true;
-		cmd->args = args;
+		cmd->args = args + 1;
+		cmd->builtin_func = execute_external;
+		return ;
 	}
 	else
 	{
-		cmd->path = NULL;
-		cmd->is_valid = false;
-		cmd->args = args;
+		path = checkforpath(cmd->name, shell->env);
+		if (path)
+		{
+			cmd->path = path;
+			cmd->is_valid = true;
+			cmd->args = args + 1;
+			cmd->builtin_func = execute_external;
+		}
+		else
+		{
+			cmd->path = NULL;
+			cmd->is_valid = false;
+			cmd->args = args + 1;
+			cmd->builtin_func = NULL;
+		}
 	}
 }
 
@@ -91,7 +106,7 @@ void	build_builtin(t_cmd *cmd, char **args)
 		cmd->builtin_func = unset_vars;
 	if (ft_strcmp(cmd->name, "exit") == 0)
 		cmd->builtin_func = exit_shell;
-	cmd->args = args;
+	cmd->args = args + 1;
 }
 
 // funciton that takes tokens and assembles into commands
