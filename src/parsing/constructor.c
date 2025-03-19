@@ -66,7 +66,7 @@ void build_cmd(t_cmd *cmd, char **args, t_shell *shell)
 	{
 		cmd->path = cmd->name;
 		cmd->is_valid = true;
-		cmd->args = args + 1;
+		cmd->args = args;
 		cmd->builtin_func = execute_external;
 		return;
 	}
@@ -77,14 +77,14 @@ void build_cmd(t_cmd *cmd, char **args, t_shell *shell)
 		{
 			cmd->path = path;
 			cmd->is_valid = true;
-			cmd->args = args + 1;
+			cmd->args = args;
 			cmd->builtin_func = execute_external;
 		}
 		else
 		{
 			cmd->path = NULL;
 			cmd->is_valid = false;
-			cmd->args = args + 1;
+			cmd->args = args;
 			cmd->builtin_func = NULL;
 		}
 	}

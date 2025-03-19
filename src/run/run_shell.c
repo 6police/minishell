@@ -17,16 +17,16 @@ void	run_shell_debug(t_shell *shell)
 		{
 			add_history(shell->line);
 			parse(shell); // parse the line and tokens
-			if (shell->tokens)
-			{
-				free_tokens(shell->tokens); // free the tokens
-				ft_printf(EMOJI_COOL "tokens cleared \n");
-			}
 			if (shell->cmds)
 			{
 				run_commands(shell);
 				free_cmds(shell->cmds);
 				ft_printf(EMOJI_COOL "commands cleared \n");
+			}
+			if (shell->tokens)
+			{
+				free_tokens(shell->tokens); // free the tokens
+				ft_printf(EMOJI_COOL "tokens cleared \n");
 			}
 			free(shell->line);
 			ft_printf(EMOJI_COOL "line cleared \n");
@@ -50,7 +50,6 @@ void	run_shell(t_shell *shell)
 			{
 				printf(EMOJI_COOL "PLACEHOLDER \n something will happen here\n");
 			}
-			free_tokens(shell->tokens); // free the tokens
 			if (shell->cmds)
 			{
 				run_commands(shell);
@@ -58,6 +57,7 @@ void	run_shell(t_shell *shell)
 			}
 			free(shell->line);
 		}
+		free_tokens(shell->tokens); // free the tokens
 	}
 }
 
