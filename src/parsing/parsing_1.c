@@ -32,9 +32,7 @@ static void	print_tokens(t_shell *shell)
 void	parse(t_shell *shell)
 {
 	int sub;
-	int j;
 
-	j = 0;
 	sub = 7; // the character to replace the separator
 	shell->tokens = parse_line(shell->line, shell->separators[0], sub);
 	shell->cmds = build_cmds(shell);
@@ -44,10 +42,7 @@ void	parse(t_shell *shell)
 	{
 		print_tokens(shell);
 		ft_printf("pipe: %d\n", shell->is_pipe);
-		while (shell->cmds)
-		{
-			print_command(shell->cmds);
-			shell->cmds = shell->cmds->next;
-		}
+		print_all_commands(shell);
 	}
+	
 }

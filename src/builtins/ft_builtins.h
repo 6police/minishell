@@ -41,6 +41,10 @@ void		unset_env_var(t_shell *shell, char *key);
 // unset multiple environment variables
 void		unset_vars(t_cmd *cmd, t_shell *shell);
 
+// env.c
+// print the environment variables
+void		env(t_cmd *cmd, t_shell *shell);
+
 // exit.c
 // exit builtin
 void		exit_shell(t_cmd *cmd, t_shell *shell);

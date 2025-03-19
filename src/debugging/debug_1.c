@@ -1,9 +1,9 @@
 #include "ft_debug.h"
 
 // Print the enviroment variables
-void	print_env(t_env *env)
+void print_env(t_env *env)
 {
-	t_env_var	*tmp;
+	t_env_var *tmp;
 
 	tmp = env->head;
 	while (tmp)
@@ -14,9 +14,9 @@ void	print_env(t_env *env)
 	}
 }
 
-void	print_export(t_env *env)
+void print_export(t_env *env)
 {
-	t_env_var	*tmp;
+	t_env_var *tmp;
 
 	tmp = env->head;
 	while (tmp)
@@ -25,9 +25,9 @@ void	print_export(t_env *env)
 		tmp = tmp->next;
 	}
 }
-static void	print_args(t_cmd *cmd)
+static void print_args(t_cmd *cmd)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	while (cmd->args && cmd->args[i])
@@ -38,11 +38,8 @@ static void	print_args(t_cmd *cmd)
 	ft_printf("\n");
 }
 
-void	print_command(t_cmd *cmd)
+void print_command(t_cmd *cmd)
 {
-	int i;
-
-	i = 0;
 
 	ft_printf("is_command_path ???\n");
 	ft_printf("%d\n", is_command_path(cmd->name));
@@ -67,4 +64,17 @@ void	print_command(t_cmd *cmd)
 	if (cmd->prev)
 		ft_printf("prev: %s\n", cmd->prev->name);
 	ft_printf("\n");
+}
+
+// print all the commands
+void print_all_commands(t_shell *shell)
+{
+	t_cmd *cmd;
+
+	cmd = shell->cmds;
+	while (cmd)
+	{
+		print_command(cmd);
+		cmd = cmd->next;
+	}
 }

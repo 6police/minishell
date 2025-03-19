@@ -3,9 +3,9 @@
 // function that takes the shell->token and parses it into commands
 
 // function to add a t_cmd to the t_cmd linked list
-static void	add_last_cmd(t_cmd **head, t_cmd *new_cmd)
+static void add_last_cmd(t_cmd **head, t_cmd *new_cmd)
 {
-	t_cmd	*tmp;
+	t_cmd *tmp;
 
 	tmp = *head;
 	if (!tmp)
@@ -20,10 +20,9 @@ static void	add_last_cmd(t_cmd **head, t_cmd *new_cmd)
 }
 
 // function to create a new t_cmd
-static t_cmd	*init_cmd(char *name, char **args)
+static t_cmd *init_cmd(char *name, char **args)
 {
-	t_cmd	*cmd;
-
+	t_cmd *cmd;
 	cmd = ft_calloc(sizeof(t_cmd), 1);
 	cmd->name = name;
 	cmd->args = args;
@@ -39,10 +38,10 @@ static t_cmd	*init_cmd(char *name, char **args)
 }
 
 // function to check if its a built-in command
-static void	check_builtin(t_cmd *cmd)
+static void check_builtin(t_cmd *cmd)
 {
 	if (!cmd)
-		return ;
+		return;
 	if (ft_strcmp(cmd->name, "env") == 0)
 		cmd->is_builtin = true;
 	if (ft_strcmp(cmd->name, "exit") == 0)
@@ -59,9 +58,9 @@ static void	check_builtin(t_cmd *cmd)
 		cmd->is_builtin = true;
 }
 
-void	build_cmd(t_cmd *cmd, char **args, t_shell *shell)
+void build_cmd(t_cmd *cmd, char **args, t_shell *shell)
 {
-	char	*path;
+	char *path;
 
 	if (is_command_path(cmd->name))
 	{
@@ -69,7 +68,7 @@ void	build_cmd(t_cmd *cmd, char **args, t_shell *shell)
 		cmd->is_valid = true;
 		cmd->args = args + 1;
 		cmd->builtin_func = execute_external;
-		return ;
+		return;
 	}
 	else
 	{
@@ -91,7 +90,7 @@ void	build_cmd(t_cmd *cmd, char **args, t_shell *shell)
 	}
 }
 
-void	build_builtin(t_cmd *cmd, char **args)
+void build_builtin(t_cmd *cmd, char **args)
 {
 	cmd->is_valid = true;
 	if (ft_strcmp(cmd->name, "cd") == 0)
@@ -106,6 +105,8 @@ void	build_builtin(t_cmd *cmd, char **args)
 		cmd->builtin_func = unset_vars;
 	if (ft_strcmp(cmd->name, "exit") == 0)
 		cmd->builtin_func = exit_shell;
+	if (ft_strcmp(cmd->name, "env") == 0)
+		cmd->builtin_func = env;
 	cmd->args = args + 1;
 }
 
@@ -116,12 +117,12 @@ void	build_builtin(t_cmd *cmd, char **args)
 // we then look for the path of the command,
 // if found we set the path of the command and build the command
 // if not found we set the path to NULL and command is now invalid
-t_cmd	*build_cmds(t_shell *shell)
+t_cmd *build_cmds(t_shell *shell)
 {
-	int		i;
-	t_cmd	*cmd;
-	t_cmd	*head_cmd;
-	char	**args;
+	int i;
+	t_cmd *cmd;
+	t_cmd *head_cmd;
+	char **args;
 
 	i = 0;
 	head_cmd = NULL;

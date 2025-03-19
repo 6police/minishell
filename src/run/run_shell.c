@@ -20,10 +20,16 @@ void	run_shell_debug(t_shell *shell)
 			if (shell->tokens)
 			{
 				free_tokens(shell->tokens); // free the tokens
-				printf(EMOJI_COOL "tokens cleared \n");
-				free(shell->line);
-				printf(EMOJI_COOL "line cleared \n");
+				ft_printf(EMOJI_COOL "tokens cleared \n");
 			}
+			if (shell->cmds)
+			{
+				run_commands(shell);
+				free_cmds(shell->cmds);
+				ft_printf(EMOJI_COOL "commands cleared \n");
+			}
+			free(shell->line);
+			ft_printf(EMOJI_COOL "line cleared \n");
 		}
 	}
 }
@@ -45,6 +51,11 @@ void	run_shell(t_shell *shell)
 				printf(EMOJI_COOL "PLACEHOLDER \n something will happen here\n");
 			}
 			free_tokens(shell->tokens); // free the tokens
+			if (shell->cmds)
+			{
+				run_commands(shell);
+				free_cmds(shell->cmds);
+			}
 			free(shell->line);
 		}
 	}
@@ -57,8 +68,4 @@ void	shelling(t_shell *shell)
 		run_shell_debug(shell);
 	else
 		run_shell(shell);
-	while (t_cmd->next)
-	{
-		cmd->builtin_func(shell, cmd);
-	}
 }
