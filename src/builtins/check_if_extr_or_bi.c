@@ -20,5 +20,5 @@ void check_command(t_shell *shell, t_cmd *cmd)
 	if (cmd->is_builtin == false)
 		execute_external(shell, cmd);
 	else
-		printf("hmmm\n"); //substitute for execute Buiiltin
+		printf("hmmm\n"); //substitute for execute Builtin
 }
