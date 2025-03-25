@@ -1,25 +1,26 @@
 #include "ft_builtins.h"
 
-static char *cd(t_cmd *cmd, t_env *env);
-static void change_dir(char *path, t_env *env);
-static void update_pwd_env_vars(t_env *env, t_env_var *oldpwd, t_env_var *pwd);
+static char	*cd(t_cmd *cmd, t_env *env);
+static void	change_dir(char *path, t_env *env);
+static void	update_pwd_env_vars(t_env *env, t_env_var *oldpwd, t_env_var *pwd);
 
-void cd_shell(t_cmd *cmd, t_shell *shell)
+void	cd_shell(t_cmd *cmd, t_shell *shell)
 {
-	char *path;
+	char	*path;
 
 	path = cd(cmd, shell->env);
 	if (!path)
-		return;
+		return ;
 	change_dir(path, shell->env);
 	return ;
 }
 
-static char *cd(t_cmd *cmd, t_env *env)
+static char	*cd(t_cmd *cmd, t_env *env)
 {
-	t_env_var *home;
+	t_env_var	*home;
 
-	if (!cmd->args[1])
+	home = NULL;
+	if (!cmd->args)
 	{
 		home = find_env_var(env, "HOME");
 		if (!home || !home->value)
@@ -29,28 +30,24 @@ static char *cd(t_cmd *cmd, t_env *env)
 		}
 		return (home->value);
 	}
-	else if (strcmp(cmd->args[1], "-") == 0)
-	{
-		return ("-");
-	}
-	return (cmd->args[1]);
+	return (cmd->args[0]);
 }
 
-static void change_dir(char *path, t_env *env)
+static void	change_dir(char *path, t_env *env)
 {
-	t_env_var *oldpwd;
-	t_env_var *pwd;
-	char *new_path;
+	t_env_var	*oldpwd;
+	t_env_var	*pwd;
+	char		*new_path;
 
 	oldpwd = find_env_var(env, "OLDPWD");
 	pwd = find_env_var(env, "PWD");
 	new_path = path;
-	if (strcmp(path, "-") == 0)
+	if (ft_strcmp(path, "-") == 0)
 	{
 		if (!oldpwd || !oldpwd->value || oldpwd->value[0] == '\0')
 		{
 			ft_putstr_fd("minishell: cd: OLDPWD not set\n", STDERR_FILENO);
-			return;
+			return ;
 		}
 		new_path = oldpwd->value;
 		ft_putstr_fd(new_path, STDOUT_FILENO);
@@ -61,12 +58,12 @@ static void change_dir(char *path, t_env *env)
 		ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
 		ft_putstr_fd(new_path, STDERR_FILENO); // joao troca por printf_fd
 		ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
-		return;
+		return ;
 	}
 	update_pwd_env_vars(env, oldpwd, pwd);
 }
 
-static void update_pwd_env_vars(t_env *env, t_env_var *oldpwd, t_env_var *pwd)
+static void	update_pwd_env_vars(t_env *env, t_env_var *oldpwd, t_env_var *pwd)
 {
 	char cwd[PATH_MAX];
 

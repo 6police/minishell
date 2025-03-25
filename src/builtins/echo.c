@@ -1,14 +1,14 @@
 #include "ft_builtins.h"
 
-void echo_shell(t_cmd *cmd, t_shell *shell)
+void	echo_shell(t_cmd *cmd, t_shell *shell)
 {
-	int newline;
-	int i;
+	int	newline;
+	int	i;
 	int	a;
 
 	(void)shell;
 	newline = 1;
-	i = 1;
+	i = 0;
 	a = 1;
 	if (!shell)
 		return ;
@@ -19,7 +19,7 @@ void echo_shell(t_cmd *cmd, t_shell *shell)
 			printf("PLACEHOLDER FOR WILDCARD");
 		a++;
 	}
-	if (cmd->args[1] && ft_strcmp(cmd->args[1], "-n") == 0)
+	if (cmd->args[0] && ft_strcmp(cmd->args[0], "-n") == 0)
 	{
 		newline = 0;
 		i++;

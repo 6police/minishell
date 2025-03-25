@@ -44,5 +44,4 @@ void	parse(t_shell *shell)
 		ft_printf("pipe: %d\n", shell->is_pipe);
 		print_all_commands(shell);
 	}
-	
 }

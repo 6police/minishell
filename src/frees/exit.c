@@ -6,11 +6,14 @@ void	free_array(char **array)
 	int	i;
 
 	i = 0;
-	while (array[i])
+	if (!array || !array[0])
+		return ;
+	while (array[i] != NULL)
 	{
 		free(array[i]);
 		i++;
 	}
+	ft_printf("array freed\n");
 	free(array);
 }
 
@@ -54,24 +57,34 @@ void	free_cmd(t_cmd *cmd)
 {
 	if (cmd->name)
 		free(cmd->name);
-	if (cmd->args)
+	if (cmd->args && cmd->args[0])
+	{
 		free_array(cmd->args);
+		cmd->args = NULL;
+	}
 	if (cmd->path)
 		free(cmd->path);
 	if (cmd->redirs)
 		free_redirs(cmd->redirs);
 	free(cmd);
+	ft_printf("cmd freed\n");
 }
 
 // free ALL cmds
 void	free_cmds(t_cmd *cmds)
 {
-	while (cmds->next)
+	t_cmd	*tmp;
+
+	if (!cmds)
+		return ;
+	tmp = cmds;
+	while (tmp)
 	{
-		free_cmd(cmds);
-		cmds = cmds->next;
+		cmds = tmp->next;
+		if (cmds)
+			free_cmd(tmp);
+		tmp = cmds;
 	}
-	free(cmds);
 }
 
 // free ONE env var
@@ -94,7 +107,8 @@ void	free_env(t_env *env)
 	while (tmp)
 	{
 		next = tmp->next;
-		free_env_var(tmp);
+		if (next)
+			free_env_var(tmp);
 		tmp = next;
 	}
 	free(env);

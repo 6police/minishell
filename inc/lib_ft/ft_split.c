@@ -68,6 +68,7 @@ static void	word_copying(char **vector, char const *s, char c)
 			i = j;
 		}
 	}
+	vector[k] = NULL;
 }
 
 char	**ft_split(char const *s, char c)
@@ -91,14 +92,18 @@ char	**ft_split(char const *s, char c)
 
 /* int main()
 {
-	char *s = NULL;
-	char **words = ft_split(s, ',');
-	int i = 0;
+	char	*s;
+	char	**words;
+	int		i;
+
+	s = NULL;
+	words = ft_split(s, ',');
+	i = 0;
 	while (words[i])
 	{
 		printf("%s\n", words[i]);
 		i++;
 	}
-	return 0;
+	return (0);
 }
  */
