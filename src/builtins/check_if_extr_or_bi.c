@@ -12,13 +12,14 @@
 
 #include "ft_builtins.h"
 
-void check_command(t_shell *shell, t_cmd *cmd)
+void	check_command(t_cmd *cmd, t_shell *shell)
 {
 	// check if the command is a built-in command
 	if (!shell)
 		return ;
 	if (cmd->is_builtin == false)
-		execute_external(shell, cmd);
+		execute_external(cmd, shell);
 	else
+
 		printf("hmmm\n"); //substitute for execute Builtin
 }

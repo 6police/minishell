@@ -1,11 +1,8 @@
 
 #include "ft_run.h"
 
-
-void run_shell_debug(t_shell *shell)
+void	run_shell_debug(t_shell *shell)
 {
-	// setup the signal handler
-	setup_signals();
 	// for now it just starts the shell
 	while (1)
 	{
@@ -14,44 +11,61 @@ void run_shell_debug(t_shell *shell)
 		if (!shell->line)
 		{
 			printf(EMOJI_BRAIN "exiting shell\n");
-			exit_shell(shell, 1);
+			exit_shell(&(t_cmd){0}, shell);
 		}
 		if (shell->line)
 		{
 			add_history(shell->line);
-			parse(shell, 1); // parse the line and tokens
+			parse(shell); // parse the line and tokens
+			if (shell->cmds)
+			{
+				run_commands(shell);
+				free_cmds(shell->cmds);
+				ft_printf(EMOJI_COOL "commands cleared \n");
+			}
 			if (shell->tokens)
 			{
 				free_tokens(shell->tokens); // free the tokens
-				printf(EMOJI_COOL "tokens cleared \n");
-				free(shell->line);
-				printf(EMOJI_COOL "line cleared \n");
+				ft_printf(EMOJI_COOL "tokens cleared \n");
 			}
+			free(shell->line);
+			ft_printf(EMOJI_COOL "line cleared \n");
 		}
 	}
 }
 
-void run_shell(t_shell *shell)
+void	run_shell(t_shell *shell)
 {
-	// setup the signal handler
-	setup_signals();
 	// for now it just starts the shell
 	while (1)
 	{
 		// read the input
 		shell->line = readline(PROMPT);
 		if (!shell->line)
-			exit_shell(shell, 0);
+			exit_shell(&(t_cmd){0}, shell);
 		if (shell->line)
 		{
-			parse(shell, 0); // parse the line and tokens
+			parse(shell); // parse the line and tokens
 			if (shell->tokens)
 			{
 				printf(EMOJI_COOL "PLACEHOLDER \n something will happen here\n");
 			}
-
-			free_tokens(shell->tokens); // free the tokens
+			if (shell->cmds)
+			{
+				run_commands(shell);
+				free_cmds(shell->cmds);
+			}
 			free(shell->line);
 		}
+		free_tokens(shell->tokens); // free the tokens
 	}
+}
+
+void	shelling(t_shell *shell)
+{
+	setup_signals();
+	if (shell->debug)
+		run_shell_debug(shell);
+	else
+		run_shell(shell);
 }

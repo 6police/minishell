@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jcmspg <jcmspg@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 23:47:26 by nuno              #+#    #+#             */
-/*   Updated: 2025/02/12 20:36:09 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/03/19 21:33:11 by jcmspg           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,8 @@ void ft_export(char *var, char  *value, t_env *env)
     char *var_value;
 
     if (!var)
-    {
-        export_no_args(env); 
         return ;
-    }
-    if (!value)
+    else if (!value)
     {
         export_var(var, env);
         return ;
@@ -62,23 +59,24 @@ void ft_export(char *var, char  *value, t_env *env)
     var_value = ft_strjoin(var, "=");
     var_value = ft_strjoin(var_value, value);
     export_var(var_value, env);
+    printf("EXPORTED %s", var);
     free(var_value);
 }
 
-void export_builtin(t_shell *shell)
+void export_builtin(t_cmd *cmd, t_shell *shell)
 {
     int i;
 
-    if (!shell->tokens[1])
+    i = 0;
+    if (cmd->args[0] == NULL)
     {
         export_no_args(shell->env);
-        return ;
+        return;
     }
 
-    i = 1;
-    while (shell->tokens[i])
+    while (cmd->args[i])
     {
-        ft_export(shell->tokens[i], NULL, shell->env);
+        ft_export(cmd->args[i], NULL, shell->env);
         i++;
     }
 }

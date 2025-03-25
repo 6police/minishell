@@ -10,41 +10,33 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
+#include "minishell.h"
 
-int main(int argc, char **argv, char **env)
+int	main(int argc, char **argv, char **env)
 {
-    (void)argv;
+	t_shell	*shell;
 
-
-    // if it has any arguments, print the error message
-    if (argc == 1)
-    {
-        t_shell *shell;
-        
-        shell = init_shell(env);
-        run_shell(shell);
-    }
-    else if (argc == 2)
-    {
-        if ((ft_strncmp(argv[1], "-d", 2) == 0) || (ft_strncmp(argv[1], "--debug", 7) == 0))
-        {
-            t_shell *shell;
-
-            shell = init_shell(env);
-            run_shell_debug(shell);
-        }
-        else
-        {
-            ft_putstr_fd(EMOJI_CROSS EMOJI_CROSS " Error: minishell does not accept arguments\n", 2);
-            return (1);
-        }
-    }
-    else
-    {
-        ft_putstr_fd(EMOJI_CROSS EMOJI_CROSS " Error: minishell does not accept arguments\n", 2);
-        return (1);
-    }
-    return (0);    
+	if (argc > 2)
+	{
+		ft_putstr_fd(EMOJI_CROSS EMOJI_CROSS " Error: minishell does not accept arguments\n",
+			2);
+		return (1);
+	}
+	shell = init_shell(env);
+	if (argc == 2)
+	{
+		if ((ft_strncmp(argv[1], "-d", 2) == 0) || (ft_strncmp(argv[1],
+					"--debug", 7) == 0))
+			shell->debug = 1;
+		else
+		{
+			ft_putstr_fd(EMOJI_CROSS EMOJI_CROSS " Error: minishell does not accept arguments\n",
+				2);
+			return (1);
+		}
+	}
+	else
+		shell->debug = 0;
+	shelling(shell);
+	return (0);
 }
-
