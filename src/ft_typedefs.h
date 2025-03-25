@@ -38,7 +38,6 @@ typedef struct here_doc
 	char *delim;   // delimiter of the here document
 	char *content; // content of the here document
 	char *file;    // file to store the here document
-
 	int fd; // file descriptor
 }						t_here_doc;
 
@@ -54,11 +53,13 @@ typedef enum s_type
 // struct to store the redirection information
 typedef struct redir
 {
-	int					fd;
-	t_type				type;
-	char *name; // type of redirection
-	struct readir		*next;
-}						t_redir;
+	char *redir_in;    // input redirection
+	char *redir_out;   // output redirection
+	char *redir_append; // for >>
+	char *error;    // error redirection
+	t_here_doc *heredoc; // here document @@ jony antes tinhas aqui um char *here_doc, mudei para termos acesso a estrutura
+}				t_redir;
+
 
 // struct to store the command information
 struct					cmd
