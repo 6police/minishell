@@ -1,22 +1,22 @@
 #include "redirections.h"
 
-static char *generate_heredoc_filename()
+static char	*generate_heredoc_filename(void)
 {
 	static int	counter;
 	char		*num_str;
 	char		*filename;
 
-	num_str = ft_itoa(counter++); //static int nao preciso de inicializar ??
+	num_str = ft_itoa(counter++); // static int nao preciso de inicializar ??
 	filename = ft_strjoin("/tmp/minishell_heredoc_", num_str);
 	free(num_str);
 	return (filename);
 }
 
-static int  create_heredoc(t_redir *redir)
+static int	create_heredoc(t_redir *redir)
 {
 	char	*line;
 	char	*filename;
-	int	fd;
+	int		fd;
 
 	filename = generate_heredoc_filename();
 	fd = open(filename, O_WRONLY | O_CREAT | O_EXCL, 0600);
@@ -31,7 +31,7 @@ static int  create_heredoc(t_redir *redir)
 		if (!line || ft_strcmp(line, redir->heredoc->delim) == 0)
 		{
 			free(line);
-			break;
+			break ;
 		}
 		ft_putstr_fd(line, fd);
 		ft_putchar_fd('\n', fd);
@@ -42,11 +42,11 @@ static int  create_heredoc(t_redir *redir)
 	return (open(filename, O_RDONLY));
 }
 
-int ft_redir_heredoc(t_cmd *cmd, t_shell *shell)
+int	ft_redir_heredoc(t_cmd *cmd, t_shell *shell)
 {
-	int		i;
-	int		fd;
-	t_redir	*redir;
+	int i;
+	int fd;
+	t_redir *redir;
 
 	i = -1;
 	while (cmd->redirs[++i])

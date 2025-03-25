@@ -85,10 +85,10 @@ void	execute_external(t_cmd *cmd, t_shell *shell)
 	else
 		waitpid(pid, &status, 0);
 	// Free the allocated memory
-		while (envp[i])
-		{
-			free(envp[i]);
-			i++;
-		}
+	while (envp[i])
+	{
+		free(envp[i]);
+		i++;
+	}
 	free(envp);
 }

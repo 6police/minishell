@@ -2,9 +2,9 @@
 
 int	ft_redir_in(t_cmd *cmd, t_shell *shell)
 {
-	int		i;
-	int		fd;
-	t_redir	*redir;
+	int i;
+	int fd;
+	t_redir *redir;
 
 	i = -1;
 	while (cmd->redirs[++i])

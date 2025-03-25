@@ -1,12 +1,12 @@
 #include "redirections.h"
 
-void cleanup_temp_files(t_cmd **cmds)
+void	cleanup_temp_files(t_cmd **cmds)
 {
-	int		i;
-	int		j;
-	t_cmd		*cmd;
-	t_redir	*redir;
-  
+	int i;
+	int j;
+	t_cmd *cmd;
+	t_redir *redir;
+
 	i = -1;
 	while (cmds[++i])
 	{
@@ -23,4 +23,4 @@ void cleanup_temp_files(t_cmd **cmds)
 			}
 		}
 	}
-  }
+}

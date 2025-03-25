@@ -45,6 +45,7 @@ void	run_shell(t_shell *shell)
 			exit_shell(&(t_cmd){0}, shell);
 		if (shell->line)
 		{
+			add_history(shell->line);
 			parse(shell); // parse the line and tokens
 			if (shell->tokens)
 			{
