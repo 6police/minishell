@@ -1,5 +1,12 @@
 #include "redirections.h"
 
+/**
+ * Função para lidar com o redirecionamento do append (>>)
+ * 
+ * O operador '>>' adiciona output no final de um ficheiro existente (escreve a frnete do que ja esta presente/escrito)
+ * Diferente do '>' que substi o conteúdo do ficheiro
+ */
+
 int	ft_redir_append(t_cmd *cmd, t_shell *shell)
 {
 	int i;
@@ -10,8 +17,12 @@ int	ft_redir_append(t_cmd *cmd, t_shell *shell)
 	while (cmd->redirs[++i])
 	{
 		redir = cmd->redirs[i];
+		// Verificamos se este redirecionamento é do tipo append (>>)
 		if (redir->redir_append)
 		{
+			// Abrimos o ficheiro em modo append:
+			// - O_WRONLY: abre só para escrita - O_CREAT: cria o ficheiro se não existir - O_APPEND: escreve sempre no final do ficheiro
+			// 0644 são as permissões: dono lê+escreve, grupo e outros só leem
 			fd = open(redir->redir_append, O_WRONLY | O_CREAT | O_APPEND, 0644);
 			// 0644 sao permissoees, ver chmod 777, falar com o jony
 			if (fd == -1)
@@ -22,6 +33,7 @@ int	ft_redir_append(t_cmd *cmd, t_shell *shell)
 				shell->exit_value = EXIT_FAILURE;
 				return (-1);
 			}
+			// Redirecionamos o STDOUT para o ficheiro aberto
 			dup2(fd, STDOUT_FILENO);
 			close(fd);
 		}
