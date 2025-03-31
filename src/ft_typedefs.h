@@ -133,6 +133,13 @@ struct					shell
 	t_token *token; // tokens from the line after parsing
 
 	int debug; // debug mode
+	int	last_exit_code; // last exit code, so we can print it with 'echo $?'
+	// adicionar isatty??
+	// temos que fazer fork sempre que corremos um built_in, com pipeline!!
+	// exemplo: ls | exit
+	// adicionar exit code_status 'alguns' enum
+	// ver ctrl \ em sleep 100;
+	// so faco fork, em comandos com pipeline e comandos que leem do terminal para dar handle nos signals.
 
 	int ret;    // return value
 	int status; // status of the shell
