@@ -30,18 +30,17 @@ void	mark_and_replace(char *line, int letter, int sub)
 	c = 0;
 	while (line[++j])
 	{
-		if ((line[j] == '\'' || line[j] == '\"') && !c)
+		if ((line[j] == '\'' || line[j] == '"') && !c)
 			c = line[j];
 		else if (c && line[j] == c)
 			c = 0;
 		else if ((line[j] == letter) && !c)
 			line[j] = sub;
 	}
-	j = -1;
 }
 
 // function to check for the existence of a pipe in the line.
-// it cant be followed by another | 
+// it cant be followed by another |
 void	mark_pipes(char *line)
 {
 	int	i;
@@ -55,7 +54,7 @@ void	mark_pipes(char *line)
 		ft_printf_fd(2, "Error: syntax error near unexpected token `|'\n");
 	while (line[++i])
 	{
-		if ((line[i] == '\'' || line[i] == '\"') && !c)
+		if ((line[i] == '\'' || line[i] == '"') && !c)
 			c = line[i];
 		else if (c && line[i] == c)
 			c = 0;
@@ -75,7 +74,7 @@ char	**ft_parse_split(char *line, int letter, int sub)
 	if (count_quotes(line) != 0)
 		return (ft_printf_fd(2, "Error: Odd number of quotes\n"), NULL);
 	mark_pipes(line);
-	//mark_and_replace(line, letter, sub);
+	// mark_and_replace(line, letter, sub);
 	// printf("line: %s\n", line);
 	return (ft_split(line, sub));
 }
@@ -113,4 +112,3 @@ t_token	*init_token(char **tokens)
 	}
 	return (head);
 }
-

@@ -25,7 +25,7 @@ static t_cmd	*init_cmd(char *name, char **args)
 	t_cmd	*cmd;
 
 	cmd = ft_calloc(sizeof(t_cmd), 1);
-	cmd->name = name;
+	cmd->name = ft_strdup(name);
 	cmd->args = args;
 	cmd->path = NULL;
 	cmd->is_builtin = false;
@@ -129,7 +129,8 @@ t_cmd	*build_cmds(t_shell *shell)
 	head_cmd = NULL;
 	while (shell->tokens[i])
 	{
-		args = ft_split(shell->tokens[i], ' ');
+		mark_and_replace(shell->tokens[i], ' ', 2);
+		args = ft_split(shell->tokens[i], 2);
 		cmd = init_cmd(args[0], args);
 		check_builtin(cmd);
 		if (cmd->is_builtin)
