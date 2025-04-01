@@ -155,7 +155,7 @@ t_cmd	*build_cmds(t_shell *shell)
 			build_builtin(cmd, args);
 		else
 			build_cmd(cmd, args, shell);
-		add_last_cmd(&head_cmd, cmd);
+		add_last_cmd(&shell->cmds, cmd);
 		free_split(args);
 		i++;
 	}

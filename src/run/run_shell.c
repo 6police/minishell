@@ -18,16 +18,12 @@ void	run_shell_debug(t_shell *shell)
 			add_history(shell->line);
 			parse(shell); // parse the line and tokens
 			run_commands(shell);
-			/* if (shell->cmds)
-				run_commands(shell);
-			if (shell->cmds)
-				free_cmds(shell->cmds);
-			ft_printf(EMOJI_COOL "commands cleared \n");
 			if (shell->tokens)
-				free_tokens(shell->tokens); // free the tokens
-			ft_printf(EMOJI_COOL "tokens cleared \n");
-			free(shell->line);
-			ft_printf(EMOJI_COOL "line cleared \n"); */
+			{
+				free_tokens(shell->tokens);
+				shell->tokens = NULL;
+			}
+			flush_commands(shell);
 			free(shell->line);
 		}
 	}

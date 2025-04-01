@@ -155,61 +155,78 @@ void	free_tokens(char **tokens)
 }
 
 // free the shell
-void	free_shell(t_shell *shell, int debug)
+void	free_shell(t_shell **shell, int debug)
 {
 	if (!shell)
 		return ;
-	if (shell->line)
+	if ((*shell)->line && *(*shell)->line)
 	{
 		if (debug)
 			printf("freeing line\n");
-		free(shell->line);
+		free((*shell)->line);
 	}
-	if (shell->cmds)
+	if ((*shell)->cmds && (*shell)->cmds->name)
 	{
 		if (debug)
 			printf("freeing cmds\n");
-		free_cmds(shell->cmds);
+		free_cmds((*shell)->cmds);
 	}
-	if (shell->env)
+	if ((*shell)->env && (*shell)->env->head)
 	{
 		if (debug)
 			printf("freeing env\n");
-		free_env(shell->env);
+		free_env((*shell)->env);
 	}
-	if (shell->fds)
+	if ((*shell)->fds && (*shell)->fds->fd_in != 0)
 	{
 		if (debug)
 			printf("freeing fds\n");
-		close_fds(shell->fds);
+		close_fds((*shell)->fds);
 	}
-	if (shell->tokens)
+	if ((*shell)->tokens)
 	{
 		if (debug)
 			printf("freeing tokens\n");
-		free_tokens(shell->tokens);
+		free_tokens((*shell)->tokens);
 	}
-	if (shell->separators)
+	if ((*shell)->separators && *(*shell)->separators)
 	{
 		if (debug)
 			printf("freeing separator\n");
-		free(shell->separators);
+		free((*shell)->separators);
 	}
 	if (debug)
 		printf("freeing shell\n");
-	free(shell);
+	free(*shell);
+}
+
+void	flush_commands(t_shell *shell)
+{
+	t_cmd	*tmp;
+	t_cmd	*next;
+
+	if (!shell->cmds)
+		return ;
+	tmp = shell->cmds;
+	while (tmp)
+	{
+		next = tmp->next;
+		free_cmd(tmp);
+		tmp = next;
+	}
+	shell->cmds = NULL;
 }
 
 // exit the shell
-void	clean_exit(t_shell *shell)
+void	clean_exit(t_shell **shell)
 {
 	int status;
 
-	status = shell->status;
-	if (shell->debug)
+	status = (*shell)->status;
+	if ((*shell)->debug)
 		printf(EMOJI_BRAIN "exiting shell\n");
 	if (shell)
-		free_shell(shell, shell->debug);
+		free_shell(shell, (*shell)->debug);
 	clear_history();
 	exit(status);
 }

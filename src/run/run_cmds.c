@@ -13,7 +13,4 @@ void	run_commands(t_shell *shell)
 			tmp->builtin_func(tmp, shell);
 		tmp = tmp->next;
 	}
-	//	free_cmds(shell->cmds);
-	//	free_tokens(shell->tokens);
-	//	free(shell->line);
 }
