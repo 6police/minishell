@@ -13,23 +13,22 @@ void	run_shell_debug(t_shell *shell)
 			printf(EMOJI_BRAIN "exiting shell\n");
 			exit_shell(&(t_cmd){0}, shell);
 		}
-		if (shell->line)
+		else
 		{
 			add_history(shell->line);
 			parse(shell); // parse the line and tokens
-			if (shell->cmds)
-			{
+			run_commands(shell);
+			/* if (shell->cmds)
 				run_commands(shell);
+			if (shell->cmds)
 				free_cmds(shell->cmds);
-				ft_printf(EMOJI_COOL "commands cleared \n");
-			}
+			ft_printf(EMOJI_COOL "commands cleared \n");
 			if (shell->tokens)
-			{
 				free_tokens(shell->tokens); // free the tokens
-				ft_printf(EMOJI_COOL "tokens cleared \n");
-			}
+			ft_printf(EMOJI_COOL "tokens cleared \n");
 			free(shell->line);
-			ft_printf(EMOJI_COOL "line cleared \n");
+			ft_printf(EMOJI_COOL "line cleared \n"); */
+			free(shell->line);
 		}
 	}
 }
@@ -43,19 +42,15 @@ void	run_shell(t_shell *shell)
 		shell->line = readline(PROMPT);
 		if (!shell->line)
 			exit_shell(&(t_cmd){0}, shell);
-		if (shell->line)
+		else
 		{
 			add_history(shell->line);
 			parse(shell); // parse the line and tokens
 			if (shell->tokens)
-			{
 				printf(EMOJI_COOL "PLACEHOLDER \n something will happen here\n");
-			}
 			if (shell->cmds)
-			{
 				run_commands(shell);
-				free_cmds(shell->cmds);
-			}
+			free_cmds(shell->cmds);
 			free(shell->line);
 		}
 		free_tokens(shell->tokens); // free the tokens
