@@ -17,18 +17,10 @@ void	siginfo_handler(int sig, siginfo_t *info, void *context)
 {
 	// aqui adicionas o que quiseres para o minishell
 	(void)context;
+	if (!info)
+		return ;
 	if (sig == SIGINT)
 		new_prompt(); // ctrl-C - Print new prompt
-	else if (sig == SIGQUIT)
-	{
-		ft_putstr_fd("\n", STDOUT_FILENO); // ctrl-\ - Print new line
-	}
-	else
-	{
-		ft_putstr_fd("Signal received: ", STDOUT_FILENO);
-		ft_putnbr_fd(sig, STDOUT_FILENO);
-		ft_putchar_fd('\n', STDOUT_FILENO);
-	}
 }
 
 

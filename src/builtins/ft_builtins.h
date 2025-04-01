@@ -53,8 +53,4 @@ void		exit_shell(t_cmd *cmd, t_shell *shell);
 // exeternal_cmd.c
 void		execute_external(t_cmd *cmd, t_shell *shell);
 
-// wildcard.c
-bool	check_wildcard(char *arg);
-void		do_wildcard(char *arg);
-
 #endif

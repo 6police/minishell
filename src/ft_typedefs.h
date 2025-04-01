@@ -133,7 +133,7 @@ struct					shell
 	t_token *token; // tokens from the line after parsing
 
 	int debug; // debug mode
-	int	last_exit_code; // last exit code, so we can print it with 'echo $?'
+	int	last_exit_code; // last exit code, so we can print it with 'echo $?', isto e o exit_value lol, ja tava feito
 	// adicionar isatty??
 	// temos que fazer fork sempre que corremos um built_in, com pipeline!!
 	// exemplo: ls | exit
@@ -143,7 +143,7 @@ struct					shell
 
 	int ret;    // return value
 	int status; // status of the shell
-	int					exit_value;
+	int	exit_value;
 
 	int *separators; // separators for the parsing
 
