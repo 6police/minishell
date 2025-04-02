@@ -6,6 +6,7 @@ static bool	check_wildcard(char *arg);
 static void	do_wildcard(char *arg);
 static int	check_wildcard_type(char *str);
 static bool	is_there_quotes(char *str);
+static void	print_entry(char *name, bool *first);
 
 
 void	echo_shell(t_cmd *cmd, t_shell *shell)
@@ -48,46 +49,55 @@ static void	do_echo(char *arg, int wild_card_type)
 	dir = opendir(".");
 	if (!dir)
 		return;
+
+	if (wild_card_type == 0)
+	{  // No wildcard - print raw argument
+		ft_putstr_fd(arg, STDOUT_FILENO);
+		closedir(dir);
+		return;
+	}
 	entry = readdir(dir);
 	while (entry)
 	{
-		if (entry->d_name[0] == '.') // Ignorar arquivos ocultos
+		if (entry->d_name[0] == '.') // Skip hidden files
 			continue;
-
-		int match = 0;
-		if (wild_card_type == 1)
-			break;
-		else if (wild_card_type == 2)
+		if (wild_card_type == 1) // Case 1: *
+			print_entry(entry->d_name, &first);
+		else if (wild_card_type == 2) // Case 2: *.ext
 		{
 			pattern = arg + 1;
 			pattern_len = ft_strlen(pattern);
 			entry_len = ft_strlen(entry->d_name);
-			match = (entry_len >= pattern_len) && !ft_strncmp(entry->d_name + (entry_len - pattern_len), pattern, pattern_len);
-			break;
+			if (entry_len >= pattern_len && 
+				!ft_strncmp(entry->d_name + (entry_len - pattern_len), pattern, pattern_len))
+				print_entry(entry->d_name, &first);
 		}
-			case 3: // prefixo* (começa com)
-				pattern = ft_strndup(arg, ft_strlen(arg) - 1);
-				pattern_len = ft_strlen(pattern);
-				match = !ft_strncmp(entry->d_name, pattern, pattern_len);
-				free(pattern);
-				break;
-
-			case 4: // *padrão* (contém)
-				pattern = ft_strndup(arg + 1, ft_strlen(arg) - 2);
-				match = (ft_strstr(entry->d_name, pattern) != NULL);
-				free(pattern);
-				break;
-		}
-		if (match)
+		else if (wild_card_type == 3) // Case 3: prefix*
 		{
-			if (!first) 
-				ft_putchar_fd(' ', STDOUT_FILENO);
-			ft_putstr_fd(entry->d_name, STDOUT_FILENO);
-			first = false;
+			pattern = strndup(arg, ft_strlen(arg) - 1); // Remove last *
+			pattern_len = ft_strlen(pattern);
+			if (!ft_strncmp(entry->d_name, pattern, pattern_len))
+				print_entry(entry->d_name, &first);
+			free(pattern);
+		}
+		else if (wild_card_type == 4) // Case 4: *substr*
+		{
+			pattern = strndup(arg + 1, ft_strlen(arg) - 2); // Remove * at both ends
+			if (strstr(entry->d_name, pattern))
+				print_entry(entry->d_name, &first);
+			free(pattern);
 		}
 		entry = readdir(dir);
 	}
-	closedir(dir);
+	closedir(dir); //gotta make a ft_strnudp
+}
+
+static void	print_entry(char *name, bool *first)
+{
+	if (!*first)
+		ft_putchar_fd(' ', STDOUT_FILENO);
+	ft_putstr_fd(name, STDOUT_FILENO);
+	*first = false;
 }
 
 static bool	check_wildcard(char *arg)
