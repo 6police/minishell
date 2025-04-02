@@ -25,9 +25,9 @@ void	execute_external(t_cmd *cmd, t_shell *shell)
 	pid = fork();
 	if (pid == 0)
 	{
-		shell->in_child = true;
+/* 		shell->in_child = true;
 		signal(SIGQUIT, SIG_DFL);
-		signal(SIGINT, SIG_DFL);
+		signal(SIGINT, SIG_DFL); */
 		if (execve(cmd->path, cmd->args, envp) == -1)
 		{
 			ft_putstr_fd("minishell: command not found: ", 2);
@@ -43,14 +43,14 @@ void	execute_external(t_cmd *cmd, t_shell *shell)
 	else
 	{
 		waitpid(pid, &status, 0);
-		if (WIFSIGNALED(status))
+	/* 	if (WIFSIGNALED(status))
 		{
 			if (WTERMSIG(status) == SIGQUIT)
 				ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
 			shell->exit_value = 128 + WTERMSIG(status);
 		}
 		else if (WIFEXITED(status))
-			shell->exit_value = WEXITSTATUS(status);
+			shell->exit_value = WEXITSTATUS(status); */
 	}
 	free_env_array(envp);
 }

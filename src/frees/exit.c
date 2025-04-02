@@ -256,16 +256,3 @@ void	clean_exit(t_shell **shell)
 			exit(status);  // Sai apenas do processo filho
 		} */
 }
-
-void	free_split(char **split)
-{
-	int i;
-
-	i = 0;
-	while (split[i])
-	{
-		free(split[i]);
-		i++;
-	}
-	free(split);
-}

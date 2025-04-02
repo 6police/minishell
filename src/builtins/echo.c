@@ -1,11 +1,11 @@
 #include "ft_builtins.h"
 
-static bool	is_there_quotes(char *str);
+//static bool	is_there_quotes(char *str);
 static void	do_echo(char *arg, int wild_card_type);
-static bool	check_wildcard(char *arg);
-static void	do_wildcard(char *arg);
-static int	check_wildcard_type(char *str);
-static bool	is_there_quotes(char *str);
+//static bool	check_wildcard(char *arg);
+//static void	do_wildcard(char *arg);
+//static int	check_wildcard_type(char *str);
+//static bool	is_there_quotes(char *str);
 
 void	echo_shell(t_cmd *cmd, t_shell *shell)
 {
@@ -27,9 +27,9 @@ void	echo_shell(t_cmd *cmd, t_shell *shell)
 	}
 	while (cmd->args[++i])
 	{
-		if (check_wildcard(cmd->args[i]))
+/* 		if (check_wildcard(cmd->args[i]))
 			do_wildcard(cmd->args[i]);
-		else 
+		else  */
 			do_echo(cmd->args[i], 0);
 		if (cmd->args[i + 1])
 			ft_putchar_fd(' ', STDOUT_FILENO);
@@ -37,7 +37,7 @@ void	echo_shell(t_cmd *cmd, t_shell *shell)
 	if (newline)
 		ft_putchar_fd('\n', STDOUT_FILENO);
 }
-
+/* 
 static bool	check_wildcard(char *arg)
 {
 	int	i;
@@ -93,7 +93,7 @@ static int	check_wildcard_type(char *str)
 	else if (str[0] == '*' && str[ft_strlen(str) - 1] == '*') // *.*
 		wild_card_type = 4;
 	return (wild_card_type);
-}
+} */
 
 static void	do_echo(char *arg, int a)
 {
