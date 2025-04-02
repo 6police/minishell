@@ -19,13 +19,32 @@ static void	add_last_cmd(t_cmd **head, t_cmd *new_cmd)
 	}
 }
 
+static char	**copy_array(char **array)
+{
+	int		i;
+	char	**new_array;
+
+	i = 0;
+	while (array[i])
+		i++;
+	new_array = ft_calloc(sizeof(char *), i + 1);
+	i = 0;
+	while (array[i])
+	{
+		new_array[i] = ft_strdup(array[i]);
+		i++;
+	}
+	new_array[i] = NULL;
+	return (new_array);
+}
+
 // function to create a new t_cmd
 static t_cmd	*init_cmd(char *name, char **args)
 {
 	t_cmd	*cmd;
 
 	cmd = ft_calloc(sizeof(t_cmd), 1);
-	cmd->name = name;
+	cmd->name = ft_strdup(name);
 	cmd->args = args;
 	cmd->path = NULL;
 	cmd->is_builtin = false;
@@ -38,7 +57,6 @@ static t_cmd	*init_cmd(char *name, char **args)
 	return (cmd);
 }
 
-// function to check if its a built-in command
 static void	check_builtin(t_cmd *cmd)
 {
 	if (!cmd)
@@ -65,9 +83,9 @@ void	build_cmd(t_cmd *cmd, char **args, t_shell *shell)
 
 	if (is_command_path(cmd->name))
 	{
-		cmd->path = cmd->name;
+		cmd->path = ft_strdup(cmd->name);
 		cmd->is_valid = true;
-		cmd->args = args;
+		cmd->args = copy_array(args);
 		cmd->builtin_func = execute_external;
 		return ;
 	}
@@ -78,14 +96,14 @@ void	build_cmd(t_cmd *cmd, char **args, t_shell *shell)
 		{
 			cmd->path = path;
 			cmd->is_valid = true;
-			cmd->args = args;
+			cmd->args = copy_array(args);
 			cmd->builtin_func = execute_external;
 		}
 		else
 		{
 			cmd->path = NULL;
 			cmd->is_valid = false;
-			cmd->args = args;
+			cmd->args = copy_array(args);
 			cmd->builtin_func = NULL;
 		}
 	}
@@ -108,7 +126,7 @@ void	build_builtin(t_cmd *cmd, char **args)
 		cmd->builtin_func = exit_shell;
 	if (ft_strcmp(cmd->name, "env") == 0)
 		cmd->builtin_func = env;
-	cmd->args = args + 1;
+	cmd->args = copy_array(args + 1);
 }
 
 // funciton that takes tokens and assembles into commands
@@ -129,14 +147,16 @@ t_cmd	*build_cmds(t_shell *shell)
 	head_cmd = NULL;
 	while (shell->tokens[i])
 	{
-		args = ft_split(shell->tokens[i], ' ');
+		mark_and_replace(shell->tokens[i], ' ', 2);
+		args = ft_split(shell->tokens[i], 2);
 		cmd = init_cmd(args[0], args);
 		check_builtin(cmd);
 		if (cmd->is_builtin)
 			build_builtin(cmd, args);
 		else
 			build_cmd(cmd, args, shell);
-		add_last_cmd(&head_cmd, cmd);
+		add_last_cmd(&shell->cmds, cmd);
+		free_split(args);
 		i++;
 	}
 	return (head_cmd);
