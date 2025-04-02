@@ -40,6 +40,7 @@
 # include "utils/ft_utils.h"
 # include "validations/ft_validations.h"
 # include "history/ft_history.h"
+# include "dirent.h"
 
 
 

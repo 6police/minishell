@@ -17,8 +17,17 @@ void	siginfo_handler(int sig, siginfo_t *info, void *context)
 {
 	// aqui adicionas o que quiseres para o minishell
 	(void)context;
+	if (!info)
+		return ;
 	if (sig == SIGINT)
 		new_prompt(); // ctrl-C - Print new prompt
-	else
-		ft_printf("\nCaught signal %d from PID: %d\n", sig, info->si_pid); // para apagar mais tarde!! nao fica no minishell final!
 }
+
+
+/*  durante a execucao do minishell, se der um ctrl+\ (SIGQUIT) o shell vai dar core dump
+	e vai dar o seguinte erro:
+➜  minishell_this_one git:(feature/wildcards) ✗ cat
+^\[1]    705615 quit (core dumped)  cat
+ 
+
+handle nisto*/

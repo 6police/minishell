@@ -4,6 +4,57 @@
 // so that we can pass it to the execve function
 // we will use the following function to convert the linked list to an array of strings
 
+static void free_env_array(char **envp);
+static size_t	count_env_vars(t_env *env);
+static char	**convert_env_to_array(t_env *env);
+
+// function to execute the command
+void	execute_external(t_cmd *cmd, t_shell *shell)
+{
+	pid_t	pid;
+	int		status;
+	char	**envp;
+
+	envp = convert_env_to_array(shell->env);
+	if (!envp)
+	{
+		ft_putstr_fd("minishell: malloc failed\n", 2);
+		//shell->exit_value = 1; ?? confirmar
+		return ;
+	}
+	pid = fork();
+	if (pid == 0)
+	{
+		shell->in_child = true;
+		signal(SIGQUIT, SIG_DFL);
+		signal(SIGINT, SIG_DFL);
+		if (execve(cmd->path, cmd->args, envp) == -1)
+		{
+			ft_putstr_fd("minishell: command not found: ", 2);
+			ft_putstr_fd(cmd->name, 2);
+			ft_putstr_fd("\n", 2);
+			free_env_array(envp); // confirmar que é necessário
+			//shell->exit_value = 127; adicionar??
+			exit(127);
+		}
+	}
+	else if (pid < 0)
+		ft_putstr_fd("minishell: fork failed\n", 2);
+	else
+	{
+		waitpid(pid, &status, 0);
+		if (WIFSIGNALED(status))
+		{
+			if (WTERMSIG(status) == SIGQUIT)
+				ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
+			shell->exit_value = 128 + WTERMSIG(status);
+		}
+		else if (WIFEXITED(status))
+			shell->exit_value = WEXITSTATUS(status);
+	}
+	free_env_array(envp);
+}
+
 // Function to count the number of environment variables
 static size_t	count_env_vars(t_env *env)
 {
@@ -59,36 +110,12 @@ static char	**convert_env_to_array(t_env *env)
 	return (envp);
 }
 
-// function to execute the command
-void	execute_external(t_cmd *cmd, t_shell *shell)
+static void free_env_array(char **envp)
 {
-	pid_t	pid;
-	int		status;
-	int		i;
-	char	**envp;
+	int i = 0;
+	if (!envp) return;
 
-	envp = convert_env_to_array(shell->env);
-	i = 0;
-	pid = fork();
-	if (pid == 0)
-	{
-		if (execve(cmd->path, cmd->args, envp) == -1)
-		{
-			ft_putstr_fd("minishell: command not found: ", 2);
-			ft_putstr_fd(cmd->name, 2);
-			ft_putstr_fd("\n", 2);
-			exit(127);
-		}
-	}
-	else if (pid < 0)
-		ft_putstr_fd("minishell: fork failed\n", 2);
-	else
-		waitpid(pid, &status, 0);
-	// Free the allocated memory
 	while (envp[i])
-	{
-		free(envp[i]);
-		i++;
-	}
+		free(envp[i++]);
 	free(envp);
 }
