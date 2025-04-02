@@ -35,8 +35,10 @@ void	parse(t_shell *shell)
 
 	sub = 7; // the character to replace the separator
 	shell->tokens = parse_line(shell->line, shell->separators[0], sub);
-	shell->cmds = build_cmds(shell);
-	if (shell->tokens[1])
+	if (!shell->tokens)
+		return ;
+	build_cmds(shell);
+	if (shell->tokens[0] && shell->tokens[1])
 		shell->is_pipe = true;
 	if (shell->debug)
 	{

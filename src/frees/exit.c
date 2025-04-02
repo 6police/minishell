@@ -1,20 +1,18 @@
 #include "ft_free.h"
 
-// free one array
-void	free_array(char **array)
+void	free_split(char **split)
 {
 	int	i;
 
-	i = 0;
-	if (!array || !array[0])
+	if (!split)
 		return ;
-	while (array[i] != NULL)
+	i = 0;
+	while (split[i])
 	{
-		free(array[i]);
+		free(split[i]);
 		i++;
 	}
-	ft_printf("array freed\n");
-	free(array);
+	free(split);
 }
 
 // close the file descriptors
@@ -43,6 +41,8 @@ void	free_redirs(t_redir **redirs)
 {
 	int	i;
 
+	if (!redirs)
+		return ;
 	i = 0;
 	while (redirs[i])
 	{
@@ -55,17 +55,39 @@ void	free_redirs(t_redir **redirs)
 // free ONE cmd
 void	free_cmd(t_cmd *cmd)
 {
+	int	i;
+
+	if (!cmd)
+		return ;
 	if (cmd->name)
-		free(cmd->name);
-	if (cmd->args && cmd->args[0])
 	{
-		free_array(cmd->args);
+		free(cmd->name);
+		cmd->name = NULL;
+	}
+	if (cmd->args)
+	{
+		i = 0;
+		while (cmd->args[i])
+		{
+			printf("freeing args[%d]: %p -> %s\n", i, (void *)cmd->args[i],
+				cmd->args[i]);
+			i++;
+		}
+		printf("freeing args array: %p\n", (void *)cmd->args);
+		free_split(cmd->args);
 		cmd->args = NULL;
+		printf("args freed: %p\n", (void *)cmd->args);
 	}
 	if (cmd->path)
+	{
 		free(cmd->path);
+		cmd->path = NULL;
+	}
 	if (cmd->redirs)
+	{
 		free_redirs(cmd->redirs);
+		cmd->redirs = NULL;
+	}
 	free(cmd);
 	ft_printf("cmd freed\n");
 }
@@ -74,27 +96,28 @@ void	free_cmd(t_cmd *cmd)
 void	free_cmds(t_cmd *cmds)
 {
 	t_cmd	*tmp;
+	t_cmd	*next;
 
 	if (!cmds)
 		return ;
 	tmp = cmds;
 	while (tmp)
 	{
-		cmds = tmp->next;
-		if (cmds)
-			free_cmd(tmp);
-		tmp = cmds;
+		next = tmp->next;
+		free_cmd(tmp);
+		tmp = next;
 	}
 }
 
 // free ONE env var
 void	free_env_var(t_env_var *env_var)
 {
-	if (env_var->key)
+	if (env_var)
+	{
 		free(env_var->key);
-	if (env_var->value)
 		free(env_var->value);
-	free(env_var);
+		free(env_var);
+	}
 }
 
 // free the whole env
@@ -103,12 +126,13 @@ void	free_env(t_env *env)
 	t_env_var	*tmp;
 	t_env_var	*next;
 
+	if (!env)
+		return ;
 	tmp = env->head;
 	while (tmp)
 	{
 		next = tmp->next;
-		if (next)
-			free_env_var(tmp);
+		free_env_var(tmp);
 		tmp = next;
 	}
 	free(env);
@@ -119,9 +143,9 @@ void	free_tokens(char **tokens)
 {
 	int	i;
 
-	i = 0;
 	if (!tokens)
 		return ;
+	i = 0;
 	while (tokens[i])
 	{
 		free(tokens[i]);
@@ -131,53 +155,78 @@ void	free_tokens(char **tokens)
 }
 
 // free the shell
-void	free_shell(t_shell *shell, int debug)
+void	free_shell(t_shell **shell, int debug)
 {
-	if (shell->line)
+	if (!shell)
+		return ;
+	if ((*shell)->line && *(*shell)->line)
 	{
 		if (debug)
 			printf("freeing line\n");
-		free(shell->line);
+		free((*shell)->line);
 	}
-	if (shell->cmds)
+	if ((*shell)->cmds && (*shell)->cmds->name)
 	{
 		if (debug)
 			printf("freeing cmds\n");
-		free_cmds(shell->cmds);
+		free_cmds((*shell)->cmds);
 	}
-	if (shell->env)
+	if ((*shell)->env && (*shell)->env->head)
 	{
 		if (debug)
 			printf("freeing env\n");
-		free_env(shell->env);
+		free_env((*shell)->env);
 	}
-	if (shell->fds)
+	if ((*shell)->fds && (*shell)->fds->fd_in != 0)
 	{
 		if (debug)
 			printf("freeing fds\n");
-		close_fds(shell->fds);
+		close_fds((*shell)->fds);
 	}
-	if (shell->tokens && shell->tokens[0])
+	if ((*shell)->tokens)
 	{
 		if (debug)
 			printf("freeing tokens\n");
-		free_tokens(shell->tokens);
+		free_tokens((*shell)->tokens);
+	}
+	if ((*shell)->separators && *(*shell)->separators)
+	{
+		if (debug)
+			printf("freeing separator\n");
+		free((*shell)->separators);
 	}
 	if (debug)
 		printf("freeing shell\n");
-	free(shell);
+	free(*shell);
+}
+
+void	flush_commands(t_shell *shell)
+{
+	t_cmd	*tmp;
+	t_cmd	*next;
+
+	if (!shell->cmds)
+		return ;
+	tmp = shell->cmds;
+	while (tmp)
+	{
+		next = tmp->next;
+		free_cmd(tmp);
+		tmp = next;
+	}
+	shell->cmds = NULL;
 }
 
 // exit the shell
-void	clean_exit(t_shell *shell)
+void	clean_exit(t_shell **shell)
 {
-	int	status;
+	int status;
 
-	status = shell->status;
-	if (shell->debug)
+	status = (*shell)->status;
+	if ((*shell)->debug)
 		printf(EMOJI_BRAIN "exiting shell\n");
 	if (shell)
-		free_shell(shell, shell->debug);
+		free_shell(shell, (*shell)->debug);
 	clear_history();
 	exit(status);
 

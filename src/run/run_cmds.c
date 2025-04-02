@@ -4,6 +4,8 @@ void	run_commands(t_shell *shell)
 {
 	t_cmd *tmp;
 
+	if (!shell->cmds)
+		return ;
 	tmp = shell->cmds;
 	while (tmp)
 	{
