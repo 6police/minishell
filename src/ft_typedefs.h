@@ -127,8 +127,9 @@ struct					shell
 	char *history_file; // file to store the history
 
 	char **tokens; // tokens from the line after pipe separation
-
-	bool is_pipe; // if the command has a pipe
+	pid_t	main_shell_pid;	 // main shell pid
+	bool	in_child; // if the shell is in a child process
+	bool	is_pipe; // if the command has a pipe
 
 	t_token *token; // tokens from the line after parsing
 

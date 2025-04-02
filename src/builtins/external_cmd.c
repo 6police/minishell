@@ -25,6 +25,7 @@ void	execute_external(t_cmd *cmd, t_shell *shell)
 	pid = fork();
 	if (pid == 0)
 	{
+		shell->in_child = true;
 		signal(SIGQUIT, SIG_DFL);
 		signal(SIGINT, SIG_DFL);
 		if (execve(cmd->path, cmd->args, envp) == -1)
