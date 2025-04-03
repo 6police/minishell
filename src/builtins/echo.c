@@ -44,17 +44,21 @@ void	echo_shell(t_cmd *cmd, t_shell *shell)
 static void	do_special_echo(char *arg, t_shell *shell)
 {
 	int	i;
+	int	count;
+	int	number_of_sifrao;
 	char	*tmp;
 	t_env_var	*env_var;
 
 	i = -1;
+	count = 0;
+	number_of_sifrao = 0;
 	tmp = arg;
-	if (strstr(tmp, "\"") || strstr(tmp, "'"))
+	while (tmp[++i])
 	{
-		while (tmp[++i])
-				tmp[i] = tmp[i + 1];
-		tmp[i - 2] = '\0';
+		if (tmp[i] == '$')
+			number_of_sifrao++;
 	}
+	i = -1;
 	if (strstr(arg, "'") != NULL) // means it found a single quote
 	{
 		ft_putstr_fd(tmp, STDOUT_FILENO);
@@ -65,27 +69,36 @@ static void	do_special_echo(char *arg, t_shell *shell)
 		ft_putstr_fd(tmp, STDOUT_FILENO);
 		return ;
 	}
+	if (strstr(tmp, "\"") || strstr(tmp, "'"))
+	{
+		while (tmp[++i])
+				tmp[i] = tmp[i + 1];
+		tmp[i - 2] = '\0';
+	}
 	i = -1;
 	while (arg[++i] != '$')
 		write(STDOUT_FILENO, &arg[i], 1);
-	if (arg[i] == '$')
-		i++;
-	env_var = find_env_var(shell->env, &arg[i]);
 	while (arg[i])
 	{
+		if (arg[i] == '$' )
+		{
+			i++;
+			env_var = find_env_var(shell->env, &arg[i]);
+			count++;
+		}
 		if (arg[i] == '?')
 			ft_putnbr_fd(shell->exit_value, STDOUT_FILENO);
 		if (env_var == NULL)
 			return ;
 		else
 		{
-			if (env_var->value)
+			if (env_var->value && count != number_of_sifrao)
 			{
 				ft_putstr_fd(env_var->value, STDOUT_FILENO);
-				break ;
+				i = i + ft_strlen(env_var->value) - 1;
 			}
 			else
-				ft_putstr_fd("", STDOUT_FILENO);
+				write(STDOUT_FILENO, &arg[i], 1);
 		}
 		i++;
 	}
