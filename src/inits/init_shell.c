@@ -40,8 +40,8 @@ t_shell	*init_shell(char **env)
     shell->env = copy_env(env);
     shell->separators = init_separator();
     shell->token = NULL;
-    shell->main_shell_pid = getpid();
-    shell->in_child = false;
+    shell->main_pid = getpid();
+    shell->is_child = false;
     ft_printf("Environment copied\n");
 	// initialize the file descriptors
 	// initialize the commands

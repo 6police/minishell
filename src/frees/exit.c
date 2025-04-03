@@ -220,39 +220,42 @@ void	flush_commands(t_shell *shell)
 // exit the shell
 void	clean_exit(t_shell **shell)
 {
-	int status;
+/*	int status;
 
-	status = (*shell)->status;
+ 	status = (*shell)->status;
 	if ((*shell)->debug)
 		printf(EMOJI_BRAIN "exiting shell\n");
 	if (shell)
 		free_shell(shell, (*shell)->debug);
 	clear_history();
-	exit(status);
+	exit(status); */
 
-/* 		//test all this, prob need to rework
-		status = shell->status;
-		if (shell->debug)
-			printf(EMOJI_BRAIN "Process: %d exiting shell\n", getpid());
-		if (getpid() == shell->main_shell_pid && (!shell->in_child || !shell->is_pipe))
-		{
-			if (shell->debug)
-					printf("Cleaning main Shell\n");
-			free_shell(shell, shell->debug);
+	int status = (*shell)->status;
+	const bool is_main_process = (getpid() == (*shell)->main_pid);
+	
+		if ((*shell)->debug) {
+			printf(EMOJI_BRAIN "Process %d exiting | Main PID: %d | Child: %d\n",
+				   getpid(), (*shell)->main_pid, (*shell)->is_child);
+		}
+	
+		if (is_main_process && !(*shell)->is_child) {
+			// Processo principal - saída completa
+			if ((*shell)->debug)
+				printf("Cleaning main Shell\n");
+			free_shell(shell, (*shell)->debug);
 			clear_history();
 			exit(status);
 		}
-		else
-		{
-			if (shell->debug)
-				printf("Limpando recursos do filho\n");
-			// Limpeza segura para filhos
-			if (shell->line)
-				free(shell->line);
-			if (shell->cmds)
-				free_cmds(shell->cmds);
-			if (shell->fds)
-				close_fds(shell->fds);
+		else {
+			// Processo filho ou pipe - saída parcial
+			if ((*shell)->debug)
+				printf("Child/pipe cleanup\n");
+			
+			// Libera apenas recursos locais do comando
+			if ((*shell)->line) free((*shell)->line);
+			if ((*shell)->cmds) free_cmds((*shell)->cmds);
+			if ((*shell)->fds) close_fds((*shell)->fds);
+			
 			exit(status);  // Sai apenas do processo filho
-		} */
+		}
 }
