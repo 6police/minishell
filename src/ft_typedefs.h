@@ -127,24 +127,18 @@ struct					shell
 	char *history_file; // file to store the history
 
 	char **tokens; // tokens from the line after pipe separation
-	pid_t	main_shell_pid;	 // main shell pid
-	bool	in_child; // if the shell is in a child process
 	bool	is_pipe; // if the command has a pipe
+	pid_t main_pid; // process id of the command
+	bool is_child; // if the command is a child process
 
 	t_token *token; // tokens from the line after parsing
 
 	int debug; // debug mode
-	int	last_exit_code; // last exit code, so we can print it with 'echo $?', isto e o exit_value lol, ja tava feito
-	// adicionar isatty??
-	// temos que fazer fork sempre que corremos um built_in, com pipeline!!
-	// exemplo: ls | exit
-	// adicionar exit code_status 'alguns' enum
-	// ver ctrl \ em sleep 100;
-	// so faco fork, em comandos com pipeline e comandos que leem do terminal para dar handle nos signals.
 
-	int ret;    // return value
-	int status; // status of the shell
-	int	exit_value;
+	int	ret;    // return value
+	int	status; // status of the shell
+	int		exit_value;
+	char	*exit_str_code; // last exit code, so we can print it with 'echo $?', isto e o exit_value lol, ja tava feito
 
 	int *separators; // separators for the parsing
 
@@ -152,4 +146,4 @@ struct					shell
 	t_cmd *cmds; // commands
 };
 
-#endif
+# endif

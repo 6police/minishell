@@ -6,6 +6,7 @@ static bool	check_wildcard(char *arg);
 static void	do_wildcard(char *arg);
 static int	check_wildcard_type(char *str);
 static bool	is_there_quotes(char *str);
+static void	do_special_echo(char *arg, t_shell *shell);
 
 void	echo_shell(t_cmd *cmd, t_shell *shell)
 {
@@ -27,7 +28,9 @@ void	echo_shell(t_cmd *cmd, t_shell *shell)
 	}
 	while (cmd->args[++i])
 	{
-		if (check_wildcard(cmd->args[i]))
+		if (is_there_quotes(cmd->args[i]) == true || strstr(cmd->args[i], "$") != NULL)
+			do_special_echo(cmd->args[i], shell);
+		else if (check_wildcard(cmd->args[i]))
 			do_wildcard(cmd->args[i]);
 		else 
 			do_echo(cmd->args[i], 0);
@@ -36,6 +39,53 @@ void	echo_shell(t_cmd *cmd, t_shell *shell)
 	}
 	if (newline)
 		ft_putchar_fd('\n', STDOUT_FILENO);
+}
+
+static void	do_special_echo(char *arg, t_shell *shell)
+{
+	int	i;
+	char	*tmp;
+	t_env_var	*env_var;
+
+	i = -1;
+	tmp = arg;
+	if (strstr(tmp, "\"") || strstr(tmp, "'"))
+	{
+		while (tmp[++i])
+				tmp[i] = tmp[i + 1];
+		tmp[i - 1] = '\0';
+	}
+	if (strstr(arg, "'") != NULL) // means it found a single quote
+	{
+		ft_putstr_fd(tmp, STDOUT_FILENO);
+		return ;
+	}
+	if (strstr(arg, "$") == NULL) // means it didnt find a dollar sign
+	{
+		ft_putstr_fd(tmp, STDOUT_FILENO);
+		return ;
+	}
+	i = -1;
+	while (arg[++i] != '$')
+		write(STDOUT_FILENO, &arg[i], 1);
+	if (arg[i] == '$')
+		i++;
+	env_var = find_env_var(shell->env, &arg[i]);
+	while (arg[i])
+	{
+		if (arg[i] == '?')
+			ft_putnbr_fd(shell->exit_value, STDOUT_FILENO);
+		if (env_var == NULL)
+			return ;
+		else
+		{
+			if (env_var->value)
+				ft_putstr_fd(env_var->value, STDOUT_FILENO);
+			else
+				ft_putstr_fd("", STDOUT_FILENO);
+		}
+		i++;
+	}
 }
 
 static bool	check_wildcard(char *arg)
@@ -56,11 +106,6 @@ static void	do_wildcard(char *arg_str)
 	int	wild_card_type;
 	
 	wild_card_type = 0;
-	if (is_there_quotes(arg_str) == true)
-	{
-		do_echo(arg_str, 0);
-		return ;
-	}
 	wild_card_type = check_wildcard_type(arg_str);
 	do_echo(arg_str, wild_card_type);
 }

@@ -41,6 +41,7 @@
 # include "validations/ft_validations.h"
 # include "history/ft_history.h"
 # include "dirent.h"
+# include "redirections/redirections.h"
 
 
 

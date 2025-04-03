@@ -9,7 +9,7 @@ void	setup_signals(void)
 	signal(SIGQUIT, SIG_IGN); // SIG_IGN = Ignore Signal, SIGQUIT (Ctrl+\) to prevent core dump
 	sa.sa_sigaction = siginfo_handler; // Use sa_sigaction instead of sa_handler
 	sigemptyset(&sa.sa_mask); // Block all signals while in the handler
-	sa.sa_flags = SA_SIGINFO; // Use SA_SIGINFO to get detailed info
+	sa.sa_flags = SA_SIGINFO; // Use SA_SIGINFO to get detailed info instead of the simpler sa_handler
 	sigaction(SIGINT, &sa, NULL); // Handle SIGINT = ctrl-C
 }
 
