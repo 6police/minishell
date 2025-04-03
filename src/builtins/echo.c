@@ -53,7 +53,7 @@ static void	do_special_echo(char *arg, t_shell *shell)
 	{
 		while (tmp[++i])
 				tmp[i] = tmp[i + 1];
-		tmp[i - 1] = '\0';
+		tmp[i - 2] = '\0';
 	}
 	if (strstr(arg, "'") != NULL) // means it found a single quote
 	{
@@ -80,7 +80,10 @@ static void	do_special_echo(char *arg, t_shell *shell)
 		else
 		{
 			if (env_var->value)
+			{
 				ft_putstr_fd(env_var->value, STDOUT_FILENO);
+				break ;
+			}
 			else
 				ft_putstr_fd("", STDOUT_FILENO);
 		}

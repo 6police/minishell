@@ -25,6 +25,7 @@ void	run_shell_debug(t_shell *shell)
 			}
 			flush_commands(shell);
 			free(shell->line);
+			shell->is_pipe = false;
 		}
 	}
 }
