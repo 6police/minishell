@@ -4,9 +4,9 @@
 // so that we can pass it to the execve function
 // we will use the following function to convert the linked list to an array of strings
 
-static void free_env_array(char **envp);
+static void		free_env_array(char **envp);
 static size_t	count_env_vars(t_env *env);
-static char	**convert_env_to_array(t_env *env);
+static char		**convert_env_to_array(t_env *env);
 
 // function to execute the command
 void	execute_external(t_cmd *cmd, t_shell *shell)
@@ -19,7 +19,7 @@ void	execute_external(t_cmd *cmd, t_shell *shell)
 	if (!envp)
 	{
 		ft_putstr_fd("minishell: malloc failed\n", 2);
-		//shell->exit_value = 1; ?? confirmar
+		// shell->exit_value = 1; ?? confirmar
 		return ;
 	}
 	pid = fork();
@@ -111,10 +111,11 @@ static char	**convert_env_to_array(t_env *env)
 	return (envp);
 }
 
-static void free_env_array(char **envp)
+static void	free_env_array(char **envp)
 {
 	int i = 0;
-	if (!envp) return;
+	if (!envp)
+		return ;
 
 	while (envp[i])
 		free(envp[i++]);

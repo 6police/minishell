@@ -6,6 +6,7 @@ void	run_commands(t_shell *shell)
 
 	if (!shell->cmds)
 		return ;
+	// ft_printf(BLUE "running commands\n" RESET);
 	tmp = shell->cmds;
 	while (tmp)
 	{

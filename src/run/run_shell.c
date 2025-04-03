@@ -17,6 +17,7 @@ void	run_shell_debug(t_shell *shell)
 		{
 			add_history(shell->line);
 			parse(shell); // parse the line and tokens
+			print_all_commands(shell);
 			run_commands(shell);
 			if (shell->tokens)
 			{
@@ -42,12 +43,13 @@ void	run_shell(t_shell *shell)
 		else
 		{
 			add_history(shell->line);
-			parse(shell); // parse the line and tokens
-			if (shell->tokens)
-				printf(EMOJI_COOL "PLACEHOLDER \n something will happen here\n");
-			if (shell->cmds)
-				run_commands(shell);
-			free_cmds(shell->cmds);
+			/* 			parse(shell); // parse the line and tokens
+						if (shell->tokens)
+							printf(EMOJI_COOL "PLACEHOLDER \n something will happen here\n");
+						if (shell->cmds)
+							run_commands(shell);
+						free_cmds(shell->cmds); */
+			ft_printf(RED "please use the debug mode to test the shell\n" RESET);
 			free(shell->line);
 		}
 		free_tokens(shell->tokens); // free the tokens

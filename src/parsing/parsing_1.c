@@ -31,7 +31,7 @@ static void	print_tokens(t_shell *shell)
 // parse the line according to priority
 void	parse(t_shell *shell)
 {
-	int sub;
+	int	sub;
 
 	sub = 7; // the character to replace the separator
 	shell->tokens = parse_line(shell->line, shell->separators[0], sub);
@@ -45,9 +45,8 @@ void	parse(t_shell *shell)
 	if (shell->debug)
 	{
 		print_tokens(shell);
-		ft_printf("pipe: %d\n", shell->is_pipe);
-		print_all_commands(shell);
+		ft_printf(BLUE "pipe: " RESET "%d\n--\n--\n", shell->is_pipe);
 	}
 }
 
-//ver onde estao os redirections, e para onde e que manda.
+// ver onde estao os redirections, e para onde e que manda.

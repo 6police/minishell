@@ -142,10 +142,10 @@ void	build_builtin(t_cmd *cmd, char **args)
 // if not found we set the path to NULL and command is now invalid
 t_cmd	*build_cmds(t_shell *shell)
 {
-	int i;
-	t_cmd *cmd;
-	t_cmd *head_cmd;
-	char **args;
+	int		i;
+	t_cmd	*cmd;
+	t_cmd	*head_cmd;
+	char	**args;
 
 	i = 0;
 	head_cmd = NULL;
@@ -159,6 +159,7 @@ t_cmd	*build_cmds(t_shell *shell)
 			build_builtin(cmd, args);
 		else
 			build_cmd(cmd, args, shell);
+		cmd->cmd_nb = i;
 		add_last_cmd(&shell->cmds, cmd);
 		free_split(args);
 		i++;

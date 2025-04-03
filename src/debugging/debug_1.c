@@ -40,27 +40,28 @@ static void	print_args(t_cmd *cmd)
 
 void	print_command(t_cmd *cmd)
 {
-	ft_printf("is_command_path ???\n");
+	ft_printf(RED "\n <-0-0->\n" RESET);
+	ft_printf(GREEN "is_command_path ???\n" RESET);
 	ft_printf("%d\n", is_command_path(cmd->name));
-	ft_printf("\n --- \n");
-	ft_printf("name: %s\n", cmd->name);
-	ft_printf("args: ");
+	ft_printf(GREEN "name: " RESET "%s\n", cmd->name);
+	ft_printf(GREEN "args: " RESET);
 	print_args(cmd);
-	ft_printf("path: %s\n", cmd->path);
-	ft_printf("is_builtin: %d\n", cmd->is_builtin);
-	ft_printf("is_valid: %d\n", cmd->is_valid);
-	ft_printf("redirs: %p\n", cmd->redirs);
-	ft_printf("last_fd: %d\n", cmd->last_fd);
-	ft_printf("last_read: %d\n", cmd->last_read);
-	ft_printf("has_heredoc: %d\n", cmd->has_heredoc);
+	ft_printf(GREEN "cmd_nb: " RESET "%d\n", cmd->cmd_nb);
+	ft_printf(GREEN "path: " RESET "%s\n", cmd->path);
+	ft_printf(GREEN "is_builtin: " RESET "%d\n", cmd->is_builtin);
+	ft_printf(GREEN "is_valid: " RESET "%d\n", cmd->is_valid);
+	ft_printf(GREEN "redirs: " RESET "%p\n", cmd->redirs);
+	ft_printf(GREEN "last_fd: " RESET "%d\n", cmd->last_fd);
+	ft_printf(GREEN "last_read: " RESET "%d\n", cmd->last_read);
+	ft_printf(GREEN "has_heredoc: " RESET "%d\n", cmd->has_heredoc);
 	// print function pointer
-	ft_printf("builtin_func: %p\n", cmd->builtin_func);
+	ft_printf(MAGENTA "builtin_func: " RESET "%p\n", cmd->builtin_func);
 	ft_printf("\n");
 	if (cmd->next)
-		ft_printf("next: %s\n", cmd->next->name);
+		ft_printf(CYAN "next: " RESET "%s\n", cmd->next->name);
 	if (cmd->prev)
-		ft_printf("prev: %s\n", cmd->prev->name);
-	ft_printf("\n");
+		ft_printf(CYAN "prev: " RESET "%s\n", cmd->prev->name);
+	ft_printf(RED "<-0-0->\n\n" RESET);
 }
 
 // print all the commands

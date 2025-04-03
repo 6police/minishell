@@ -162,41 +162,67 @@ void	free_shell(t_shell **shell, int debug)
 	if ((*shell)->line && *(*shell)->line)
 	{
 		if (debug)
-			printf("freeing line\n");
+		{
+			ft_printf(GREEN "freeing line\n" RESET);
+			ft_printf("line: %p -> %s\n", (void *)(*shell)->line,
+				(*shell)->line);
+		}
 		free((*shell)->line);
 	}
 	if ((*shell)->cmds && (*shell)->cmds->name)
 	{
 		if (debug)
-			printf("freeing cmds\n");
+		{
+			ft_printf(GREEN "freeing cmds\n" RESET);
+			ft_printf("cmds: %p -> %s\n", (void *)(*shell)->cmds->name,
+				(*shell)->cmds->name);
+		}
 		free_cmds((*shell)->cmds);
 	}
 	if ((*shell)->env && (*shell)->env->head)
 	{
 		if (debug)
-			printf("freeing env\n");
+		{
+			ft_printf(GREEN "freeing env\n" RESET);
+			ft_printf("env: %p -> %s\n", (void *)(*shell)->env->head->key,
+				(*shell)->env->head->key);
+		}
 		free_env((*shell)->env);
 	}
 	if ((*shell)->fds && (*shell)->fds->fd_in != 0)
 	{
 		if (debug)
-			printf("freeing fds\n");
+		{
+			ft_printf(GREEN "freeing fds\n" RESET);
+			ft_printf("fds: %p -> %d\n", (*shell)->fds->fd_in,
+				(*shell)->fds->fd_in);
+		}
 		close_fds((*shell)->fds);
 	}
 	if ((*shell)->tokens)
 	{
 		if (debug)
-			printf("freeing tokens\n");
+		{
+			ft_printf(GREEN "freeing tokens\n" RESET);
+			ft_printf("tokens: %p -> %s\n", (*shell)->tokens[0],
+				(*shell)->tokens);
+		}
 		free_tokens((*shell)->tokens);
 	}
 	if ((*shell)->separators && *(*shell)->separators)
 	{
 		if (debug)
-			printf("freeing separator\n");
+		{
+			ft_printf(GREEN "freeing separators\n" RESET);
+			ft_printf("separators: -> %s\n", (*shell)->separators);
+		}
 		free((*shell)->separators);
 	}
 	if (debug)
-		printf("freeing shell\n");
+	{
+		ft_printf(GREEN "freeing shell\n" RESET);
+		ft_printf("shell: %p\n", (void *)*shell);
+	}
 	free(*shell);
 }
 

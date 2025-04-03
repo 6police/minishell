@@ -38,7 +38,7 @@ typedef struct here_doc
 	char *delim;   // delimiter of the here document
 	char *content; // content of the here document
 	char *file;    // file to store the here document
-	int fd; // file descriptor
+	int fd;        // file descriptor
 }						t_here_doc;
 
 typedef enum s_type
@@ -49,17 +49,30 @@ typedef enum s_type
 	READ
 }						t_type;
 
+// struct to store the pipe information
+typedef struct s_pipex
+{
+	t_cmd **cmds; // array of commands
+	int n_cmds;   // number of commands
+	pid_t *pid;   // array of process ids
+	int infile;   // input file descriptor
+	int outfile;  // output file descriptor
+
+	char **envp; // environment variables
+}						t_pipe;
+
 // struct to store the command information
 // struct to store the redirection information
 typedef struct redir
 {
-	char *redir_in;    // input redirection
-	char *redir_out;   // output redirection
+	char *redir_in;     // input redirection
+	char *redir_out;    // output redirection
 	char *redir_append; // for >>
-	char *error;    // error redirection
-	t_here_doc *heredoc; // here document @@ jony antes tinhas aqui um char *here_doc, mudei para termos acesso a estrutura
-}				t_redir;
-
+	char *error;        // error redirection
+	t_here_doc			*heredoc;
+	// here document @@ jony antes tinhas aqui um char *here_doc,
+	//	mudei para termos acesso a estrutura
+}						t_redir;
 
 // struct to store the command information
 struct					cmd
@@ -68,12 +81,14 @@ struct					cmd
 	char **args; // arguments
 	char *path;  // path to the command,
 
+	int cmd_nb; // command number
+
 	bool is_builtin; // if the command is a built-in command
 	bool is_valid;   // if the command is valid
 
 	// pointer for the builtin functions
-	void (*builtin_func)(t_cmd *cmd, t_shell *shell);
-		// Function pointer to the built-in function
+	void				(*builtin_func)(t_cmd *cmd, t_shell *shell);
+	// Function pointer to the built-in function
 
 	struct cmd *next; // next command
 	struct cmd *prev; // previous command
@@ -81,6 +96,7 @@ struct					cmd
 	t_redir **redirs; // redirections
 	int					last_fd;
 	int					last_read;
+	int fd[2]; // file descriptors for the command
 	bool				has_heredoc;
 };
 
@@ -126,19 +142,20 @@ struct					shell
 	char *line;         // line read from the input
 	char *history_file; // file to store the history
 
-	char **tokens; // tokens from the line after pipe separation
-	bool	is_pipe; // if the command has a pipe
+	char **tokens;  // tokens from the line after pipe separation
+	bool is_pipe;   // if the command has a pipe
 	pid_t main_pid; // process id of the command
-	bool is_child; // if the command is a child process
+	bool is_child;  // if the command is a child process
 
 	t_token *token; // tokens from the line after parsing
 
 	int debug; // debug mode
 
-	int	ret;    // return value
-	int	status; // status of the shell
-	int		exit_value;
-	char	*exit_str_code; // last exit code, so we can print it with 'echo $?', isto e o exit_value lol, ja tava feito
+	int ret;    // return value
+	int status; // status of the shell
+	int					exit_value;
+	char *exit_str_code; // last exit code, so we can print it with 'echo $?',
+							// isto e o exit_value lol, ja tava feito
 
 	int *separators; // separators for the parsing
 
@@ -146,4 +163,4 @@ struct					shell
 	t_cmd *cmds; // commands
 };
 
-# endif
+#endif
