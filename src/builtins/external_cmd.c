@@ -33,13 +33,14 @@ void	execute_external(t_cmd *cmd, t_shell *shell)
 			ft_putstr_fd("minishell: command not found: ", 2);
 			ft_putstr_fd(cmd->name, 2);
 			ft_putstr_fd("\n", 2);
-			free_env_array(envp); // confirmar que é necessário
-			//shell->exit_value = 127; adicionar??
-			exit(127);
+			shell->exit_value = 127;
 		}
 	}
 	else if (pid < 0)
+	{
 		ft_putstr_fd("minishell: fork failed\n", 2);
+		shell->exit_value = 1;
+	}
 	else
 	{
 		waitpid(pid, &status, 0);

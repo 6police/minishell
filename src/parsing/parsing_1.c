@@ -40,6 +40,8 @@ void	parse(t_shell *shell)
 	build_cmds(shell);
 	if (shell->tokens[0] && shell->tokens[1])
 		shell->is_pipe = true;
+	else
+		shell->is_pipe = false;
 	if (shell->debug)
 	{
 		print_tokens(shell);
@@ -47,3 +49,5 @@ void	parse(t_shell *shell)
 		print_all_commands(shell);
 	}
 }
+
+//ver onde estao os redirections, e para onde e que manda.

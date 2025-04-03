@@ -68,7 +68,7 @@ static int	create_heredoc(t_redir *redir)
  * 2. Redireciona STDIN para ler desse ficheiro
  */
 
-int	ft_redir_heredoc(t_cmd *cmd, t_shell *shell)
+void	ft_redir_heredoc(t_cmd *cmd, t_shell *shell)
 {
 	int i;
 	int fd;
@@ -86,12 +86,11 @@ int	ft_redir_heredoc(t_cmd *cmd, t_shell *shell)
 			{
 				ft_putstr_fd("minishell: heredoc failed\n", STDERR_FILENO);
 				shell->exit_value = EXIT_FAILURE;
-				return (-1);
+				break ;
 			}
 			// Redirecionar o STDIN para ler do ficheiro
 			dup2(fd, STDIN_FILENO);
 			close(fd);
 		}
 	}
-	return (0);
 }

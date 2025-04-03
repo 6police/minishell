@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 23:47:26 by nuno              #+#    #+#             */
-/*   Updated: 2025/03/27 18:59:57 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/04/03 15:46:31 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ void export_builtin(t_cmd *cmd, t_shell *shell)
     int i;
 
     i = 0;
+    // add a checker for '*'
     if (cmd->args[0] == NULL)
     {
         export_no_args(shell->env);
@@ -79,4 +80,5 @@ void export_builtin(t_cmd *cmd, t_shell *shell)
         ft_export(cmd->args[i], NULL, shell->env);
         i++;
     }
+    shell->exit_value = 0;
 }

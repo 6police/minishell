@@ -6,7 +6,7 @@
  * Faz com que o comando leia de um ficheiro em vez de STDIN
  */
 
-int	ft_redir_in(t_cmd *cmd, t_shell *shell)
+void	ft_redir_in(t_cmd *cmd, t_shell *shell)
 {
 	int i;
 	int fd;
@@ -28,12 +28,11 @@ int	ft_redir_in(t_cmd *cmd, t_shell *shell)
 				ft_putstr_fd(redir->redir_in, STDERR_FILENO);
 				ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
 				shell->exit_value = EXIT_FAILURE;
-				return (-1);
+				break ;
 			}
 			// Redireciona STDIN para ler do ficheiro
 			dup2(fd, STDIN_FILENO);
 			close(fd);
 		}
 	}
-	return (0);
 }

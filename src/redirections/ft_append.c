@@ -7,7 +7,7 @@
  * Diferente do '>' que substi o conteúdo do ficheiro
  */
 
-int	ft_redir_append(t_cmd *cmd, t_shell *shell)
+void	ft_redir_append(t_cmd *cmd, t_shell *shell)
 {
 	int i;
 	int fd;
@@ -31,12 +31,11 @@ int	ft_redir_append(t_cmd *cmd, t_shell *shell)
 				ft_putstr_fd(redir->redir_append, STDERR_FILENO);
 				ft_putstr_fd(": Permission denied\n", STDERR_FILENO);
 				shell->exit_value = EXIT_FAILURE;
-				return (-1);
+				break ;
 			}
 			// Redirecionamos o STDOUT para o ficheiro aberto
 			dup2(fd, STDOUT_FILENO);
 			close(fd);
 		}
 	}
-	return (0);
 }

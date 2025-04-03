@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 20:00:06 by joamiran          #+#    #+#             */
-/*   Updated: 2025/01/15 21:17:59 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/04/03 15:44:06 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void	unset_env_var(t_shell *shell, char *key)
 	env_var = find_env_var(shell->env, key);
 	if (env_var)
 		remove_env_var(shell->env, key);
+	shell->exit_value = 0;
 }
 
 // function to unset multiple environment variables
