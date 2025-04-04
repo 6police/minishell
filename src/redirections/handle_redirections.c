@@ -28,7 +28,7 @@ void reset_redirections(t_cmd *cmd, t_shell *shell, bool child_process)
 	}
 }
 
-void	handle_redirection(t_cmd *cmd, t_shell *shell, bool child_process)
+void	handle_redirections(t_cmd *cmd, t_shell *shell, bool child_process)
 {
 	if (cmd->FD[1] != STDOUT_FILENO)
 	{

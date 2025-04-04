@@ -32,7 +32,7 @@ static void	print_args(t_cmd *cmd)
 	i = 0;
 	while (cmd->args && cmd->args[i])
 	{
-		ft_printf("[%s]", cmd->args[i]);
+		ft_printf_fd(cmd->FD[1], "[%s]", cmd->args[i]);
 		i++;
 	}
 	ft_printf("\n");
