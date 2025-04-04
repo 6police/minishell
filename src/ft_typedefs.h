@@ -20,17 +20,24 @@ typedef struct env		t_env;
 typedef struct shell	t_shell;
 typedef struct cmd t_cmd; // Define a type for the function pointer
 
-typedef enum e_exit_status
+typedef enum e_exit_code
 {
-	EXITSUCCESS = 0, // Successful execution
-	EXITFAILURE = 1,
-	// General failure (often used by programs to indicate an error)
-
-	// Shell-specific exit codes (for shell-like environments)
-	EXIT_COMMAND_NOT_FOUND = 127, // Command not found (shell scripts)
-
-	SIG = 128 //+ SIGSEGV,			// + signal - For all the other SIG's
-}						t_exit_status;
+    EXIT_CODE_SUCCESS = 0,            // No error, command executed successfully
+    EXIT_CODE_GENERAL_ERROR = 1,      // General error occurred
+    EXIT_CODE_MALLOC_FAILURE = 2,     // Memory allocation failure
+    EXIT_CODE_PERMISSION_DENIED = 126,// Permission denied (common for exec errors)
+    EXIT_CODE_CMD_NOT_FOUND = 127,    // Command not found
+    EXIT_CODE_INVALID_ARGUMENT = 128, // Invalid argument passed to a command
+    EXIT_CODE_SYNTAX_ERROR = 129,     // Syntax error in the command line
+    EXIT_CODE_ENV_FAILURE = 130,      // Error with environment variable manipulation
+    EXIT_CODE_BUILTIN_FAILURE = 131,  // Builtin command failure
+    EXIT_CODE_REDIRECTION_ERROR = 132,// Error during redirection processing
+    EXIT_CODE_PIPE_FAILURE = 133,     // Failure in creating or handling pipes
+    EXIT_CODE_FORK_FAILURE = 134,     // Failure in forking a new process
+    EXIT_CODE_SIGNAL_TERMINATION = 135,// Process terminated due to a signal
+    EXIT_CODE_NOT_A_DIRECTORY = 136,  // Path provided is not a directory when expected
+    EXIT_CODE_FILE_NOT_FOUND = 137    // Specified file does not exist
+} t_exit_code;
 
 // struct to store the here document information
 typedef struct here_doc
@@ -53,10 +60,10 @@ typedef enum s_type
 // struct to store the redirection information
 typedef struct redir
 {
-	char *redir_in;    // input redirection
-	char *redir_out;   // output redirection
+	char *redir_in;   	// input redirection
+	char *redir_out;   	// output redirection
 	char *redir_append; // for >>
-	char *error;    // error redirection
+	char *error;    	// error redirection
 	t_here_doc *heredoc; // here document @@ jony antes tinhas aqui um char *here_doc, mudei para termos acesso a estrutura
 }				t_redir;
 
@@ -67,6 +74,7 @@ struct					cmd
 	char *name;  // command name
 	char **args; // arguments
 	char *path;  // path to the command,
+	int		FD[2];
 
 	bool is_builtin; // if the command is a built-in command
 	bool is_valid;   // if the command is valid

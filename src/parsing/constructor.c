@@ -53,6 +53,8 @@ static t_cmd	*init_cmd(char *name, char **args)
 	cmd->redirs = NULL;
 	cmd->last_fd = -1;
 	cmd->last_read = -1;
+	cmd->FD[0] = STDIN_FILENO;
+	cmd->FD[1] = STDOUT_FILENO;
 	cmd->has_heredoc = false;
 	return (cmd);
 }

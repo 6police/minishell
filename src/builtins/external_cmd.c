@@ -28,12 +28,21 @@ void	execute_external(t_cmd *cmd, t_shell *shell)
 		shell->is_child = true;
 		signal(SIGQUIT, SIG_DFL);
 		signal(SIGINT, SIG_DFL);
+		handle_redirections(cmd, shell, true);
 		if (execve(cmd->path, cmd->args, envp) == -1)
 		{
-			ft_putstr_fd("minishell: command not found: ", 2);
-			ft_putstr_fd(cmd->name, 2);
-			ft_putstr_fd("\n", 2);
-			shell->exit_value = 127;
+			if (errno == ENOENT)
+			{
+				ft_putstr_fd("minishell: command not found: ", 2);
+				ft_putstr_fd(cmd->name, 2);
+				ft_putstr_fd("\n", 2);
+				shell->exit_value = 127; // or should i exit(127);?
+			}
+			else
+			{
+				perror("Aii nu cu nao\n");
+				shell->exit_value = 126; // or should i exit(126);?
+			}
 		}
 	}
 	else if (pid < 0)

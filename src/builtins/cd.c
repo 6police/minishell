@@ -1,7 +1,7 @@
 #include "ft_builtins.h"
 
 static char	*cd(t_cmd *cmd, t_shell *shell);
-static void	change_dir(char *path, t_shell *shell);
+static void	change_dir(char *path, t_shell *shell, t_cmd *cmd);
 static void	update_pwd_env_vars(t_env *env, t_env_var *oldpwd, t_env_var *pwd);
 
 void	cd_shell(t_cmd *cmd, t_shell *shell)
@@ -14,7 +14,7 @@ void	cd_shell(t_cmd *cmd, t_shell *shell)
 		shell->exit_value = 1;
 		return ;
 	}
-	change_dir(path, shell);
+	change_dir(path, shell, cmd);
 	return ;
 }
 
@@ -26,7 +26,7 @@ static char	*cd(t_cmd *cmd, t_shell *shell)
 	if (!cmd->args[0])
 	{
 		home = find_env_var(shell->env, "HOME");
-		printf("home: %s\n", home->value);
+		ft_printf_fd(cmd->FD[1], "home: %s\n", home->value);
 		if (!home || !home->value)
 		{
 			ft_putstr_fd("minishell: cd: HOME not set\n", STDERR_FILENO);
@@ -38,7 +38,7 @@ static char	*cd(t_cmd *cmd, t_shell *shell)
 	return (cmd->args[0]);
 }
 
-static void	change_dir(char *path, t_shell *shell)
+static void	change_dir(char *path, t_shell *shell, t_cmd *cmd)
 {
 	t_env_var	*oldpwd;
 	t_env_var	*pwd;
@@ -55,8 +55,8 @@ static void	change_dir(char *path, t_shell *shell)
 			return ;
 		}
 		new_path = oldpwd->value;
-		ft_putstr_fd(new_path, STDOUT_FILENO);
-		ft_putstr_fd("\n", STDOUT_FILENO);
+		ft_putstr_fd(new_path, cmd->FD[1]);
+		ft_putstr_fd("\n", cmd->FD[1]);
 		shell->exit_value = 0;
 	}
 	if (chdir(new_path) != 0)

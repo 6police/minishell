@@ -1,12 +1,13 @@
 #include "ft_builtins.h"
 
-static bool	is_there_quotes(char *str);
-static void	do_echo(char *arg, int wild_card_type);
+static void	do_echo(char *arg, int wild_card_type, t_cmd *cmd);
 static bool	check_wildcard(char *arg);
-static void	do_wildcard(char *arg);
+static void	do_wildcard(char *arg, t_cmd *cmd);
 static int	check_wildcard_type(char *str);
-static bool	is_there_quotes(char *str);
-static void	do_special_echo(char *arg, t_shell *shell);
+static int	check_quotes(char *str);
+static void	do_echo_with_env_value(char *arg, t_shell *shell, t_cmd *cmd);
+static void	echoing(t_cmd *cmd, t_shell *shell);
+static void	remove_quotes(char *arg);
 
 void	echo_shell(t_cmd *cmd, t_shell *shell)
 {
@@ -18,7 +19,7 @@ void	echo_shell(t_cmd *cmd, t_shell *shell)
 	i = -1;
 	if (!cmd || !cmd->args)
 	{
-		ft_putchar_fd('\n', STDOUT_FILENO);
+		ft_putchar_fd('\n', cmd->FD[1]);
 		return ;
 	}
 	if (cmd->args[0] && ft_strcmp(cmd->args[0], "-n") == 0)
@@ -26,80 +27,74 @@ void	echo_shell(t_cmd *cmd, t_shell *shell)
 		newline = 0;
 		i++;
 	}
-	while (cmd->args[++i])
-	{
-		if (is_there_quotes(cmd->args[i]) == true || strstr(cmd->args[i], "$") != NULL)
-			do_special_echo(cmd->args[i], shell);
-		else if (check_wildcard(cmd->args[i]))
-			do_wildcard(cmd->args[i]);
-		else 
-			do_echo(cmd->args[i], 0);
-		if (cmd->args[i + 1])
-			ft_putchar_fd(' ', STDOUT_FILENO);
-	}
+	echoing(cmd, shell);
 	if (newline)
-		ft_putchar_fd('\n', STDOUT_FILENO);
+		ft_putchar_fd('\n', cmd->FD[1]);
 }
 
-static void	do_special_echo(char *arg, t_shell *shell)
+static void	echoing(t_cmd *cmd, t_shell *shell)
 {
 	int	i;
-	int	count;
-	int	number_of_sifrao;
-	char	*tmp;
-	t_env_var	*env_var;
+	bool	wildcard;
+	int	quote_type;
 
 	i = -1;
-	count = 0;
-	number_of_sifrao = 0;
-	tmp = arg;
-	while (tmp[++i])
+	wildcard = false;
+	while (cmd->args[++i])
 	{
-		if (tmp[i] == '$')
-			number_of_sifrao++;
+		wildcard = check_wildcard(cmd->args[i]);
+		quote_type = check_quotes(cmd->args[i]);
+		if (wildcard == true)
+			do_wildcard(cmd->args[i], cmd);
+		else if ((quote_type == 0 || quote_type == 1) && strstr(cmd->args[i], "$") != NULL)
+			do_echo_with_env_value(cmd->args[i], shell, cmd);
+		else if (quote_type == 2)
+			do_echo(cmd->args[i], 0, cmd);
+		else 
+			do_echo(cmd->args[i], 0, cmd);
+		// check if there is more so we can put a space ' '
+		if (cmd->args[i + 1])
+			ft_putchar_fd(' ', cmd->FD[1]);
 	}
-	i = -1;
-	if (strstr(arg, "'") != NULL) // means it found a single quote
+}
+
+static void	do_echo_with_env_value(char *arg, t_shell *shell, t_cmd *cmd)
+{
+	int	i;
+	t_env_var	*env_var;
+
+	i = 0;
+	remove_quotes(arg); // implementar funcao para remover quotes
+	while (arg[i] != '$' && arg[i])
 	{
-		ft_putstr_fd(tmp, STDOUT_FILENO);
-		return ;
+		write(cmd->FD[1], &arg[i], 1);
+		i++;
 	}
-	if (strstr(arg, "$") == NULL) // means it didnt find a dollar sign
-	{
-		ft_putstr_fd(tmp, STDOUT_FILENO);
-		return ;
-	}
-	if (strstr(tmp, "\"") || strstr(tmp, "'"))
-	{
-		while (tmp[++i])
-				tmp[i] = tmp[i + 1];
-		tmp[i - 2] = '\0';
-	}
-	i = -1;
-	while (arg[++i] != '$')
-		write(STDOUT_FILENO, &arg[i], 1);
 	while (arg[i])
 	{
-		if (arg[i] == '$' )
+		if (arg[i] == '$' && arg[i + 1] == '?')
+		{
+			ft_putnbr_fd(shell->exit_value, cmd->FD[1]);
+			i++;
+		}
+		else if (arg[i] == '$' && arg[i + 1] != '\0')
 		{
 			i++;
-			env_var = find_env_var(shell->env, &arg[i]);
-			count++;
-		}
-		if (arg[i] == '?')
-			ft_putnbr_fd(shell->exit_value, STDOUT_FILENO);
-		if (env_var == NULL)
-			return ;
-		else
-		{
-			if (env_var->value && count != number_of_sifrao)
+			if (arg[i] != ' ')
+				env_var = find_env_var(shell->env, &arg[i]);
+			else
+				write(cmd->FD[1], &arg[i], 1);
+			if (env_var)
 			{
-				ft_putstr_fd(env_var->value, STDOUT_FILENO);
-				i = i + ft_strlen(env_var->value) - 1;
+				ft_putstr_fd(env_var->value, cmd->FD[1]);
+				i += ft_strlen(env_var->value) -1;
 			}
 			else
-				write(STDOUT_FILENO, &arg[i], 1);
+				//bobly ver.
+			i++; 
 		}
+		else
+			write(cmd->FD[1], &arg[i], 1);
 		i++;
 	}
 }
@@ -117,26 +112,28 @@ static bool	check_wildcard(char *arg)
 	return (false);
 }
 
-static void	do_wildcard(char *arg_str)
+static void	do_wildcard(char *arg_str, t_cmd *cmd)
 {
 	int	wild_card_type;
 	
 	wild_card_type = 0;
 	wild_card_type = check_wildcard_type(arg_str);
-	do_echo(arg_str, wild_card_type);
+	do_echo(arg_str, wild_card_type, cmd);
 }
 
-static bool	is_there_quotes(char *str)
+static int	check_quotes(char *str)
 {
 	int		i;
 
 	i = -1;
 	while (str[++i])
 	{
-		if ((str[i] == '\'' || str[i] == '\"'))
-			return (true);
+		if (str[i] == '\"')
+			return (1);
+		if (str[i] == '\'')
+			return (2);
 	}
-	return (false);
+	return (0);
 }
 
 static int	check_wildcard_type(char *str)
@@ -156,7 +153,7 @@ static int	check_wildcard_type(char *str)
 	return (wild_card_type);
 }
 
-static void	do_echo(char *arg, int a)
+static void	do_echo(char *arg, int a, t_cmd *cmd)
 {
 	DIR				*dir;
 	struct dirent	*entry;
@@ -171,7 +168,8 @@ static void	do_echo(char *arg, int a)
 	first = true;
 	if (a == 0) // Caso 0: sem wildcard ou "*" asterisco dentro de aspas
 	{
-		ft_putstr_fd(arg, STDOUT_FILENO);
+		remove_quotes(arg); // Remove aspas, implementar.
+		ft_putstr_fd(arg, cmd->FD[1]);
 		return ;
 	}
 	dir = opendir(".");
@@ -185,8 +183,8 @@ static void	do_echo(char *arg, int a)
 			if (entry->d_name[0] != '.') // Ignora os fichiros ocultos (os q começam com .)
 			{
 				if (first == false)
-					ft_putchar_fd(' ', STDOUT_FILENO);
-				ft_putstr_fd(entry->d_name, STDOUT_FILENO);
+					ft_putchar_fd(' ', cmd->FD[1]);
+				ft_putstr_fd(entry->d_name, cmd->FD[1]);
 				first = 0;
 			}
 			entry = readdir(dir);
@@ -202,8 +200,8 @@ static void	do_echo(char *arg, int a)
 			if (name_len > suffix_len && 
 				strncmp(entry->d_name + name_len - suffix_len, suffix, suffix_len) == 0)
 			{
-				if (!first) ft_putchar_fd(' ', STDOUT_FILENO);
-				ft_putstr_fd(entry->d_name, STDOUT_FILENO);
+				if (!first) ft_putchar_fd(' ', cmd->FD[1]);
+				ft_putstr_fd(entry->d_name, cmd->FD[1]);
 				first = 0;
 			}
 			entry = readdir(dir);
@@ -222,8 +220,8 @@ static void	do_echo(char *arg, int a)
 				
 			if (ft_strncmp(entry->d_name, prefix, prefix_len) == 0)
 			{
-				if (!first) ft_putchar_fd(' ', STDOUT_FILENO);
-				ft_putstr_fd(entry->d_name, STDOUT_FILENO);
+				if (!first) ft_putchar_fd(' ', cmd->FD[1]);
+				ft_putstr_fd(entry->d_name, cmd->FD[1]);
 				first = 0;
 			}
 			entry = readdir(dir);
@@ -239,8 +237,8 @@ static void	do_echo(char *arg, int a)
 			if (entry->d_name[0] != '.' && 
 				strstr(entry->d_name, substring) != NULL) // criar ft_strstr, que localiza uma substring
 			{
-				if (!first) ft_putchar_fd(' ', STDOUT_FILENO);
-				ft_putstr_fd(entry->d_name, STDOUT_FILENO);
+				if (!first) ft_putchar_fd(' ', cmd->FD[1]);
+				ft_putstr_fd(entry->d_name, cmd->FD[1]);
 				first = 0;
 			}
 			entry = readdir(dir);
@@ -248,4 +246,22 @@ static void	do_echo(char *arg, int a)
 		free(substring);
 	}
 	closedir(dir);
+}
+
+static void	remove_quotes(char *arg)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (arg[i])
+	{
+		
+		if (arg[i] == '\'' || arg[i] == '\"')
+			i++;
+		arg[j++] = arg[i++];
+	}
+	if (arg[j] != '\0')
+		arg[j] = '\0';
 }

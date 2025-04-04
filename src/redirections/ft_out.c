@@ -9,11 +9,13 @@
 
 void	ft_redir_out(t_cmd *cmd, t_shell *shell)
 {
-	int i;
-	int fd;
+	int	i;
+	int	fd;
+	int	saved_stdout;
 	t_redir *redir;
 
 	i = -1;
+	saved_stdout = dup(STDOUT_FILENO);
 	// mm coisa que os outros... vamos percorrer todos os redirs a procura do redir_out
 	while (cmd->redirs[++i])
 	{
@@ -34,8 +36,8 @@ void	ft_redir_out(t_cmd *cmd, t_shell *shell)
 				shell->exit_value = EXIT_FAILURE;
 				break ;
 			}
-			dup2(fd, STDOUT_FILENO);
-			close(fd);
+			dup2(saved_stdout, STDOUT_FILENO);
+			close(saved_stdout);
 		}
 	}
 }
