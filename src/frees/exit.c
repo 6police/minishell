@@ -55,8 +55,7 @@ void	free_redirs(t_redir **redirs)
 // free ONE cmd
 void	free_cmd(t_cmd *cmd)
 {
-	int	i;
-
+	//	int	i;
 	if (!cmd)
 		return ;
 	if (cmd->name)
@@ -64,20 +63,20 @@ void	free_cmd(t_cmd *cmd)
 		free(cmd->name);
 		cmd->name = NULL;
 	}
-	if (cmd->args)
-	{
-		i = 0;
-		while (cmd->args[i])
-		{
-			printf("freeing args[%d]: %p -> %s\n", i, (void *)cmd->args[i],
-				cmd->args[i]);
-			i++;
-		}
-		printf("freeing args array: %p\n", (void *)cmd->args);
-		free_split(cmd->args);
-		cmd->args = NULL;
-		printf("args freed: %p\n", (void *)cmd->args);
-	}
+	// if (cmd->args)
+	// {
+	// 	i = 0;
+	// 	while (cmd->args[i])
+	// 	{
+	// 		printf("freeing args[%d]: %p -> %s\n", i, (void *)cmd->args[i],
+	// 			cmd->args[i]);
+	// 		i++;
+	// 	}
+	// 	printf("freeing args array: %p\n", (void *)cmd->args);
+	// 	free_split(cmd->args);
+	// 	cmd->args = NULL;
+	// 	printf("args freed: %p\n", (void *)cmd->args);
+	// }
 	if (cmd->path)
 	{
 		free(cmd->path);
@@ -89,7 +88,7 @@ void	free_cmd(t_cmd *cmd)
 		cmd->redirs = NULL;
 	}
 	free(cmd);
-	ft_printf("cmd freed\n");
+	//	ft_printf("cmd freed\n");
 }
 
 // free ALL cmds

@@ -49,18 +49,6 @@ typedef enum s_type
 	READ
 }						t_type;
 
-// struct to store the pipe information
-typedef struct s_pipex
-{
-	t_cmd **cmds; // array of commands
-	int n_cmds;   // number of commands
-	pid_t *pid;   // array of process ids
-	int infile;   // input file descriptor
-	int outfile;  // output file descriptor
-
-	char **envp; // environment variables
-}						t_pipe;
-
 // struct to store the command information
 // struct to store the redirection information
 typedef struct redir
@@ -82,6 +70,8 @@ struct					cmd
 	char *path;  // path to the command,
 
 	int cmd_nb; // command number
+
+	int					statusl;
 
 	bool is_builtin; // if the command is a built-in command
 	bool is_valid;   // if the command is valid
@@ -151,13 +141,16 @@ struct					shell
 
 	int debug; // debug mode
 
-	int ret;    // return value
-	int status; // status of the shell
-	int					exit_value;
+	int ret;             // return value
+	int status;          // status of the shell
+	int exit_value;      // exit value of the shell
 	char *exit_str_code; // last exit code, so we can print it with 'echo $?',
 							// isto e o exit_value lol, ja tava feito
 
 	int *separators; // separators for the parsing
+
+	int infile;  // input file descriptor
+	int outfile; // output file descriptor
 
 	t_fds *fds;  // file descriptors
 	t_cmd *cmds; // commands
