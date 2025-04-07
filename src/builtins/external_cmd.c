@@ -28,6 +28,7 @@ void	execute_external(t_cmd *cmd, t_shell *shell)
 		shell->is_child = true;
 		signal(SIGQUIT, SIG_DFL);
 		signal(SIGINT, SIG_DFL);
+		dup_handles(cmd, shell);
 		if (execve(cmd->path, cmd->args, envp) == -1)
 		{
 			ft_putstr_fd("minishell: command not found: ", 2);

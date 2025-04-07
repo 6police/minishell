@@ -58,22 +58,24 @@ void	close_correct_pipe(t_cmd *cmd)
 // dup handles
 void	dup_handles(t_cmd *cmd, t_shell *shell)
 {
+	if ((!shell->is_pipe) || !cmd)
+		return ;
 	(void)shell;
-	if (!cmd->prev)
+	if (cmd->prev == NULL)
 	{
 		close(cmd->fd[0]);
 		// dup2(shell->infile, STDIN_FILENO);
 		// close(shell->infile);
 		dup2(cmd->fd[1], STDOUT_FILENO);
-		close(cmd->fd[1]);
+		// close(cmd->fd[1]);
 	}
-	else if (cmd->next)
+	else if (cmd->next == NULL)
 	{
 		close(cmd->prev->fd[1]);
 		// dup2(shell->outfile, STDOUT_FILENO);
 		// close(shell->outfile);
 		dup2(cmd->prev->fd[0], STDIN_FILENO);
-		close(cmd->prev->fd[0]);
+		// close(cmd->prev->fd[0]);
 	}
 	else
 	{
@@ -90,7 +92,7 @@ void	dup_handles(t_cmd *cmd, t_shell *shell)
 void	process_pipe(t_cmd *cmd, t_shell *shell)
 {
 	dup_handles(cmd, shell);
-	// close_all_pipes(shell);
+	close_all_pipes(shell);
 	//	close(shell->infile);
 	//	close(shell->outfile);
 	// execute command!!!!

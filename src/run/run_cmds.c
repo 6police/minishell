@@ -11,21 +11,20 @@ void	run_commands(t_shell *shell)
 	if (!tmp)
 		return ;
 
+	if (shell->is_pipe)
+	{
+		if (make_pipes(shell) == 1)
+		{
+			shell->exit_value = 0;
+			return ((void)ft_printf_fd(2, "Error: pipe failed\n"));
+		}
+	}
 	while (tmp)
 	{
 		if (tmp->is_valid)
 		{
-			if (shell->is_pipe)
-				dup_handles(tmp, shell);
-			// close the pipes
-			if (tmp->next)
-				close(tmp->fd[1]);
-			if (tmp->prev)
-				close(tmp->prev->fd[0]);
-			// execute the command
-			tmp->builtin_func(tmp, shell);
-			// standardize the exit status
-			shell->exit_value = 0;
+			tmp->builtin_func(tmp, shell); // run the command
+			shell->exit_value = 0;         // reset exit value
 		}
 		else
 		{

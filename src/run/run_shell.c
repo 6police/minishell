@@ -33,6 +33,7 @@ void	run_shell_debug(t_shell *shell)
 			}
 			flush_commands(shell);
 			free(shell->line);
+			shell->line = NULL;
 			shell->is_pipe = false;
 		}
 	}
