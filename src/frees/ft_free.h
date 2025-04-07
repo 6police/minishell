@@ -8,15 +8,6 @@
 // free one array
 void	free_array(char **array);
 
-// close the file descriptors
-void	close_fds(t_fds *fds);
-
-// free ONE redir
-void	free_redir(t_redir *redir);
-
-// free ALL redirs
-void	free_redirs(t_redir **redirs);
-
 // free ONE cmd
 void	free_cmd(t_cmd *cmd);
 

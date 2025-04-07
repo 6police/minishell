@@ -12,7 +12,7 @@
  * - Cada heredoc cria seu próprio ficheiro temporário
  */
 
-void	cleanup_temp_files(t_cmd **cmds)
+/*void	cleanup_temp_files(t_cmd **cmds)
 {
 	int i;
 	int j;
@@ -39,4 +39,4 @@ void	cleanup_temp_files(t_cmd **cmds)
 			}
 		}
 	}
-}
+}*/

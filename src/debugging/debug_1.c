@@ -49,9 +49,6 @@ void	print_command(t_cmd *cmd)
 	ft_printf("path: %s\n", cmd->path);
 	ft_printf("is_builtin: %d\n", cmd->is_builtin);
 	ft_printf("is_valid: %d\n", cmd->is_valid);
-	ft_printf("redirs: %p\n", cmd->redirs);
-	ft_printf("last_fd: %d\n", cmd->last_fd);
-	ft_printf("last_read: %d\n", cmd->last_read);
 	ft_printf("has_heredoc: %d\n", cmd->has_heredoc);
 	// print function pointer
 	ft_printf("builtin_func: %p\n", cmd->builtin_func);

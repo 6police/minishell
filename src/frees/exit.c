@@ -15,43 +15,6 @@ void	free_split(char **split)
 	free(split);
 }
 
-// close the file descriptors
-void	close_fds(t_fds *fds)
-{
-	if (fds->fd_in != 0)
-		close(fds->fd_in);
-	if (fds->fd_out != 1)
-		close(fds->fd_out);
-	if (fds->fd_err != 2)
-		close(fds->fd_err);
-	if (fds->fd_here_doc != -1)
-		close(fds->fd_here_doc);
-	free(fds);
-}
-
-// free ONE redir
-void	free_redir(t_redir *redir)
-{
-	if (redir)
-		free(redir);
-}
-
-// free ALL redirs
-void	free_redirs(t_redir **redirs)
-{
-	int	i;
-
-	if (!redirs)
-		return ;
-	i = 0;
-	while (redirs[i])
-	{
-		free_redir(redirs[i]);
-		i++;
-	}
-	free(redirs);
-}
-
 // free ONE cmd
 void	free_cmd(t_cmd *cmd)
 {
@@ -82,11 +45,6 @@ void	free_cmd(t_cmd *cmd)
 	{
 		free(cmd->path);
 		cmd->path = NULL;
-	}
-	if (cmd->redirs)
-	{
-		free_redirs(cmd->redirs);
-		cmd->redirs = NULL;
 	}
 	free(cmd);
 	ft_printf("cmd freed\n");
@@ -176,12 +134,6 @@ void	free_shell(t_shell **shell, int debug)
 		if (debug)
 			printf("freeing env\n");
 		free_env((*shell)->env);
-	}
-	if ((*shell)->fds && (*shell)->fds->fd_in != 0)
-	{
-		if (debug)
-			printf("freeing fds\n");
-		close_fds((*shell)->fds);
 	}
 	if ((*shell)->tokens)
 	{

@@ -11,8 +11,7 @@ static char	**convert_env_to_array(t_env *env);
 // function to execute the command
 void	execute_external(t_cmd *cmd, t_shell *shell)
 {
-	pid_t	pid;
-	int		status;
+
 	char	**envp;
 
 	envp = convert_env_to_array(shell->env);
@@ -22,13 +21,12 @@ void	execute_external(t_cmd *cmd, t_shell *shell)
 		//shell->exit_value = 1; ?? confirmar
 		return ;
 	}
-	pid = fork();
-	if (pid == 0)
+	cmd->pid = fork();
+	if (cmd->pid == 0)
 	{
 		shell->is_child = true;
 		signal(SIGQUIT, SIG_DFL);
 		signal(SIGINT, SIG_DFL);
-		handle_redirections(cmd, shell, true);
 		if (execve(cmd->path, cmd->args, envp) == -1)
 		{
 			if (errno == ENOENT)
@@ -45,22 +43,22 @@ void	execute_external(t_cmd *cmd, t_shell *shell)
 			}
 		}
 	}
-	else if (pid < 0)
+	else if (cmd->pid < 0)
 	{
 		ft_putstr_fd("minishell: fork failed\n", 2);
 		shell->exit_value = 1;
 	}
 	else
 	{
-		waitpid(pid, &status, 0);
-		if (WIFSIGNALED(status))
+		waitpid(cmd->pid, &shell->exit_value, 0);
+		if (WIFSIGNALED(shell->exit_value))
 		{
-			if (WTERMSIG(status) == SIGQUIT)
+			if (WTERMSIG(shell->exit_value) == SIGQUIT)
 				ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
-			shell->exit_value = 128 + WTERMSIG(status);
+			shell->exit_value = 128 + WTERMSIG(shell->exit_value);
 		}
-		else if (WIFEXITED(status))
-			shell->exit_value = WEXITSTATUS(status);
+		else if (WIFEXITED(shell->exit_value))
+			shell->exit_value = WEXITSTATUS(shell->exit_value);
 	}
 	free_env_array(envp);
 }
