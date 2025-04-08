@@ -4,7 +4,7 @@ static void	pipe_builtin(t_cmd *cmd, t_shell *shell);
 
 void	run_commands(t_shell *shell)
 {
-	t_cmd *tmp;
+	t_cmd	*tmp;
 
 	if (!shell->cmds)
 		return ;
@@ -26,7 +26,7 @@ void	pipe_builtin(t_cmd *cmd, t_shell *shell)
 	{
 		cmd->pid = fork();
 		if (cmd->pid == 0)
-		{	
+		{
 			signal(SIGQUIT, SIG_DFL);
 			signal(SIGINT, SIG_DFL);
 			shell->is_child = true;
@@ -35,7 +35,7 @@ void	pipe_builtin(t_cmd *cmd, t_shell *shell)
 		}
 		else if (cmd->pid < 0)
 		{
-			ft_printf_fd(cmd->FD[1], "minishell: fork failed\n");
+			ft_printf_fd(cmd->fd[1], "minishell: fork failed\n");
 			shell->exit_value = 1;
 		}
 		else

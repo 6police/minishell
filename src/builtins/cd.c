@@ -26,7 +26,7 @@ static char	*cd(t_cmd *cmd, t_shell *shell)
 	if (!cmd->args[0])
 	{
 		home = find_env_var(shell->env, "HOME");
-		ft_printf_fd(cmd->FD[1], "home: %s\n", home->value);
+		ft_printf_fd(cmd->fd[1], "home: %s\n", home->value);
 		if (!home || !home->value)
 		{
 			ft_putstr_fd("minishell: cd: HOME not set\n", STDERR_FILENO);
@@ -52,8 +52,8 @@ static void	change_dir(char *path, t_shell *shell, t_cmd *cmd)
 		if (!oldpwd || !oldpwd->value || oldpwd->value[0] == '\0')
 			return (ft_putstr_fd("minishell: cd: OLDPWD not set\n", STDERR_FILENO));
 		new_path = oldpwd->value;
-		ft_putstr_fd(new_path, cmd->FD[1]);
-		ft_putstr_fd("\n", cmd->FD[1]);
+		ft_putstr_fd(new_path, cmd->fd[1]);
+		ft_putstr_fd("\n", cmd->fd[1]);
 		shell->exit_value = 0;
 	}
 	if (chdir(new_path) != 0)

@@ -25,8 +25,12 @@ void	mark_pipes(char *line);
 // split the line into tokens
 char	**ft_parse_split(char *line, int letter, int sub);
 
+// function to initialize tokens
 t_token	*init_token(char **tokens);
 
+// function to add a token to the list
 t_cmd	*build_cmds(t_shell *shell);
+
+void	parse_redirs(t_cmd *cmd, t_shell *shell);
 
 #endif

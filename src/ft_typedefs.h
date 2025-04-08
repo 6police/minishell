@@ -22,22 +22,25 @@ typedef struct cmd t_cmd; // Define a type for the function pointer
 
 typedef enum e_exit_code
 {
-    EXIT_CODE_SUCCESS = 0,            // No error, command executed successfully
-    EXIT_CODE_GENERAL_ERROR = 1,      // General error occurred
-    EXIT_CODE_MALLOC_FAILURE = 2,     // Memory allocation failure
-    EXIT_CODE_PERMISSION_DENIED = 126,// Permission denied (common for exec errors)
-    EXIT_CODE_CMD_NOT_FOUND = 127,    // Command not found
-    EXIT_CODE_INVALID_ARGUMENT = 128, // Invalid argument passed to a command
-    EXIT_CODE_SYNTAX_ERROR = 129,     // Syntax error in the command line
-    EXIT_CODE_ENV_FAILURE = 130,      // Error with environment variable manipulation
-    EXIT_CODE_BUILTIN_FAILURE = 131,  // Builtin command failure
-    EXIT_CODE_REDIRECTION_ERROR = 132,// Error during redirection processing
-    EXIT_CODE_PIPE_FAILURE = 133,     // Failure in creating or handling pipes
-    EXIT_CODE_FORK_FAILURE = 134,     // Failure in forking a new process
-    EXIT_CODE_SIGNAL_TERMINATION = 135,// Process terminated due to a signal
-    EXIT_CODE_NOT_A_DIRECTORY = 136,  // Path provided is not a directory when expected
-    EXIT_CODE_FILE_NOT_FOUND = 137    // Specified file does not exist
-} t_exit_code;
+	EXIT_CODE_SUCCESS = 0,        // No error,command executed successfully
+	EXIT_CODE_GENERAL_ERROR = 1,  // General error occurred
+	EXIT_CODE_MALLOC_FAILURE = 2, // Memory allocation failure
+	EXIT_CODE_PERMISSION_DENIED = 126,
+	// Permission denied (common for exec errors)
+	EXIT_CODE_CMD_NOT_FOUND = 127,    // Command not found
+	EXIT_CODE_INVALID_ARGUMENT = 128, // Invalid argument passed to a command
+	EXIT_CODE_SYNTAX_ERROR = 129,     // Syntax error in the command line
+	EXIT_CODE_ENV_FAILURE = 130,
+	// Error with environment variable manipulation
+	EXIT_CODE_BUILTIN_FAILURE = 131,    // Builtin command failure
+	EXIT_CODE_REDIRECTION_ERROR = 132,  // Error during redirection processing
+	EXIT_CODE_PIPE_FAILURE = 133,       // Failure in creating or handling pipes
+	EXIT_CODE_FORK_FAILURE = 134,       // Failure in forking a new process
+	EXIT_CODE_SIGNAL_TERMINATION = 135, // Process terminated due to a signal
+	EXIT_CODE_NOT_A_DIRECTORY = 136,
+	// Path provided is not a directory when expected
+	EXIT_CODE_FILE_NOT_FOUND = 137 // Specified file does not exist
+}						t_exit_code;
 
 // struct to store the here document information
 typedef struct here_doc
@@ -45,7 +48,7 @@ typedef struct here_doc
 	char *delim;   // delimiter of the here document
 	char *content; // content of the here document
 	char *file;    // file to store the here document
-	int fd; // file descriptor
+	int fd;        // file descriptor
 }						t_here_doc;
 
 typedef enum s_type
@@ -58,9 +61,9 @@ typedef enum s_type
 
 typedef struct s_redirs
 {
-	char	*append;
-	char	*write;
-	char	*read;
+	char				*append;
+	char				*write;
+	char				*read;
 }						t_redirs;
 
 // struct to store the command information
@@ -69,20 +72,20 @@ struct					cmd
 	char *name;  // command name
 	char **args; // arguments
 	char *path;  // path to the command,
-	int		FD[2];
-	pid_t	pid;
+	int					fd[2];
+	pid_t				pid;
 
 	bool is_builtin; // if the command is a built-in command
 	bool is_valid;   // if the command is valid
 
 	// pointer for the builtin functions
-	void (*builtin_func)(t_cmd *cmd, t_shell *shell);
-		// Function pointer to the built-in function
+	void				(*builtin_func)(t_cmd *cmd, t_shell *shell);
+	// Function pointer to the built-in function
 
 	struct cmd *next; // next command
 	struct cmd *prev; // previous command
-	
-	t_redirs *redirs;
+
+	t_redirs			*redirs;
 
 	bool				has_heredoc;
 };
@@ -120,22 +123,22 @@ struct					shell
 	char *line;         // line read from the input
 	char *history_file; // file to store the history
 
-	char **tokens; // tokens from the line after pipe separation
-	bool	is_pipe; // if the command has a pipe
+	char **tokens;  // tokens from the line after pipe separation
+	bool is_pipe;   // if the command has a pipe
 	pid_t main_pid; // process id of the command
-	bool is_child; // if the command is a child process
+	bool is_child;  // if the command is a child process
 
 	t_token *token; // tokens from the line after parsing
 
 	int debug; // debug mode
 
-	int	ret;    // return value
-	int	status; // status of the shell
-	int		exit_value;
+	int ret;    // return value
+	int status; // status of the shell
+	int					exit_value;
 
 	int *separators; // separators for the parsing
 
 	t_cmd *cmds; // commands
 };
 
-# endif
+#endif
