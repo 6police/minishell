@@ -10,15 +10,6 @@ void	run_commands(t_shell *shell)
 	tmp = shell->cmds;
 	if (!tmp)
 		return ;
-
-	if (shell->is_pipe)
-	{
-		if (make_pipes(shell) == 1)
-		{
-			shell->exit_value = 0;
-			return ((void)ft_printf_fd(2, "Error: pipe failed\n"));
-		}
-	}
 	while (tmp)
 	{
 		if (tmp->is_valid)

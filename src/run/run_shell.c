@@ -20,7 +20,7 @@ void	run_shell_debug(t_shell *shell)
 			print_all_commands(shell);
 			if (shell->is_pipe)
 			{
-				if (make_pipes(shell) == 1)
+				if (make_pipes(shell) != 0)
 					return ((void)ft_printf_fd(2, "Error: pipe failed\n"));
 			}
 			run_commands(shell);

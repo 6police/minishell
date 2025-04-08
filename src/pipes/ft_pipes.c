@@ -63,19 +63,19 @@ void	dup_handles(t_cmd *cmd, t_shell *shell)
 	(void)shell;
 	if (cmd->prev == NULL)
 	{
+		dup2(cmd->fd[1], STDOUT_FILENO);
 		close(cmd->fd[0]);
 		// dup2(shell->infile, STDIN_FILENO);
 		// close(shell->infile);
-		dup2(cmd->fd[1], STDOUT_FILENO);
-		// close(cmd->fd[1]);
+	     close(cmd->fd[1]);
 	}
 	else if (cmd->next == NULL)
 	{
+		dup2(cmd->prev->fd[0], STDIN_FILENO);
 		close(cmd->prev->fd[1]);
 		// dup2(shell->outfile, STDOUT_FILENO);
 		// close(shell->outfile);
-		dup2(cmd->prev->fd[0], STDIN_FILENO);
-		// close(cmd->prev->fd[0]);
+		close(cmd->prev->fd[0]);
 	}
 	else
 	{
@@ -160,4 +160,4 @@ void	process_pipe(t_cmd *cmd, t_shell *shell)
 // 			close_piperino(pipex, i);
 // 		i++;
 // 	}
-// }
+// 
