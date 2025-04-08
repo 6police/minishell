@@ -1,11 +1,11 @@
-#include "redirections.h"
+/*#include "redirections.h"
 
-/**
+
  * Função para lidar com o redirecionamento do append (>>)
  * 
  * O operador '>>' adiciona output no final de um ficheiro existente (escreve a frnete do que ja esta presente/escrito)
  * Diferente do '>' que substi o conteúdo do ficheiro
- */
+ 
 
 void	ft_redir_append(t_cmd *cmd, t_shell *shell)
 {
@@ -38,4 +38,4 @@ void	ft_redir_append(t_cmd *cmd, t_shell *shell)
 			close(fd);
 		}
 	}
-}
+}*/

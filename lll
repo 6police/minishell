@@ -105,16 +105,9 @@ run: build
 	@./$(NAME)
 
 .PHONY: all clean fclean re run libs build bonus
-freeing args[0]: 0x4b99680 -> cat
-freeing args[1]: 0x4b996d0 -> Makefile
-freeing args[2]: 0x4b99720 -> >
-freeing args[3]: 0x4b99770 -> ola.txt
-freeing args array: 0x4b99610
-args freed: (nil)
-cmd freed
-[?2004h🙈 minishell _$ [0;31mDEBUG[0m🔨[?2004l
-🧠exiting shell
-🧠exiting shell
-freeing env
-freeing separator
-freeing shell
+#bash script 
+# Run the program
+valgrind --suppressions=read.supp --show-leak-kinds=all --leak-check=full ./minishell -d
+
+
+

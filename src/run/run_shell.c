@@ -42,15 +42,31 @@ void	run_shell(t_shell *shell)
 		else
 		{
 			add_history(shell->line);
+			static t_cmd test;
+
+			shell->cmds = &test;
+			test.is_valid = true;
+			test.is_builtin = false;
+
+
+			test.name = "cat";
+			static char *args[] = {"cat", "Makefile", NULL};
+			test.args = args;
+			test.path = "/bin/cat";
+			test.FD[0] = open("Makefile", O_RDONLY);
+			test.FD[1] = open("ola.c", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			test.builtin_func = execute_external; // Assign the function pointer
+			run_commands(shell);
+			/*add_history(shell->line);
 			parse(shell); // parse the line and tokens
 			if (shell->tokens)
 				printf(EMOJI_COOL "PLACEHOLDER \n something will happen here\n");
 			if (shell->cmds)
 				run_commands(shell);
 			free_cmds(shell->cmds);
-			free(shell->line);
+			free(shell->line);*/
 		}
-		free_tokens(shell->tokens); // free the tokens
+		//free_tokens(shell->tokens); // free the tokens
 	}
 }
 

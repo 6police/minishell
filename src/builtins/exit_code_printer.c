@@ -4,22 +4,11 @@
 
 void	exit_code_printer(t_cmd *cmd, t_shell *shell)
 {
-	// temos de tratar em pipe, penso que mais nenhum command pode correr se houver $?!!
+	if (shell->is_pipe)
+	{
+		cmd->pid = fork();
+	}
 	(void)cmd;
-	shell->exit_str_code = "command not found";
-	printf("%d: %s\n", shell->exit_value, shell->exit_str_code);
+	ft_printf_fd(cmd->FD[1], "%d: command not found\n", shell->exit_value);
 	shell->exit_value = 127;
-	//example:
-/* 	if (shell->exit_value == 127)
-	{
-		ft_putstr_fd("127: command not found\n", 2);
-	}
-	else if (shell->exit_value == 126)
-	{
-		ft_putstr_fd("126: permission denied\n", 2);
-	}
-	else if (shell->exit_value == 1)
-	{
-		ft_putstr_fd("1: syntax error\n", 2);
-	} */
 }

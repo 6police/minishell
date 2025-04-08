@@ -50,9 +50,12 @@ static t_cmd	*init_cmd(char *name, char **args)
 	cmd->is_builtin = false;
 	cmd->next = NULL;
 	cmd->prev = NULL;
-	cmd->redirs = NULL;
-	cmd->last_fd = -1;
-	cmd->last_read = -1;
+	cmd->FD[0] = STDIN_FILENO;
+	cmd->FD[1] = STDOUT_FILENO;
+	cmd->redirs = ft_calloc(sizeof(t_redirs), 1);
+	cmd->redirs->append = NULL;
+	cmd->redirs->write = NULL;
+	cmd->redirs->read = NULL;
 	cmd->has_heredoc = false;
 	return (cmd);
 }
