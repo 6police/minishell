@@ -174,7 +174,7 @@ void	clean_exit(t_shell **shell)
 {
 	int status;
 
- 	status = (*shell)->status;
+ 	status = (*shell)->exit_value;
 	if ((*shell)->debug)
 		printf(EMOJI_BRAIN "exiting shell\n");
 	if (shell)

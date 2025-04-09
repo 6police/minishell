@@ -4,98 +4,53 @@ static void	do_echo(char *arg, int wild_card_type, t_cmd *cmd);
 static bool	check_wildcard(char *arg);
 static void	do_wildcard(char *arg, t_cmd *cmd);
 static int	check_wildcard_type(char *str);
-static int	check_quotes(char *str);
-static void	do_echo_with_env_value(char *arg, t_shell *shell, t_cmd *cmd);
-static void	echoing(t_cmd *cmd, t_shell *shell);
-static void	remove_quotes(char *arg);
+static bool	is_there_quotes(char *str);
+static void	echoing(t_cmd *cmd, int newline);
+//static void	remove_quotes(char *arg);
 
 void	echo_shell(t_cmd *cmd, t_shell *shell)
 {
 	int	newline;
 	int	i;
 
-	(void)shell;
 	newline = 1;
 	i = -1;
 	if (!cmd || !cmd->args)
 	{
 		ft_putchar_fd('\n', cmd->FD[1]);
+		shell->exit_value = 0;
 		return ;
 	}
 	if (cmd->args[0] && ft_strcmp(cmd->args[0], "-n") == 0)
 	{
 		newline = 0;
-		i++;
 	}
-	echoing(cmd, shell);
+	echoing(cmd, newline);
 	if (newline)
 		ft_putchar_fd('\n', cmd->FD[1]);
 }
 
-static void	echoing(t_cmd *cmd, t_shell *shell)
+static void	echoing(t_cmd *cmd, int newline)
 {
 	int	i;
 	bool	wildcard;
-	int	quote_type;
+	bool	quotes;
 
 	i = -1;
 	wildcard = false;
+	if (newline == 0)
+		i++;
 	while (cmd->args[++i])
 	{
 		wildcard = check_wildcard(cmd->args[i]);
-		quote_type = check_quotes(cmd->args[i]);
-		if (wildcard == true)
+		quotes = is_there_quotes(cmd->args[i]);
+		if (wildcard == true && quotes == false)
 			do_wildcard(cmd->args[i], cmd);
-		else if ((quote_type == 0 || quote_type == 1) && strstr(cmd->args[i], "$") != NULL)
-			do_echo_with_env_value(cmd->args[i], shell, cmd);
-		else if (quote_type == 2)
-			do_echo(cmd->args[i], 0, cmd);
-		else 
+		else
 			do_echo(cmd->args[i], 0, cmd);
 		// check if there is more so we can put a space ' '
 		if (cmd->args[i + 1])
 			ft_putchar_fd(' ', cmd->FD[1]);
-	}
-}
-
-static void	do_echo_with_env_value(char *arg, t_shell *shell, t_cmd *cmd)
-{
-	int	i;
-	t_env_var	*env_var;
-
-	i = 0;
-	remove_quotes(arg); // implementar funcao para remover quotes
-	while (arg[i] != '$' && arg[i])
-	{
-		write(cmd->FD[1], &arg[i], 1);
-		i++;
-	}
-	while (arg[i])
-	{
-		if (arg[i] == '$' && arg[i + 1] == '?')
-		{
-			ft_putnbr_fd(shell->exit_value, cmd->FD[1]);
-			i++;
-		}
-		else if (arg[i] == '$' && arg[i + 1] != '\0')
-		{
-			i++;
-			if (arg[i] != ' ')
-				env_var = find_env_var(shell->env, &arg[i]);
-			else
-				write(cmd->FD[1], &arg[i], 1);
-			if (env_var)
-			{
-				ft_putstr_fd(env_var->value, cmd->FD[1]);
-				i += ft_strlen(env_var->value) -1;
-			}
-			else
-				//bobly ver.
-			i++; 
-		}
-		else
-			write(cmd->FD[1], &arg[i], 1);
-		i++;
 	}
 }
 
@@ -121,7 +76,7 @@ static void	do_wildcard(char *arg_str, t_cmd *cmd)
 	do_echo(arg_str, wild_card_type, cmd);
 }
 
-static int	check_quotes(char *str)
+static bool	is_there_quotes(char *str)
 {
 	int		i;
 
@@ -129,11 +84,11 @@ static int	check_quotes(char *str)
 	while (str[++i])
 	{
 		if (str[i] == '\"')
-			return (1);
+			return (true);
 		if (str[i] == '\'')
-			return (2);
+			return (true);
 	}
-	return (0);
+	return (false);
 }
 
 static int	check_wildcard_type(char *str)
@@ -168,8 +123,8 @@ static void	do_echo(char *arg, int a, t_cmd *cmd)
 	first = true;
 	if (a == 0) // Caso 0: sem wildcard ou "*" asterisco dentro de aspas
 	{
-		remove_quotes(arg); // Remove aspas, implementar.
-		ft_putstr_fd(arg, cmd->FD[1]);
+		//remove_quotes(arg); // Remove aspas, implementar.
+		ft_printf_fd(cmd->FD[1], "%s", arg);
 		return ;
 	}
 	dir = opendir(".");
@@ -262,6 +217,5 @@ static void	remove_quotes(char *arg)
 			i++;
 		arg[j++] = arg[i++];
 	}
-	if (arg[j] != '\0')
-		arg[j] = '\0';
 }
+// use strtrim and free old arg, replace with new one.

@@ -2,8 +2,8 @@
 
 void handle_redirections(t_cmd *cmd, t_shell *shell)
 {
-	if (cmd->redirs->append != NULL)
-		cmd->FD[0] = open(cmd->redirs->append, O_RDONLY);
+/*	if (cmd->redirs->append != NULL)
+		cmd->FD[0] = open(cmd->redirs->append, O_RDONLY);*/
 	// Redirect input (e.g., < or heredoc)
 	if (cmd->FD[0] != STDIN_FILENO)
 	{
