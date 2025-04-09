@@ -239,19 +239,18 @@ static void	do_echo(char *arg, int a, t_cmd *cmd)
 						// ta a dar erro
 	{
 		substring = strndup(arg + 1, ft_strlen(arg) - 2);
-			// Remove "*" inicial e final while (entry)
+		// Remove "*" inicial e final while (entry)
 		{
 			// Ignora ocultos e verifica substring
 			if (entry->d_name[0] != '.' && strstr(entry->d_name,
 					substring) != NULL)
-				// criar ft_strstr,
-				que localiza uma substring
-				{
-					if (!first)
-						ft_putchar_fd(' ', cmd->fd[1]);
-					ft_putstr_fd(entry->d_name, cmd->fd[1]);
-					first = 0;
-				}
+			// criar ft_strstr, que localiza uma substring
+			{
+				if (!first)
+					ft_putchar_fd(' ', cmd->fd[1]);
+				ft_putstr_fd(entry->d_name, cmd->fd[1]);
+				first = 0;
+			}
 			entry = readdir(dir);
 		}
 		free(substring);

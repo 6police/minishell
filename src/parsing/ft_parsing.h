@@ -31,6 +31,19 @@ t_token	*init_token(char **tokens);
 // function to add a token to the list
 t_cmd	*build_cmds(t_shell *shell);
 
-void	parse_redirs(t_cmd *cmd, t_shell *shell);
+// funciton to count the number of > redirects in the token
+int		forward_redir_count(char *token);
+
+// function to count the number of >> redirects in the token
+int		dbl_forward_redir_count(char *token);
+
+// function to count the number of < redirects in the token
+int		back_redir_count(char *token);
+
+// function that counts the number of here_docs in the token
+int		here_doc_count(char *token);
+
+// function to check for redirections
+void	check_for_redirs(char *token);
 
 #endif
