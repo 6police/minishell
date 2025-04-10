@@ -16,8 +16,8 @@
 # define HD_TEMP_FILE ".hd_temp"
 # define HISTORY ".minishell_history"
 
-typedef struct env		t_env;
-typedef struct shell	t_shell;
+typedef struct env			t_env;
+typedef struct shell		t_shell;
 typedef struct cmd t_cmd; // Define a type for the function pointer
 
 typedef enum e_exit_code
@@ -40,7 +40,7 @@ typedef enum e_exit_code
 	EXIT_CODE_NOT_A_DIRECTORY = 136,
 	// Path provided is not a directory when expected
 	EXIT_CODE_FILE_NOT_FOUND = 137 // Specified file does not exist
-}						t_exit_code;
+}							t_exit_code;
 
 // struct to store the here document information
 typedef struct here_doc
@@ -49,45 +49,44 @@ typedef struct here_doc
 	char *content; // content of the here document
 	char *file;    // file to store the here document
 	int fd;        // file descriptor
-}						t_here_doc;
+}							t_here_doc;
 
 typedef enum s_type
 {
-	HEREDOC,
-	APPEND,
-	CREATE,
-	READ
-}						t_type;
-
+	REDIR_OUT,
+	REDIR_IN,
+	REDIR_APPEND,
+	HERE_DOC_
+}							t_type;
 typedef struct s_redirs
 {
-	char				*append;
-	char				*write;
-	char				*read;
-}						t_redirs;
+	char					*append;
+	char					*write;
+	char					*read;
+}							t_redirs;
 
 // struct to store the command information
-struct					cmd
+struct						cmd
 {
 	char *name;  // command name
 	char **args; // arguments
 	char *path;  // path to the command,
-	int					fd[2];
-	pid_t				pid;
+	int						fd[2];
+	pid_t					pid;
 
 	bool is_builtin; // if the command is a built-in command
 	bool is_valid;   // if the command is valid
 
 	// pointer for the builtin functions
-	void				(*builtin_func)(t_cmd *cmd, t_shell *shell);
+	void					(*builtin_func)(t_cmd *cmd, t_shell *shell);
 	// Function pointer to the built-in function
 
 	struct cmd *next; // next command
 	struct cmd *prev; // previous command
 
-	t_redirs			*redirs;
+	t_redirs				*redirs;
 
-	bool				has_heredoc;
+	bool					has_heredoc;
 };
 
 // struct to store the environment variable and its value
@@ -99,10 +98,10 @@ typedef struct env_var
 
 	struct env_var *next; // next environment variable
 	struct env_var *prev; // previous environment variable
-}						t_env_var;
+}							t_env_var;
 
 // struct to store the environment variables
-struct					env
+struct						env
 {
 	t_env_var *head; // head of the environment variables
 	t_env_var *last; // last of the environment variables
@@ -110,14 +109,14 @@ struct					env
 
 typedef struct token
 {
-	char				**token;
-	struct token		*next;
-}						t_token;
+	char					**token;
+	struct token			*next;
+}							t_token;
 
 // struct to store the shell information
-struct					shell
+struct						shell
 {
-	t_here_doc			*hd;
+	t_here_doc				*hd;
 
 	t_env *env;         // environment variables
 	char *line;         // line read from the input
@@ -134,11 +133,19 @@ struct					shell
 
 	int ret;    // return value
 	int status; // status of the shell
-	int					exit_value;
+	int						exit_value;
 
 	int *separators; // separators for the parsing
 
 	t_cmd *cmds; // commands
 };
+
+typedef struct s_redir_struct
+{
+	int type;   // 1 for >, 2 for >>, 3 for < and 4 for <<
+	char *file; // name of the file to redirect to
+
+	struct s_redir_struct	*next;
+}							t_redir_struct;
 
 #endif

@@ -1,5 +1,6 @@
 #include "ft_parsing.h"
 
+
 // function that counts the number of > redirects in the token
 int	forward_redir_count(char *token)
 {

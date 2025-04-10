@@ -6,7 +6,8 @@
     "ft_typedefs.h": "c",
     "ft_validations.h": "c",
     "typeinfo": "c",
-    "ft_debug.h": "c"
+    "ft_debug.h": "c",
+    "ft_parsing.h": "c"
   },
   "C_Cpp_Runner.cCompilerPath": "gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",
