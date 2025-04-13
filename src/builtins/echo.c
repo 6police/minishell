@@ -6,15 +6,13 @@ static void	do_wildcard(char *arg, t_cmd *cmd);
 static int	check_wildcard_type(char *str);
 static bool	is_there_quotes(char *str);
 static void	echoing(t_cmd *cmd, int newline);
-//static void	remove_quotes(char *arg);
+static char	*remove_quotes(char *arg);
 
 void	echo_shell(t_cmd *cmd, t_shell *shell)
 {
 	int	newline;
-	int	i;
 
 	newline = 1;
-	i = -1;
 	if (!cmd || !cmd->args)
 	{
 		ft_putchar_fd('\n', cmd->FD[1]);
@@ -44,6 +42,7 @@ static void	echoing(t_cmd *cmd, int newline)
 	{
 		wildcard = check_wildcard(cmd->args[i]);
 		quotes = is_there_quotes(cmd->args[i]);
+		cmd->args[i] = remove_quotes(cmd->args[i]);
 		if (wildcard == true && quotes == false)
 			do_wildcard(cmd->args[i], cmd);
 		else
@@ -110,20 +109,11 @@ static int	check_wildcard_type(char *str)
 
 static void	do_echo(char *arg, int a, t_cmd *cmd)
 {
-	DIR				*dir;
+	DIR			*dir;
 	struct dirent	*entry;
-	bool			first;
-	char 			*suffix;
-	char			*prefix;
-	char			*substring;
-	size_t			prefix_len;
-	size_t			suffix_len;
-	size_t			name_len;
 
-	first = true;
 	if (a == 0) // Caso 0: sem wildcard ou "*" asterisco dentro de aspas
 	{
-		//remove_quotes(arg); // Remove aspas, implementar.
 		ft_printf_fd(cmd->FD[1], "%s", arg);
 		return ;
 	}
@@ -136,16 +126,11 @@ static void	do_echo(char *arg, int a, t_cmd *cmd)
 		while (entry)
 		{ // we need to organize the entry (by name or ascii?) before printing it
 			if (entry->d_name[0] != '.') // Ignora os fichiros ocultos (os q começam com .)
-			{
-				if (first == false)
-					ft_putchar_fd(' ', cmd->FD[1]);
 				ft_putstr_fd(entry->d_name, cmd->FD[1]);
-				first = 0;
-			}
 			entry = readdir(dir);
 		}
 	}
-	else if (a == 2) // Caso 2: *.ext (extensão específica)     // ta a dar erro
+	/* else if (a == 2) // Caso 2: *.ext (extensão específica)     // ta a dar erro
 	{
 		suffix = strndup(arg + 1, ft_strlen(arg) - 2); // Remove * inicial e final
 		suffix_len = ft_strlen(suffix);
@@ -199,23 +184,26 @@ static void	do_echo(char *arg, int a, t_cmd *cmd)
 			entry = readdir(dir);
 		}
 		free(substring);
-	}
+	} */
 	closedir(dir);
 }
 
-static void	remove_quotes(char *arg)
+static char	*remove_quotes(char *arg)
 {
-	int	i;
-	int	j;
+	char	*new_str;
 
-	i = 0;
-	j = 0;
-	while (arg[i])
+	if (!arg)
+		return (NULL);
+	if (arg[0] == '\"')
 	{
-		
-		if (arg[i] == '\'' || arg[i] == '\"')
-			i++;
-		arg[j++] = arg[i++];
+		new_str = ft_strtrim(arg, "\"");
+		free(arg); // Free the old arg
 	}
+	else if (arg[0] == '\'')
+	{
+		new_str = ft_strtrim(arg, "\'");
+		free(arg); // Free the old arg
+	} // Duplicate the string if no quotes
+	return (new_str); // Return the new string
 }
 // use strtrim and free old arg, replace with new one.
