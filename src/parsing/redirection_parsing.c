@@ -34,21 +34,24 @@ int	check_for_redirs(char *token)
 		return (0);
 }
 
-t_redir_struct	*create_redir(char *token)
+void	check_redir(char *token, int *j)
 {
-	t_redir_struct	*redir;
+	int	i;
+	int	c;
 
-	(void)token;
-	redir = ft_calloc(1, sizeof(t_redir_struct));
-	if (redir == NULL)
+	c = 0;
+	i = *j;
+	while (token[i] != '\0')
 	{
-		ft_printf_fd(STDIN_FILENO, "Error: malloc failed\n");
-		return (NULL);
+		if ((token[i] == '"' || token[i] == '\'') && !c)
+			c = token[i];
+		else if ((token[i] == '>' || token[i] == '<' || token[i] == ' ') && !c)
+			break ;
+		else if (token[i] == c)
+			c = 0;
+		i++;
 	}
-	redir->type = 0;
-	redir->file = NULL;
-	redir->next = NULL;
-	return (redir);
+	*j = i;
 }
 
 // function to treat tokens and corresponding redirections
@@ -79,8 +82,11 @@ char	**split_into_redirs(char *token)
 		while (token[i] != '\0' && (token[i] != '>' && token[i] != '<'))
 			i++;
 		j = i + 1;
-		while (token[j] != '\0' && (token[j] != '>' && token[j] != '<'))
+		if (token[i] == token[j])
 			j++;
+		while (token[j] == ' ')
+			j++;
+		check_redir(token, &j);
 		redirs[k] = ft_substr(token, i, j - i);
 		if (redirs[k] == NULL)
 		{
@@ -94,3 +100,85 @@ char	**split_into_redirs(char *token)
 	redirs[k] = NULL;
 	return (redirs);
 }
+
+// create a new t_fd struct
+/* t_fd	*create_fd_struct(void)
+{
+	t_fd	*fd;
+
+	fd = ft_calloc(1, sizeof(t_fd));
+	if (fd == NULL)
+	{
+		ft_printf_fd(STDIN_FILENO, "Error: malloc failed\n");
+		return (NULL);
+	}
+	fd->type = NULL;
+	fd->fd = 0;
+	fd->file = NULL;
+	fd->next = NULL;
+	return (fd);
+}
+void	t_fd_addback(t_fd **lst, t_fd *new)
+{
+	t_fd	*temp;
+
+	if (lst == NULL || new == NULL)
+		return ;
+	if (*lst == NULL)
+	{
+		*lst = new;
+		return ;
+	}
+	temp = *lst;
+	while (temp->next != NULL)
+		temp = temp->next;
+	temp->next = new;
+} */
+// create the fd linked list
+/* t_fd	*create_fd_list(char **token)
+{
+	t_fd	*head;
+	int		i;
+
+	head = NULL;
+	if (token == NULL)
+		return (NULL);
+	t_fd_addback(&head, create_fd_struct());
+	if (head == NULL)
+		return (NULL);
+	i = -1;
+	while (token[++i] != NULL)
+		t_fd_addback(&head, create_fd_struct());
+	return (head);
+} */
+
+// function to assign the redirection type
+// it takes the redir array and the linked list of fds and populates the data
+/* void	*assign_redir(char **token, t_fd *fd)
+{
+	if (token == NULL || fd == NULL)
+		return (NULL);
+	int i;
+	int j;
+	char *file;
+
+	i = 0;
+	while (token[i] != NULL)
+	{
+		j = 0;
+		if (ft_strncmp(token[i][j], ">>", 2) == 0)
+		{
+			fd->type = REDIR_APPEND;
+			fd->file = ft_strrchr(token[i], '>');
+		}
+		else if (ft_strncmp(token[i][j], "<<", 2) == 0)
+			fd->type = HERE_DOC;
+		else if (ft_strncmp(token[i][j], ">", 1) == 0)
+			fd->type = REDIR_OUT;
+		else if (ft_strncmp(token[i][j], "<", 1) == 0)
+			fd->type = REDIR_IN;
+
+		fd = fd->next;
+		i++;
+	}
+} */

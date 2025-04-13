@@ -47,7 +47,7 @@ void	parse(t_shell *shell)
 		i = 0;
 		while (redir_splits[i])
 		{
-			ft_printf("Redirection: %s\n", redir_splits[i]);
+			ft_printf("Redirection: [%s]\n", redir_splits[i]);
 			i++;
 		}
 	}
