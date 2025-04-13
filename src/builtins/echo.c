@@ -132,7 +132,7 @@ static void do_echo(char *arg, int a, t_cmd *cmd)
         if (entry->d_name[0] != '.')
             wc.nbr_of_dir++;
     }
-    rewinddir(dir);
+    rewinddir(dir); // nao posso usar, fdps
 
     wc.wildcard = malloc(sizeof(char *) * (wc.nbr_of_dir));
     if (!wc.wildcard)
