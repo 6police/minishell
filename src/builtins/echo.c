@@ -1,12 +1,14 @@
 #include "ft_builtins.h"
 
 static void	do_echo(char *arg, int wild_card_type, t_cmd *cmd);
-static bool	check_wildcard(char *arg);
+static bool	has_wildcard(char *arg);
 static void	do_wildcard(char *arg, t_cmd *cmd);
 static int	check_wildcard_type(char *str);
 static bool	is_there_quotes(char *str);
 static void	echoing(t_cmd *cmd, int newline);
 static char	*remove_quotes(char *arg);
+static void	organize_wildcard(t_wildcard *wc);
+static int ft_strcasecmp(const char *s1, const char *s2);
 
 void	echo_shell(t_cmd *cmd, t_shell *shell)
 {
@@ -20,9 +22,7 @@ void	echo_shell(t_cmd *cmd, t_shell *shell)
 		return ;
 	}
 	if (cmd->args[0] && ft_strcmp(cmd->args[0], "-n") == 0)
-	{
 		newline = 0;
-	}
 	echoing(cmd, newline);
 	if (newline)
 		ft_putchar_fd('\n', cmd->FD[1]);
@@ -40,7 +40,7 @@ static void	echoing(t_cmd *cmd, int newline)
 		i++;
 	while (cmd->args[++i])
 	{
-		wildcard = check_wildcard(cmd->args[i]);
+		wildcard = has_wildcard(cmd->args[i]);
 		quotes = is_there_quotes(cmd->args[i]);
 		cmd->args[i] = remove_quotes(cmd->args[i]);
 		if (wildcard == true && quotes == false)
@@ -53,7 +53,7 @@ static void	echoing(t_cmd *cmd, int newline)
 	}
 }
 
-static bool	check_wildcard(char *arg)
+static bool	has_wildcard(char *arg)
 {
 	int	i;
 
@@ -107,29 +107,58 @@ static int	check_wildcard_type(char *str)
 	return (wild_card_type);
 }
 
-static void	do_echo(char *arg, int a, t_cmd *cmd)
+static void do_echo(char *arg, int a, t_cmd *cmd)
 {
-	DIR			*dir;
-	struct dirent	*entry;
+    DIR *dir;
+    struct dirent *entry;
+    bool first;
+    t_wildcard wc;
+    int i;
 
-	if (a == 0) // Caso 0: sem wildcard ou "*" asterisco dentro de aspas
-	{
-		ft_printf_fd(cmd->FD[1], "%s", arg);
-		return ;
-	}
-	dir = opendir(".");
-	if (!dir)
-		return ;
-	entry = readdir(dir);
-	if (a == 1) // Caso 1: * (todos ficheiros visíveis)
-	{
-		while (entry)
-		{ // we need to organize the entry (by name or ascii?) before printing it
-			if (entry->d_name[0] != '.') // Ignora os fichiros ocultos (os q começam com .)
-				ft_putstr_fd(entry->d_name, cmd->FD[1]);
-			entry = readdir(dir);
-		}
-	}
+    first = true;
+    if (a == 0) // No wildcard
+    {
+        ft_printf_fd(cmd->FD[1], "%s", arg);
+        return;
+    }
+
+    dir = opendir(".");
+    if (!dir)
+        return;
+
+    wc.nbr_of_dir = 0;
+    while ((entry = readdir(dir)))
+    {
+        if (entry->d_name[0] != '.')
+            wc.nbr_of_dir++;
+    }
+    rewinddir(dir);
+
+    wc.wildcard = malloc(sizeof(char *) * (wc.nbr_of_dir));
+    if (!wc.wildcard)
+    {
+        closedir(dir);
+        return;
+    }
+
+    i = 0;
+    while ((entry = readdir(dir)))
+    {
+        if (entry->d_name[0] != '.')
+            wc.wildcard[i++] = ft_strdup(entry->d_name);
+    }
+
+    organize_wildcard(&wc);
+
+    for (i = 0; i < wc.nbr_of_dir; i++)
+    {
+        if (!first)
+            ft_putchar_fd(' ', cmd->FD[1]);
+        first = false;
+        ft_printf_fd(cmd->FD[1], "%s", wc.wildcard[i]);
+        free(wc.wildcard[i]);
+    }
+    free(wc.wildcard);
 	/* else if (a == 2) // Caso 2: *.ext (extensão específica)     // ta a dar erro
 	{
 		suffix = strndup(arg + 1, ft_strlen(arg) - 2); // Remove * inicial e final
@@ -198,12 +227,62 @@ static char	*remove_quotes(char *arg)
 	{
 		new_str = ft_strtrim(arg, "\"");
 		free(arg); // Free the old arg
+		return (new_str);
 	}
 	else if (arg[0] == '\'')
 	{
 		new_str = ft_strtrim(arg, "\'");
 		free(arg); // Free the old arg
+		return (new_str);
 	} // Duplicate the string if no quotes
-	return (new_str); // Return the new string
+	 // Return the new string
+	return (arg);
 }
 // use strtrim and free old arg, replace with new one.
+
+
+static void organize_wildcard(t_wildcard *wc)
+{
+	int i;
+	int j;
+	char *temp;
+	bool swapped;
+
+	if (!wc || wc->nbr_of_dir <= 1)
+		return;
+
+	swapped = true;
+	i = 0;
+
+	while (swapped)
+	{
+		swapped = false;
+		j = 0;
+		while (j < wc->nbr_of_dir - i - 1)
+		{
+			if (ft_strcasecmp(wc->wildcard[j], wc->wildcard[j + 1]) > 0)
+			{
+				temp = wc->wildcard[j];
+				wc->wildcard[j] = wc->wildcard[j + 1];
+				wc->wildcard[j + 1] = temp;
+				swapped = true;
+			}
+			j++;
+		}
+		i++;
+	}
+}
+
+#include <ctype.h> // For tolower()
+
+static int ft_strcasecmp(const char *s1, const char *s2)
+{
+    while (*s1 && *s2)
+    {
+        if (tolower((unsigned char)*s1) != tolower((unsigned char)*s2))
+            return (tolower((unsigned char)*s1) - tolower((unsigned char)*s2));
+        s1++;
+        s2++;
+    }
+    return (tolower((unsigned char)*s1) - tolower((unsigned char)*s2));
+}

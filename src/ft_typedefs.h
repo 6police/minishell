@@ -48,6 +48,12 @@ typedef struct here_doc
 	int fd; // file descriptor
 }						t_here_doc;
 
+typedef struct s_wildcard
+{
+	char	**wildcard;
+	int	nbr_of_dir;
+}		t_wildcard;
+
 typedef enum s_type
 {
 	HEREDOC,
