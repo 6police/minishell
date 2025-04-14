@@ -52,6 +52,7 @@ static t_cmd	*init_cmd(char *name, char **args)
 	cmd->prev = NULL;
 	cmd->FD[0] = STDIN_FILENO;
 	cmd->FD[1] = STDOUT_FILENO;
+	cmd->FD[2] = STDERR_FILENO;
 /*	cmd->redirs = ft_calloc(sizeof(t_redirs), 1);
 	cmd->redirs->append = NULL;
 	cmd->redirs->write = NULL;

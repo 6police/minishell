@@ -13,11 +13,12 @@ void	execute_external(t_cmd *cmd, t_shell *shell)
 {
 
 	char	**envp;
+	int		status;
 
 	envp = convert_env_to_array(shell->env);
 	if (!envp)
 	{
-		ft_putstr_fd("minishell: malloc failed\n", 2);
+		ft_printf_fd(cmd->FD[2], "minishell: malloc failed\n");
 		//shell->exit_value = 1; ?? confirmar
 		return ;
 	}
@@ -31,9 +32,7 @@ void	execute_external(t_cmd *cmd, t_shell *shell)
 		{
 			if (errno == ENOENT)
 			{
-				ft_putstr_fd("minishell: command not found: ", 2);
-				ft_putstr_fd(cmd->name, 2);
-				ft_putstr_fd("\n", 2);
+				ft_printf_fd(cmd->FD[2], "minishell: command not found: %s\n", cmd->name);
 				shell->exit_value = 127; // or should i exit(127);?
 			}
 			else
@@ -45,20 +44,20 @@ void	execute_external(t_cmd *cmd, t_shell *shell)
 	}
 	else if (cmd->pid < 0)
 	{
-		ft_putstr_fd("minishell: fork failed\n", 2);
+		ft_printf_fd(cmd->FD[2], "minishell: fork failed\n");
 		shell->exit_value = 1;
 	}
 	else
 	{
-		waitpid(cmd->pid, &shell->exit_value, 0);
-		if (WIFSIGNALED(shell->exit_value))
+		waitpid(cmd->pid, &status, 0);
+		if (WIFSIGNALED(status))
 		{
-			if (WTERMSIG(shell->exit_value) == SIGQUIT)
-				ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
-			shell->exit_value = 128 + WTERMSIG(shell->exit_value);
+			if (WTERMSIG(status) == SIGQUIT)
+				ft_printf_fd(cmd->FD[2], "Quit (core dumped)\n");
+			shell->exit_value = 128 + WTERMSIG(status);
 		}
-		else if (WIFEXITED(shell->exit_value))
-			shell->exit_value = WEXITSTATUS(shell->exit_value);
+		else if (WIFEXITED(status))
+			shell->exit_value = WEXITSTATUS(status);
 	}
 	free_env_array(envp);
 }

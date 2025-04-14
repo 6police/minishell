@@ -75,7 +75,7 @@ struct					cmd
 	char *name;  // command name
 	char **args; // arguments
 	char *path;  // path to the command,
-	int		FD[2];
+	int		FD[3];
 	pid_t	pid;
 
 	bool is_builtin; // if the command is a built-in command

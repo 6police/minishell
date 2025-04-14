@@ -43,10 +43,35 @@ t_shell	*init_shell(char **env)
     shell->main_pid = getpid();
     shell->is_child = false;
     shell->exit_value = 0;
+	//disable_echo(1);
     ft_printf("Environment copied\n");
 	// initialize the file descriptors
 	// initialize the commands
 	ft_printf("Shell initialized\n");
     ft_print_minishell();
 	return (shell);
+}
+
+#include "termios.h"
+
+int	disable_echo(int disable)
+{
+	struct	termios	term;
+	static struct termios term_old;
+
+	if (disable != 0)
+	{
+		if (tcgetattr(STDIN_FILENO, &term) == -1)
+			return (EXIT_FAILURE);
+		term_old = term;
+		term.c_lflag &= ~ECHOCTL;
+		if (tcsetattr(0, TCSANOW, &term) == -1)
+			return (EXIT_FAILURE);
+	}
+	else
+	{
+		if (tcsetattr(0, TCSANOW, &term_old) == -1)
+			return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
 }
