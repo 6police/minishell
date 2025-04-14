@@ -38,8 +38,29 @@ static void	print_args(t_cmd *cmd)
 	ft_printf("\n");
 }
 
+void print_redirs(char **redirs)
+{
+	int	i;
+
+	i = 0;
+	while (redirs && redirs[i])
+	{
+		ft_printf("["GREEN"%s"RESET"] ", redirs[i]);
+		i++;
+	}
+	ft_printf("\n");
+}
+
+
 void	print_command(t_cmd *cmd)
 {
+	ft_printf("line :  %s\n", cmd->line);
+	ft_printf("redirs: ");
+	if (!cmd->redirs)
+		ft_printf("NULL\n");
+	else
+		print_redirs(cmd->redirs);
+	ft_printf("\n"); 
 	ft_printf("is_command_path ???\n");
 	ft_printf("%d\n", is_command_path(cmd->name));
 	ft_printf("\n --- \n");

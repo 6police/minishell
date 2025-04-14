@@ -22,6 +22,18 @@ void	free_cmd(t_cmd *cmd)
 
 	if (!cmd)
 		return ;
+
+	if (cmd->line)
+	{
+		free(cmd->line);
+		cmd->line = NULL;
+	}
+	if (cmd->redirs)
+	{
+		free_split(cmd->redirs);
+		cmd->redirs = NULL;
+	}
+
 	if (cmd->name)
 	{
 		free(cmd->name);

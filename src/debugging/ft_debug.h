@@ -9,6 +9,9 @@ void	print_env(t_env *env, t_cmd *cmd);
 // Print the exported enviroment variables
 void	print_export(t_env *env, t_cmd *cmd);
 
+// print the redirections
+void	print_redirs(char **redirs);
+
 // Print the command
 void	print_command(t_cmd *cmd);
 

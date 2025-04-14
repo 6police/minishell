@@ -54,6 +54,7 @@ typedef struct here_doc
 // struct to store the redirections
 typedef enum s_type
 {
+	NONE,
 	REDIR_OUT,
 	REDIR_IN,
 	REDIR_APPEND,
@@ -72,6 +73,10 @@ typedef struct s_fd
 // struct to store the command information
 struct					cmd
 {
+	
+	char *line; // line of the command
+	char **redirs; // redirections
+
 	char *name;  // command name
 	char **args; // arguments
 	char *path;  // path to the command,
@@ -88,7 +93,7 @@ struct					cmd
 	struct cmd *next; // next command
 	struct cmd *prev; // previous command
 
-	/// t_fd				*fd;
+	t_fd				*fd_struct;
 	bool				has_heredoc;
 };
 

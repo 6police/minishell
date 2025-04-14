@@ -52,10 +52,11 @@ static t_cmd	*init_cmd(char *name, char **args)
 	cmd->prev = NULL;
 	cmd->fd[0] = STDIN_FILENO;
 	cmd->fd[1] = STDOUT_FILENO;
-	cmd->redirs = ft_calloc(sizeof(t_redirs), 1);
-	cmd->redirs->append = NULL;
-	cmd->redirs->write = NULL;
-	cmd->redirs->read = NULL;
+	cmd->fd_struct = ft_calloc(sizeof(t_fd), 1);
+	cmd->fd_struct->type = NONE;
+	cmd->fd_struct->fd = -1;
+	cmd->fd_struct->file = NULL;
+	cmd->fd_struct->next = NULL;
 	cmd->is_valid = false;
 	cmd->builtin_func = NULL;
 	cmd->pid = 0;
@@ -152,9 +153,11 @@ t_cmd	*build_cmds(t_shell *shell)
 	t_cmd *cmd;
 	t_cmd *head_cmd;
 	char **args;
+	char **redirs;
 
 	i = 0;
 	head_cmd = NULL;
+	redirs = NULL;
 	while (shell->tokens[i])
 	{
 		mark_and_replace(shell->tokens[i], ' ', 2);
@@ -166,7 +169,13 @@ t_cmd	*build_cmds(t_shell *shell)
 		else
 			build_cmd(cmd, args, shell);
 		add_last_cmd(&shell->cmds, cmd);
+		cmd->line = ft_strdup(shell->tokens[i]);
 		free_split(args);
+
+		check_for_redirs(cmd->line);
+		if (check_for_redirs(cmd->line) > 0)
+			cmd->redirs = split_into_redirs(cmd->line);
+
 		i++;
 	}
 	return (head_cmd);

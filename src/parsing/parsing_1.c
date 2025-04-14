@@ -32,25 +32,12 @@ static void	print_tokens(t_shell *shell)
 void	parse(t_shell *shell)
 {
 	int		sub;
-	char	**redir_splits;
-	int		i;
 
 	sub = 7; // the character to replace the separator
 	shell->tokens = parse_line(shell->line, shell->separators[0], sub);
 	if (!shell->tokens)
 		return ;
-	for (int i = 0; shell->tokens[i]; i++)
-		check_for_redirs(shell->tokens[i]);
-	redir_splits = split_into_redirs(shell->tokens[0]);
-	if (redir_splits)
-	{
-		i = 0;
-		while (redir_splits[i])
-		{
-			ft_printf("Redirection: [%s]\n", redir_splits[i]);
-			i++;
-		}
-	}
+
 	build_cmds(shell);
 	if (shell->tokens[0] && shell->tokens[1])
 		shell->is_pipe = true;

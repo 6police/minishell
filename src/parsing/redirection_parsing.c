@@ -57,7 +57,7 @@ void	check_redir(char *token, int *j)
 // function to treat tokens and corresponding redirections
 // it searches for the next redir
 // takes the token and separates it by redirections
-char	**split_into_redirs(char *token)
+char	**split_into_redirs(char *line)
 {
 	int		total_redirs;
 	char	**redirs;
@@ -65,7 +65,7 @@ char	**split_into_redirs(char *token)
 	int		j;
 	int		k;
 
-	total_redirs = (check_for_redirs(token));
+	total_redirs = (check_for_redirs(line));
 	if (total_redirs == 0)
 		return (NULL);
 	redirs = ft_calloc(total_redirs + 1, sizeof(char *));
@@ -79,15 +79,15 @@ char	**split_into_redirs(char *token)
 	j = 0;
 	while (k < total_redirs)
 	{
-		while (token[i] != '\0' && (token[i] != '>' && token[i] != '<'))
+		while (line[i] != '\0' && (line[i] != '>' && line[i] != '<'))
 			i++;
 		j = i + 1;
-		if (token[i] == token[j])
+		if (line[i] == line[j])
 			j++;
-		while (token[j] == ' ')
+		while (line[j] == ' ')
 			j++;
-		check_redir(token, &j);
-		redirs[k] = ft_substr(token, i, j - i);
+		check_redir(line, &j);
+		redirs[k] = ft_substr(line, i, j - i);
 		if (redirs[k] == NULL)
 		{
 			ft_printf_fd(STDIN_FILENO, "Error: malloc failed\n");

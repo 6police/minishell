@@ -13,7 +13,7 @@ void	run_commands(t_shell *shell)
 	{
 		if (tmp->is_valid)
 		{
-			handle_redirections(tmp, shell);
+			//handle_redirections(tmp, shell);
 			pipe_builtin(tmp, shell);
 		}
 		tmp = tmp->next;
