@@ -51,7 +51,7 @@ typedef struct here_doc
 typedef struct s_wildcard
 {
 	char	**wildcard;
-	int	nbr_of_dir;
+	int	nbr_of_files;
 }		t_wildcard;
 
 typedef enum s_type
