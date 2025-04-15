@@ -109,56 +109,56 @@ static int	check_wildcard_type(char *str)
 
 static void do_echo(char *arg, int a, t_cmd *cmd)
 {
-    DIR *dir;
-    struct dirent *entry;
-    bool first;
-    t_wildcard wc;
-    int i;
+	DIR *dir;
+	struct dirent *entry;
+	bool first;
+	t_wildcard wc;
+	int i;
 
-    first = true;
-    if (a == 0) // No wildcard
-    {
-        ft_printf_fd(cmd->FD[1], "%s", arg);
-        return;
-    }
+	first = true;
+	if (a == 0) // No wildcard
+	{
+		ft_printf_fd(cmd->FD[1], "%s", arg);
+		return;
+	}
 
-    dir = opendir(".");
-    if (!dir)
-        return;
+	dir = opendir(".");
+	if (!dir)
+		return;
 
-    wc.nbr_of_dir = 0;
-    while ((entry = readdir(dir)))
-    {
-        if (entry->d_name[0] != '.')
-            wc.nbr_of_dir++;
-    }
-    rewinddir(dir); // nao posso usar, fdps
+	wc.nbr_of_dir = 0;
+	while ((entry = readdir(dir)))
+	{
+		if (entry->d_name[0] != '.')
+		wc.nbr_of_dir++;
+	}
+	rewinddir(dir); // nao posso usar, fdps, trocar!!
 
-    wc.wildcard = malloc(sizeof(char *) * (wc.nbr_of_dir));
-    if (!wc.wildcard)
-    {
-        closedir(dir);
-        return;
-    }
+	wc.wildcard = malloc(sizeof(char *) * (wc.nbr_of_dir));
+	if (!wc.wildcard)
+	{
+		closedir(dir);
+		return;
+	}
 
-    i = 0;
-    while ((entry = readdir(dir)))
-    {
-        if (entry->d_name[0] != '.')
-            wc.wildcard[i++] = ft_strdup(entry->d_name);
-    }
+	i = 0;
+	while ((entry = readdir(dir)))
+	{
+		if (entry->d_name[0] != '.')
+		wc.wildcard[i++] = ft_strdup(entry->d_name);
+	}
 
-    organize_wildcard(&wc);
+	organize_wildcard(&wc);
 
-    for (i = 0; i < wc.nbr_of_dir; i++)
-    {
-        if (!first)
-            ft_putchar_fd(' ', cmd->FD[1]);
-        first = false;
-        ft_printf_fd(cmd->FD[1], "%s", wc.wildcard[i]);
-        free(wc.wildcard[i]);
-    }
-    free(wc.wildcard);
+	for (i = 0; i < wc.nbr_of_dir; i++)
+	{
+		if (!first)
+		ft_putchar_fd(' ', cmd->FD[1]);
+		first = false;
+		ft_printf_fd(cmd->FD[1], "%s", wc.wildcard[i]);
+		free(wc.wildcard[i]);
+	}
+	free(wc.wildcard);
 	/* else if (a == 2) // Caso 2: *.ext (extensão específica)     // ta a dar erro
 	{
 		suffix = strndup(arg + 1, ft_strlen(arg) - 2); // Remove * inicial e final
