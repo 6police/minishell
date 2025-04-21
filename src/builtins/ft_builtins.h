@@ -57,4 +57,6 @@ void		execute_external(t_cmd *cmd, t_shell *shell);
 // print the exit code
 void	exit_code_printer(t_cmd *cmd, t_shell *shell);
 
+// ft_str_r_cmp.c
+int	ft_str_r_cmp(const char *s1, const char *s2);
 #endif
