@@ -174,8 +174,24 @@ t_cmd	*build_cmds(t_shell *shell)
 
 		check_for_redirs(cmd->line);
 		if (check_for_redirs(cmd->line) > 0)
+		{
 			cmd->redirs = split_into_redirs(cmd->line);
-
+			redirs = cmd->redirs;
+			cmd->fd_struct = assemble_redirs(redirs);
+			if (cmd->fd_struct == NULL)
+			{
+				free_cmd(cmd);
+				return (NULL);
+			}
+			if (cmd->fd_struct->type == HERE_DOC_)
+				cmd->has_heredoc = true;
+			handle_args_n_redirs(cmd->args, cmd->redirs);
+		}
+		else
+		{
+			cmd->redirs = NULL;
+			cmd->fd_struct = NULL;
+		}
 		i++;
 	}
 	return (head_cmd);

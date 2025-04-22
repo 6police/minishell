@@ -15,6 +15,26 @@ void	free_split(char **split)
 	free(split);
 }
 
+// free the redirections
+void free_redir_structs(t_fd *redirs)
+{
+	t_fd	*tmp;
+	t_fd	*next;
+
+	if (!redirs)
+		return ;
+	tmp = redirs;
+	while (tmp)
+	{
+		next = tmp->next;
+		if (tmp->file)
+			free(tmp->file);
+		free(tmp);
+		tmp = next;
+	}
+}
+
+
 // free ONE cmd
 void	free_cmd(t_cmd *cmd)
 {
@@ -58,6 +78,13 @@ void	free_cmd(t_cmd *cmd)
 		free(cmd->path);
 		cmd->path = NULL;
 	}
+
+	if (cmd->fd_struct)
+	{
+		free_redir_structs(cmd->fd_struct);
+		cmd->fd_struct = NULL;
+	}
+
 	free(cmd);
 	ft_printf("cmd freed\n");
 }

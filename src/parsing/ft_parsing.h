@@ -49,4 +49,25 @@ int		check_for_redirs(char *token);
 // function to treat tokens and corresponding redirections
 char	**split_into_redirs(char *token);
 
+// function to add a redirection to the list
+void	add_last_redir(t_fd **head, t_fd *new_redir);
+
+// function to check and assign the redirection type
+int assign_redir_type(char *str);
+
+// function to assign the redirection file
+void assign_redir_file(t_fd *redir, char *str);
+
+// function to create a new redirection
+t_fd *create_redir(char *str);
+
+// function to assemble all the redirections
+t_fd *assemble_redirs(char **redirs);
+
+
+
+
+
+
+
 #endif

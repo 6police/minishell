@@ -51,9 +51,37 @@ void print_redirs(char **redirs)
 	ft_printf("\n");
 }
 
+static void print_cmd_redirs(t_cmd *cmd)
+{
+	t_fd	*tmp;
+
+	tmp = cmd->fd_struct;
+	while (tmp)
+	{
+		if (tmp->file)
+		{
+			ft_printf("type: %d\n", tmp->type);
+			ft_printf("redir: %s\n", tmp->file);
+			//ft_printf("fd: %d\n", tmp->fd);
+		}
+		// if (tmp->type == HERE_DOC_)
+		// 	ft_printf("heredoc: %s\n", tmp->file);
+		// if (tmp->type == REDIR_IN)
+		// 	ft_printf("redir in: %s\n", tmp->file);
+		// if (tmp->type == REDIR_OUT)
+		// 	ft_printf("redir out: %s\n", tmp->file);
+		// if (tmp->type == REDIR_APPEND)
+		// 	ft_printf("redir append: %s\n", tmp->file);
+		// if (tmp->type == NONE)
+		// 	ft_printf("redir none: %s\n", tmp->file);
+		tmp = tmp->next;
+	}
+}
+
 
 void	print_command(t_cmd *cmd)
 {
+	ft_printf(RED " --- NEW COMMAND ---\n" RESET);
 	ft_printf("line :  %s\n", cmd->line);
 	ft_printf("redirs: ");
 	if (!cmd->redirs)
@@ -74,11 +102,14 @@ void	print_command(t_cmd *cmd)
 	// print function pointer
 	ft_printf("builtin_func: %p\n", cmd->builtin_func);
 	ft_printf("\n");
+	ft_printf("\n REDIRS \n");
+	print_cmd_redirs(cmd);
 	if (cmd->next)
 		ft_printf("next: %s\n", cmd->next->name);
 	if (cmd->prev)
 		ft_printf("prev: %s\n", cmd->prev->name);
 	ft_printf("\n");
+	ft_printf(RED " --- END ---\n" RESET);
 }
 
 // print all the commands
