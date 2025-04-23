@@ -6,8 +6,8 @@
 // so that the execution function can use the args array
 
 // function to handle the args and redirs
-void handle_args_n_redirs(char **args, char **redirs)
-{}
+// void handle_args_n_redirs(char **args, char **redirs)
+// {}
 
 // function to open all the redirs in a cmd
 void open_redirs(t_cmd *cmd)
@@ -17,11 +17,11 @@ void open_redirs(t_cmd *cmd)
     i = 0;
     while (cmd->redirs[i])
     {
-        if (cmd->fd_struct[i].type == INFILE_)
+        if (cmd->fd_struct[i].type == REDIR_IN)
             cmd->fd[0] = open(cmd->redirs[i], O_RDONLY);
-        else if (cmd->fd_struct[i].type == OUTFILE_)
+        else if (cmd->fd_struct[i].type == REDIR_OUT)
             cmd->fd[1] = open(cmd->redirs[i], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-        else if (cmd->fd_struct[i].type == APPEND_)
+        else if (cmd->fd_struct[i].type == REDIR_APPEND)
             cmd->fd[1] = open(cmd->redirs[i], O_WRONLY | O_CREAT | O_APPEND, 0644);
         else if (cmd->fd_struct[i].type == HERE_DOC_)
             cmd->fd[0] = open(cmd->redirs[i], O_RDONLY);
@@ -37,11 +37,11 @@ void close_redirs(t_cmd *cmd)
     i = 0;
     while (cmd->redirs[i])
     {
-        if (cmd->fd_struct[i].type == INFILE_)
+        if (cmd->fd_struct[i].type == REDIR_IN)
             close(cmd->fd[0]);
-        else if (cmd->fd_struct[i].type == OUTFILE_)
+        else if (cmd->fd_struct[i].type == REDIR_OUT)
             close(cmd->fd[1]);
-        else if (cmd->fd_struct[i].type == APPEND_)
+        else if (cmd->fd_struct[i].type == REDIR_APPEND)
             close(cmd->fd[1]);
         else if (cmd->fd_struct[i].type == HERE_DOC_)
             close(cmd->fd[0]);

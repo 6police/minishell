@@ -185,7 +185,7 @@ t_cmd	*build_cmds(t_shell *shell)
 			}
 			if (cmd->fd_struct->type == HERE_DOC_)
 				cmd->has_heredoc = true;
-			handle_args_n_redirs(cmd->args, cmd->redirs);
+			//handle_args_n_redirs(cmd->args, cmd->redirs);
 		}
 		else
 		{
