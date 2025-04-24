@@ -6,7 +6,6 @@ static void	do_wildcard(char *arg, t_cmd *cmd);
 static int	check_wildcard_type(char *str);
 static bool	is_there_quotes(char *str);
 static void	echoing(t_cmd *cmd, int newline);
-static char	*remove_quotes(char *arg);
 static void	organize_wildcard(t_wildcard *wc);
 static int ft_strcasecmp(const char *s1, const char *s2);
 
@@ -95,14 +94,14 @@ static int	check_wildcard_type(char *str)
 	wild_card_type = 0;
 	if (str[0] == '*' && str[1] == '\0') // *
 		wild_card_type = 1;
+	else if (str[0] != '*' && str[ft_strlen(str - 1)] != '*' && ft_strchr(str, '*')) // .*.
+		wild_card_type = 5;
 	else if (str[0] == '*' && str[ft_strlen(str) - 1] == '*') // *.*
 		wild_card_type = 4;
 	else if (str[0] == '*' && str[1] != '\0') // *.
 		wild_card_type = 2;
 	else if ((str[0] != '\0' && str[0] != '*') && str[ft_strlen(str) - 1] == '*') // .*
 		wild_card_type = 3;
-	else if (str[0] != '*' && str[ft_strlen(str - 1)] != '*' && ft_strchr(str, '*')) // .*.
-		wild_card_type = 5;
 	printf(GREEN"Wildcardtype: %d\n"RESET, wild_card_type);
 	return (wild_card_type);
 }
@@ -331,28 +330,6 @@ static void do_echo(char *arg, int wc_type, t_cmd *cmd)
 		free(wc.wildcard);
 		closedir(dir);
 	} */
-}
-
-static char	*remove_quotes(char *arg)
-{
-	char	*new_str;
-
-	if (!arg)
-		return (NULL);
-	if (arg[0] == '\"')
-	{
-		new_str = ft_strtrim(arg, "\"");
-		free(arg); // Free the old arg
-		return (new_str);
-	}
-	else if (arg[0] == '\'')
-	{
-		new_str = ft_strtrim(arg, "\'");
-		free(arg); // Free the old arg
-		return (new_str);
-	} // Duplicate the string if no quotes
-	 // Return the new string
-	return (arg);
 }
 // use strtrim and free old arg, replace with new one.
 

@@ -40,9 +40,10 @@ t_shell	*init_shell(char **env)
     shell->env = copy_env(env);
     shell->separators = init_separator();
     shell->token = NULL;
-    shell->main_pid = getpid();
+    shell->main_pid = ft_get_pid();
     shell->is_child = false;
     shell->exit_value = 0;
+	shell->main_pid = ft_get_pid();
 	//disable_echo(1);
     ft_printf("Environment copied\n");
 	// initialize the file descriptors
@@ -52,7 +53,7 @@ t_shell	*init_shell(char **env)
 	return (shell);
 }
 
-#include "termios.h"
+/*#include "termios.h"
 
 int	disable_echo(int disable)
 {
@@ -74,4 +75,4 @@ int	disable_echo(int disable)
 			return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
-}
+}*/

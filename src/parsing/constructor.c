@@ -165,6 +165,7 @@ t_cmd	*build_cmds(t_shell *shell)
 			build_cmd(cmd, args, shell);
 		add_last_cmd(&shell->cmds, cmd);
 		free_split(args);
+		dollar_sign(cmd, shell);
 		i++;
 	}
 	return (head_cmd);
