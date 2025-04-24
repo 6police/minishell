@@ -26,12 +26,13 @@ void free_redir_structs(t_fd *redirs)
 	tmp = redirs;
 	while (tmp)
 	{
-		next = tmp->next;
-		if (tmp->file)
+		if(tmp->file)
 			free(tmp->file);
+		next = tmp->next;
 		free(tmp);
 		tmp = next;
 	}
+	ft_printf("redirs freed\n");
 }
 
 
@@ -78,13 +79,11 @@ void	free_cmd(t_cmd *cmd)
 		free(cmd->path);
 		cmd->path = NULL;
 	}
-
 	if (cmd->fd_struct)
 	{
 		free_redir_structs(cmd->fd_struct);
 		cmd->fd_struct = NULL;
 	}
-
 	free(cmd);
 	ft_printf("cmd freed\n");
 }

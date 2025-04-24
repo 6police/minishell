@@ -56,7 +56,7 @@ void	add_last_redir(t_fd **head, t_fd *new_redir);
 int assign_redir_type(char *str);
 
 // function to assign the redirection file
-void assign_redir_file(t_fd *redir, char *str);
+void assign_redir_file(t_fd *redir);
 
 // function to create a new redirection
 t_fd *create_redir(char *str);

@@ -52,11 +52,8 @@ static t_cmd	*init_cmd(char *name, char **args)
 	cmd->prev = NULL;
 	cmd->fd[0] = STDIN_FILENO;
 	cmd->fd[1] = STDOUT_FILENO;
-	cmd->fd_struct = ft_calloc(sizeof(t_fd), 1);
-	cmd->fd_struct->type = NONE;
-	cmd->fd_struct->fd = -1;
-	cmd->fd_struct->file = NULL;
-	cmd->fd_struct->next = NULL;
+	cmd->fd_struct = NULL;
+	cmd->redirs = NULL;
 	cmd->is_valid = false;
 	cmd->builtin_func = NULL;
 	cmd->pid = 0;
@@ -140,6 +137,57 @@ void	build_builtin(t_cmd *cmd, char **args)
 	cmd->args = copy_array(args + 1);
 }
 
+// function that normalizes the command->arg array.
+// if there are redirs in the args we remove them from the args
+// if there are redirs BEFORE the nnevargs we remove them from the args, if there are redirs AFTER the args we remove them from the args as well
+// if an arg is just a redir symbol, we then remove as well the next arg
+/* static void process_cmd_args(t_cmd *cmd)
+{
+	char **new_array;
+	int i;
+	int j;
+	int k;
+	int count;
+
+
+	count = 0;
+	i = 0;
+	j = 0;
+	k = 0;
+	if (!cmd || !cmd->args)
+		return ;
+	while (cmd->args[i])
+	{
+		if (cmd->args[i][0] == '>' || cmd->args[i][0] == '<')
+			count++;		
+		i++;
+	}
+	new_array = ft_calloc(sizeof(char *), i - count + 1);
+	if (!new_array)
+		return ;
+	i = 0;
+	while (cmd->args[i])
+	{
+		while (cmd->args[i][k] == '>' || cmd->args[i][k] == '<')
+			k++;
+		if (cmd->args[i][k] == '\0')
+		{
+			i ++;
+			k = 0;
+		}
+		else
+		if (cmd->args[i][0] != '>' && cmd->args[i][0] != '<')
+		{
+			new_array[j] = ft_strdup(cmd->args[i]);
+			j++;
+		}
+		i++;
+	}
+	new_array[j] = NULL;
+	free_split(cmd->args);
+	cmd->args = new_array;
+} */
+
 // funciton that takes tokens and assembles into commands
 // we check if the command is a built-in command and if it is we set the is_builtin to true
 // we also check if the command is a redirection
@@ -160,6 +208,8 @@ t_cmd	*build_cmds(t_shell *shell)
 	redirs = NULL;
 	while (shell->tokens[i])
 	{
+		char *aux;
+		aux = ft_strdup(shell->tokens[i]);
 		mark_and_replace(shell->tokens[i], ' ', 2);
 		args = ft_split(shell->tokens[i], 2);
 		cmd = init_cmd(args[0], args);
@@ -169,7 +219,7 @@ t_cmd	*build_cmds(t_shell *shell)
 		else
 			build_cmd(cmd, args, shell);
 		add_last_cmd(&shell->cmds, cmd);
-		cmd->line = ft_strdup(shell->tokens[i]);
+		cmd->line = ft_strdup(aux);
 		free_split(args);
 
 		check_for_redirs(cmd->line);
@@ -178,21 +228,18 @@ t_cmd	*build_cmds(t_shell *shell)
 			cmd->redirs = split_into_redirs(cmd->line);
 			redirs = cmd->redirs;
 			cmd->fd_struct = assemble_redirs(redirs);
-			if (cmd->fd_struct == NULL)
+			if (cmd->fd_struct == NULL)	
 			{
 				free_cmd(cmd);
 				return (NULL);
 			}
 			if (cmd->fd_struct->type == HERE_DOC_)
 				cmd->has_heredoc = true;
-			//handle_args_n_redirs(cmd->args, cmd->redirs);
-		}
-		else
-		{
-			cmd->redirs = NULL;
-			cmd->fd_struct = NULL;
 		}
 		i++;
+		free(aux);
+	//	process_cmd_args(cmd);
+
 	}
 	return (head_cmd);
 }

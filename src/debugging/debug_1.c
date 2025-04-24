@@ -58,11 +58,13 @@ static void print_cmd_redirs(t_cmd *cmd)
 	tmp = cmd->fd_struct;
 	while (tmp)
 	{
-		if (tmp->file)
+		if (tmp)
 		{
-			ft_printf("type: %d\n", tmp->type);
-			ft_printf("redir: %s\n", tmp->file);
+			ft_printf(RED "type:" GREEN "%d\n" RESET, tmp->type);
+			ft_printf(YELLOW "file:" GREEN "%s\n" RESET, tmp->file);
+			ft_printf(BLUE "file pointer:" GREEN "%p\n" RESET, tmp->file);
 			//ft_printf("fd: %d\n", tmp->fd);
+			ft_printf("\n");
 		}
 		// if (tmp->type == HERE_DOC_)
 		// 	ft_printf("heredoc: %s\n", tmp->file);
