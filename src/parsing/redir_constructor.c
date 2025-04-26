@@ -15,27 +15,6 @@ void	add_last_redir(t_fd **head, t_fd *new_redir)
 	}
 }
 
-/* void assign_redir_type(t_fd *redir, char *str)
-{
-	if (!str)
-		redir->type = NONE;
-	else if (str[0] == '>')
-	{
-		if ((str[1] == '>') && str[2] == '\0')
-			redir->type = REDIR_APPEND;
-		else if (str[1] != '\0')
-			redir->type = REDIR_OUT;
-	}
-	else if (str[0] == '<')
-	{
-		if ((str[1] == '<') && str[2] == '\0')
-			redir->type = HERE_DOC_;
-		else if (str[1] != '\0')
-			redir->type = REDIR_IN;
-	}
-	else
-		redir->type = NONE;
-} */
 int	assign_redir_type(char *str)
 {
 	if (!str)
@@ -69,6 +48,7 @@ void	assign_redir_file(t_fd *redir)
 	{
 		free(redir->file);
 		redir->file = NULL;
+		return ;
 	}
 	else
 	{
@@ -79,13 +59,19 @@ void	assign_redir_file(t_fd *redir)
 			i++;
 		new_file = ft_substr(redir->file, i, ft_strlen(redir->file) - i);
 	}
-	if (new_file == NULL)
+	if (!new_file)
 	{
 		ft_printf_fd(STDIN_FILENO, "Error: malloc failed\n");
 		return ;
 	}
 	free(redir->file);
 	redir->file = new_file;
+	if (redir->file[0] == '\0')
+	{
+		free(redir->file);
+		redir->file = NULL;
+		redir->type = 0;
+	}
 }
 
 // function that creates a redirection structure
@@ -104,7 +90,6 @@ t_fd	*create_redir(char *str)
 	redir->type = 0;
 	redir->fd = -1;
 	redir->file = ft_strdup(str);
-	printf(RED "create_redir: %s\n" RESET, redir->file);
 	redir->next = NULL;
 	return (redir);
 }

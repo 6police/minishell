@@ -16,6 +16,8 @@
 # define HD_TEMP_FILE ".hd_temp"
 # define HISTORY ".minishell_history"
 
+# define REDIR_FAILURE "minishell: syntax error near unexpected token"
+
 typedef struct env		t_env;
 typedef struct shell	t_shell;
 typedef struct cmd t_cmd; // Define a type for the function pointer

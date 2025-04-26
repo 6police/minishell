@@ -29,27 +29,27 @@ static void	print_tokens(t_shell *shell)
 }
 static bool	check_redir_validity(t_shell *shell)
 {
-	int	i;
-	t_cmd *tmp;
+	int		i;
+	t_cmd	*tmp;
 
 	i = 0;
 	tmp = shell->cmds;
 	while (tmp)
 	{
 		if (tmp->fd_struct)
-			if (!tmp->fd_struct->file)
+		{
+			if (tmp->fd_struct->file == NULL)
 			{
-				ft_printf_fd(STDOUT_FILENO,
-					"minishell: syntax error near unexpected token %s\n",
-					tmp->name);
+				ft_printf(RED REDIR_FAILURE " %s\n" RESET, tmp->name);
 				return (false);
 			}
+		}
 		tmp = tmp->next;
 	}
 	return (true);
 }
 
-static void invalidate_cmds(t_shell *shell)
+static void	invalidate_cmds(t_shell *shell)
 {
 	t_cmd	*tmp;
 
@@ -61,11 +61,10 @@ static void invalidate_cmds(t_shell *shell)
 	}
 }
 
-
 // parse the line according to priority
 void	parse(t_shell *shell)
 {
-	int		sub;
+	int	sub;
 
 	sub = 7; // the character to replace the separator
 	shell->tokens = parse_line(shell->line, shell->separators[0], sub);
@@ -76,14 +75,14 @@ void	parse(t_shell *shell)
 		shell->is_pipe = true;
 	else
 		shell->is_pipe = false;
+	if (!check_redir_validity(shell))
+		invalidate_cmds(shell);
 	if (shell->debug)
 	{
 		print_tokens(shell);
 		ft_printf("pipe: %d\n", shell->is_pipe);
 		print_all_commands(shell);
 	}
-	if (!check_redir_validity(shell))
-		invalidate_cmds(shell);
 }
 
 // ver onde estao os redirections, e para onde e que manda.

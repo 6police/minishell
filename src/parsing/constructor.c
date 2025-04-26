@@ -137,56 +137,88 @@ void	build_builtin(t_cmd *cmd, char **args)
 	cmd->args = copy_array(args + 1);
 }
 
+static bool	is_redir_noarg(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (!str)
+		return (false);
+	while (str[i])
+	{
+		while ((str[i] == '<' || str[i] == '>'))
+			i++;
+		if (str[i] == '\0' || str[i] == ' ')
+			return (true);
+		if (str[i] != ' ' && str[i] != '\0')
+			return (false);
+		i++;
+	}
+	return (false);
+}
+
+static bool	is_redir(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (!str)
+		return (false);
+	while (str[i])
+	{
+		if (str[i] == '>' || str[i] == '<')
+			return (true);
+		i++;
+	}
+	return (false);
+}
+
 // function that normalizes the command->arg array.
 // if there are redirs in the args we remove them from the args
-// if there are redirs BEFORE the nnevargs we remove them from the args, if there are redirs AFTER the args we remove them from the args as well
+// if there are redirs BEFORE the nnevargs we remove them from the args,
+// if there are redirs AFTER the args we remove them from the args as well
 // if an arg is just a redir symbol, we then remove as well the next arg
-/* static void process_cmd_args(t_cmd *cmd)
+static void	process_cmd_args(t_cmd *cmd)
 {
-	char **new_array;
-	int i;
-	int j;
-	int k;
-	int count;
+	char	**newargs;
+	int		arg_count;
+	int		i;
 
-
-	count = 0;
-	i = 0;
-	j = 0;
-	k = 0;
 	if (!cmd || !cmd->args)
 		return ;
-	while (cmd->args[i])
-	{
-		if (cmd->args[i][0] == '>' || cmd->args[i][0] == '<')
-			count++;		
-		i++;
-	}
-	new_array = ft_calloc(sizeof(char *), i - count + 1);
-	if (!new_array)
-		return ;
+	arg_count = 0;
 	i = 0;
-	while (cmd->args[i])
+	while (cmd->args[i] && cmd->args[i][0] != '\0')
 	{
-		while (cmd->args[i][k] == '>' || cmd->args[i][k] == '<')
-			k++;
-		if (cmd->args[i][k] == '\0')
-		{
-			i ++;
-			k = 0;
-		}
+		if (is_redir_noarg(cmd->args[i]))
+			i += 2;
+		else if (is_redir(cmd->args[i]))
+			i++;
 		else
-		if (cmd->args[i][0] != '>' && cmd->args[i][0] != '<')
 		{
-			new_array[j] = ft_strdup(cmd->args[i]);
-			j++;
+			arg_count++;
+			i++;
 		}
-		i++;
 	}
-	new_array[j] = NULL;
+	newargs = ft_calloc(sizeof(char *), arg_count + 1);
+	i = 0;
+	arg_count = 0;
+	while (cmd->args[i] && cmd->args[i][0] != '\0')
+	{
+		if (is_redir_noarg(cmd->args[i]))
+			i += 2;
+		else if (is_redir(cmd->args[i]))
+			i++;
+		else
+		{
+			newargs[arg_count] = ft_strdup(cmd->args[i]);
+			arg_count++;
+			i++;
+		}
+	}
 	free_split(cmd->args);
-	cmd->args = new_array;
-} */
+	cmd->args = newargs;
+}
 
 // funciton that takes tokens and assembles into commands
 // we check if the command is a built-in command and if it is we set the is_builtin to true
@@ -197,18 +229,18 @@ void	build_builtin(t_cmd *cmd, char **args)
 // if not found we set the path to NULL and command is now invalid
 t_cmd	*build_cmds(t_shell *shell)
 {
-	int i;
-	t_cmd *cmd;
-	t_cmd *head_cmd;
-	char **args;
-	char **redirs;
+	int		i;
+	t_cmd	*cmd;
+	t_cmd	*head_cmd;
+	char	**args;
+	char	**redirs;
+		char *aux;
 
 	i = 0;
 	head_cmd = NULL;
 	redirs = NULL;
 	while (shell->tokens[i])
 	{
-		char *aux;
 		aux = ft_strdup(shell->tokens[i]);
 		mark_and_replace(shell->tokens[i], ' ', 2);
 		args = ft_split(shell->tokens[i], 2);
@@ -221,14 +253,13 @@ t_cmd	*build_cmds(t_shell *shell)
 		add_last_cmd(&shell->cmds, cmd);
 		cmd->line = ft_strdup(aux);
 		free_split(args);
-
 		check_for_redirs(cmd->line);
 		if (check_for_redirs(cmd->line) > 0)
 		{
 			cmd->redirs = split_into_redirs(cmd->line);
 			redirs = cmd->redirs;
 			cmd->fd_struct = assemble_redirs(redirs);
-			if (cmd->fd_struct == NULL)	
+			if (cmd->fd_struct == NULL)
 			{
 				free_cmd(cmd);
 				return (NULL);
@@ -238,8 +269,7 @@ t_cmd	*build_cmds(t_shell *shell)
 		}
 		i++;
 		free(aux);
-	//	process_cmd_args(cmd);
-
+		process_cmd_args(cmd);
 	}
 	return (head_cmd);
 }

@@ -8,7 +8,11 @@ void	ft_redir_out(t_cmd *cmd, t_shell *shell);
 void	ft_redir_append(t_cmd *cmd, t_shell *shell);
 void	ft_redir_heredoc(t_cmd *cmd, t_shell *shell);
 void	cleanup_temp_files(t_cmd **cmds);*/
-void handle_redirections(t_cmd *cmd, t_shell *shell);
-void reset_redirections(t_cmd *cmd, t_shell *shell);
+// void reset_redirections(t_cmd *cmd, t_shell *shell);
+int handle_redirections(t_cmd *cmd, t_shell *shell);
+void manage_redirs(t_cmd *cmd, t_shell *shell);
+void close_redirs(t_cmd *cmd);
+
+
 
 #endif

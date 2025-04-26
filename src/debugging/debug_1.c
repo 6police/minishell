@@ -66,16 +66,16 @@ static void print_cmd_redirs(t_cmd *cmd)
 			//ft_printf("fd: %d\n", tmp->fd);
 			ft_printf("\n");
 		}
-		// if (tmp->type == HERE_DOC_)
-		// 	ft_printf("heredoc: %s\n", tmp->file);
-		// if (tmp->type == REDIR_IN)
-		// 	ft_printf("redir in: %s\n", tmp->file);
-		// if (tmp->type == REDIR_OUT)
-		// 	ft_printf("redir out: %s\n", tmp->file);
-		// if (tmp->type == REDIR_APPEND)
-		// 	ft_printf("redir append: %s\n", tmp->file);
-		// if (tmp->type == NONE)
-		// 	ft_printf("redir none: %s\n", tmp->file);
+		if (tmp->type == HERE_DOC_)
+			ft_printf("heredoc: %s\n", tmp->file);
+		if (tmp->type == REDIR_IN)
+			ft_printf("redir in: %s\n", tmp->file);
+		if (tmp->type == REDIR_OUT)
+			ft_printf("redir out: %s\n", tmp->file);
+		if (tmp->type == REDIR_APPEND)
+			ft_printf("redir append: %s\n", tmp->file);
+		if (tmp->type == NONE)
+			ft_printf("redir none: %s\n", tmp->file);
 		tmp = tmp->next;
 	}
 }

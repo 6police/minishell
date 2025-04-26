@@ -11,7 +11,7 @@ int	check_for_redirs(char *token)
 	// check if the token is NULL
 	if (token == NULL)
 	{
-		ft_printf_fd(STDIN_FILENO, "Token is NULL\n");
+		ft_printf_fd(STDIN_FILENO, "Error: token is NULL\n");
 		return (-1);
 	}
 	fwd = 0;
@@ -22,11 +22,12 @@ int	check_for_redirs(char *token)
 	bwd = back_redir_count(token);
 	dbl_fwd = dbl_forward_redir_count(token);
 	hd = here_doc_count(token);
-	ft_printf_fd(STDIN_FILENO, "Forward redirection found: %d\n", fwd);
-	ft_printf_fd(STDIN_FILENO, "Backward redirection found: %d\n", bwd);
-	ft_printf_fd(STDIN_FILENO, "Double forward redirection found: %d\n",
-		dbl_fwd);
-	ft_printf_fd(STDIN_FILENO, "Here document found: %d\n", hd);
+	// ft_printf_fd(STDIN_FILENO, "Token: %s\n", token);
+	// ft_printf_fd(STDIN_FILENO, "Forward redirection count: %d\n", fwd);
+	// ft_printf_fd(STDIN_FILENO, "Backward redirection count: %d\n", bwd);
+	// ft_printf_fd(STDIN_FILENO, "Double forward redirection count: %d\n",
+		// dbl_fwd);
+	// ft_printf_fd(STDIN_FILENO, "Here document count: %d\n", hd);
 	result = fwd + bwd + dbl_fwd + hd;
 	if (result > 0)
 		return (result);
@@ -100,5 +101,3 @@ char	**split_into_redirs(char *line)
 	redirs[k] = NULL;
 	return (redirs);
 }
-
-

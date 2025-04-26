@@ -17,6 +17,11 @@ void	run_shell_debug(t_shell *shell)
 		{
 			add_history(shell->line);
 			parse(shell); // parse the line and tokens
+			
+			// TO DO - handle REDIRS
+			
+
+
 			run_commands(shell);
 			if (shell->tokens)
 			{

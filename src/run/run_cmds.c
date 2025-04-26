@@ -11,11 +11,14 @@ void	run_commands(t_shell *shell)
 	tmp = shell->cmds;
 	while (tmp)
 	{
+		if (tmp->fd_struct)
+			manage_redirs(tmp, shell);
 		if (tmp->is_valid)
 		{
 			//handle_redirections(tmp, shell);
 			pipe_builtin(tmp, shell);
 		}
+		close_redirs(tmp);
 		tmp = tmp->next;
 	}
 }
