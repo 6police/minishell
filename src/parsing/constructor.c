@@ -52,6 +52,7 @@ static t_cmd	*init_cmd(char *name, char **args)
 	cmd->prev = NULL;
 	cmd->fd[0] = STDIN_FILENO;
 	cmd->fd[1] = STDOUT_FILENO;
+	cmd->fd[2] = STDERR_FILENO;
 	cmd->fd_struct = NULL;
 	cmd->redirs = NULL;
 	cmd->is_valid = false;

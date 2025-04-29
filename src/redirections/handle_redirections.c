@@ -36,14 +36,14 @@ static void handle_redir_append(t_fd *redir, t_shell *shell)
 // 	**** HANDLE HERE DOC ****
 // }
 
-int handle_redirections(t_cmd *cmd, t_shell *shell)
+int handle_redirections(t_fd *fd_struct, t_shell *shell)
 {
 	t_fd *tmp;
 
-	tmp = cmd->fd_struct;
+	tmp = fd_struct;
 
 	if (!tmp)
-		return;
+		return (shell->exit_value = 1, 1);
 	// if (tmp->type == HERE_DOC_)
 	// 	handle_heredoc(tmp, shell);
 
@@ -61,14 +61,14 @@ int handle_redirections(t_cmd *cmd, t_shell *shell)
 }
 
 // function to open and manage all the redirections in a single command
-void manage_redirs(t_cmd *cmd, t_shell *shell)
+void manage_redirs(t_fd *fd_struct, t_shell *shell)
 {
-	if (!cmd->fd_struct)
+	if (!fd_struct)
 		return;
 
 	t_fd *tmp;
 
-	tmp = cmd->fd_struct;
+	tmp = fd_struct;
 	if (!tmp)
 		return;
 	while (tmp)
@@ -83,7 +83,7 @@ void manage_redirs(t_cmd *cmd, t_shell *shell)
 }
 
 // function to close all the redirections in a single command
-void close_redirs(t_cmd *cmd)
+void close_cmd_redirs(t_cmd *cmd)
 {
 	if (!cmd->fd_struct)
 		return;

@@ -79,7 +79,21 @@ static void print_cmd_redirs(t_cmd *cmd)
 		tmp = tmp->next;
 	}
 }
+static void print_fds(t_cmd *cmd)
+{
+	int	i;
 
+	i = 0;
+	while (i < 3)
+	{
+		if (cmd->fd[i] == -1)
+			ft_printf("["RED"%d"RESET"] ", -1);
+		else
+			ft_printf("["GREEN"%d"RESET"] ", cmd->fd[i]);
+		i++;
+	}
+	ft_printf("\n");
+}
 
 void	print_command(t_cmd *cmd)
 {
@@ -100,6 +114,9 @@ void	print_command(t_cmd *cmd)
 	ft_printf("path: %s\n", cmd->path);
 	ft_printf("is_builtin: %d\n", cmd->is_builtin);
 	ft_printf("is_valid: %d\n", cmd->is_valid);
+	ft_printf(RED "FDs : "RESET);
+	print_fds(cmd);
+	ft_printf("\n");
 	ft_printf("has_heredoc: %d\n", cmd->has_heredoc);
 	// print function pointer
 	ft_printf("builtin_func: %p\n", cmd->builtin_func);
