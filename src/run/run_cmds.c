@@ -12,13 +12,16 @@ void	run_commands(t_shell *shell)
 	while (tmp)
 	{
 		if (tmp->fd_struct)
+		{
 			manage_redirs(tmp->fd_struct, shell);
+			assign_redirs(tmp, shell);
+		//	close_cmd_redirs(tmp);
+		}
 		if (tmp->is_valid)
 		{
 			//handle_redirections(tmp, shell);
 			pipe_builtin(tmp, shell);
 		}
-		close_cmd_redirs(tmp);
 		tmp = tmp->next;
 	}
 }

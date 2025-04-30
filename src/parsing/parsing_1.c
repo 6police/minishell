@@ -29,10 +29,8 @@ static void	print_tokens(t_shell *shell)
 }
 static bool	check_redir_validity(t_shell *shell)
 {
-	int		i;
 	t_cmd	*tmp;
 
-	i = 0;
 	tmp = shell->cmds;
 	while (tmp)
 	{

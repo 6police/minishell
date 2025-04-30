@@ -67,17 +67,38 @@ void manage_redirs(t_fd *fd_struct, t_shell *shell)
 		return;
 
 	t_fd *tmp;
+	int last_in;
+	int last_out;
 
 	tmp = fd_struct;
 	if (!tmp)
 		return;
+	last_in = -1;
+	last_out = -1;
+
 	while (tmp)
 	{
-		if (handle_redirections(tmp, shell) == 1)
+		//close previous same type redirections if any
+		if (tmp->type == REDIR_IN && last_in != -1)
 		{
-			shell->exit_value = 1;
-			return;
+			close(last_in);
+			last_in = -1;
 		}
+		else if (tmp->type == REDIR_OUT && last_out != -1)
+		{
+			close(last_out);
+			last_out = -1;
+		}
+
+		// open the new redirection
+		if (handle_redirections(tmp, shell) == 1)
+			return;
+		
+		//store the current as last fd of this type
+		if (tmp->type == REDIR_IN)
+			last_in = tmp->fd;
+		else if (tmp->type == REDIR_OUT || tmp->type == REDIR_APPEND)
+			last_out = tmp->fd;
 		tmp = tmp->next;
 	}
 }
@@ -104,6 +125,68 @@ void close_cmd_redirs(t_cmd *cmd)
 	}
 }
 
+void assign_redirs(t_cmd *cmd, t_shell *shell)
+{
+	if (!cmd->fd_struct)
+		return;
+		
+	t_fd *tmp;
+	t_fd *last_in;
+	t_fd *last_out;
+
+	tmp = cmd->fd_struct;
+	last_in = NULL;
+	last_out = NULL;
+
+	// set the lasat input and output redirections
+	while (tmp)
+	{
+		if (tmp->type == REDIR_IN)
+			last_in = tmp;
+		else if (tmp->type == REDIR_OUT || tmp->type == REDIR_APPEND)
+			last_out = tmp;
+		tmp = tmp->next;
+	}
+
+	// re-loop and close unused redirections
+	tmp = cmd->fd_struct;
+	while (tmp)
+	{
+		if (tmp->type == REDIR_IN && tmp != last_in)
+		{
+			close(tmp->fd);
+			tmp->fd = -1;
+		}
+		else if ((tmp->type == REDIR_OUT || tmp->type == REDIR_APPEND) && tmp != last_out)
+		{
+			close(tmp->fd);
+			tmp->fd = -1;
+		}
+		tmp = tmp->next;
+	}
+
+	// apply dup2 to the last input and output redirections
+	if (last_in && last_in->fd != -1)
+	{
+		if (dup2(last_in->fd, STDIN_FILENO) == -1)
+		{
+			perror("minishell: dup2 input");
+			shell->exit_value = 1;
+			return;
+		}
+		close(last_in->fd);
+	}
+	if (last_out && last_out->fd != -1)
+	{
+		if (dup2(last_out->fd, STDOUT_FILENO) == -1)
+		{
+			perror("minishell: dup2 output");
+			shell->exit_value = 1;
+			return;
+		}
+		close(last_out->fd);
+	}
+}
 
 
 

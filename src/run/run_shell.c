@@ -20,9 +20,19 @@ void	run_shell_debug(t_shell *shell)
 			
 			// TO DO - handle REDIRS
 			
+			int backup_stdin = dup(STDIN_FILENO);
+			int backup_stdout = dup(STDOUT_FILENO);
+
 
 
 			run_commands(shell);
+
+			dup2(backup_stdin, STDIN_FILENO);
+			dup2(backup_stdout, STDOUT_FILENO);
+			close(backup_stdin);
+			close(backup_stdout);
+
+
 			if (shell->tokens)
 			{
 				free_tokens(shell->tokens);

@@ -141,6 +141,8 @@ struct					shell
 
 	int debug; // debug mode
 
+	int fd[2]; // file descriptor for the pipe
+
 	int ret;    // return value
 	int status; // status of the shell
 	int					exit_value;

@@ -12,7 +12,7 @@ void	cleanup_temp_files(t_cmd **cmds);*/
 int handle_redirections(t_fd *fd_struct, t_shell *shell);
 void manage_redirs(t_fd *fd_struct, t_shell *shell);
 void close_cmd_redirs(t_cmd *cmd);
-
+void assign_redirs(t_cmd *cmd, t_shell *shell);
 
 
 #endif
