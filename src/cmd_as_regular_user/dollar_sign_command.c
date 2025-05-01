@@ -3,14 +3,6 @@
 static char	*handle_dollar(char *arg, t_shell *shell);
 static int	check_quotes_type(char *str);
 
-/*
-	TESTAR VARIAS MERDAS MALUCAS. COMO:
-
-	cat ola"'PIZ$USERZA'"adeus
-	echo ola""PIZ$$ZZA""adeus
-	etc
-*/
-
 void	dollar_sign(t_cmd *cmd, t_shell *shell)
 {
 	int	i;
@@ -22,12 +14,12 @@ void	dollar_sign(t_cmd *cmd, t_shell *shell)
 	has_dollar = false;
 	while (cmd->args[++i])
 	{
-		if (strstr(cmd->args[i], "$") != NULL)
+		if (strstr(cmd->args[i], "$") != NULL) // mudar para ft_strstr
 		{
 			quote_type = check_quotes_type(cmd->args[i]);
 			has_dollar = true;
 		}
-		if ((quote_type == 1 || quote_type == 0) && has_dollar == true)
+		if ((quote_type != 2) && has_dollar == true)
 		{
 			if (quote_type == 1)
 				cmd->args[i] = remove_quotes(cmd->args[i]);
@@ -52,41 +44,55 @@ static char	*handle_dollar(char *arg, t_shell *shell)
 		{
 			if (ft_isalpha(arg[i + 1]) == 1 || (arg[i + 1] == '_'))
 			{
-				if ((env_var = find_env_var(shell->env, (arg + (i + 1)))))
+				if ((env_var = find_env_var(shell->env, (arg + (i + 1)))) != NULL)
 				{
 					start = i;
-					env_key_len = ft_strlen(env_var->key) + 1; // +1 for the $
+					env_key_len = ft_strlen(env_var->key) + 1; // +1 to catch the $
 					tmp = str_replace_segment(arg, env_var->value, i, env_key_len);
 					if (tmp[i + ft_strlen(env_var->value)] != '\0' && (ft_isalnum(tmp[i + ft_strlen(env_var->value)]) == 1 || tmp[i + ft_strlen(env_var->value)] == '_')) // we want to check 
 					{
 						i += ft_strlen(env_var->value);
 						delete = 0;
-						while ((ft_isalnum(tmp[i]) == 1 || tmp[i] == '_') && tmp[i])
+						while ((ft_isalnum(tmp[i]) == 1 || tmp[i] == '_'))
 						{	
 							i++;
 							delete++;
 						}
 						arg = str_replace_segment(arg, "", start, env_key_len + delete);
+						i = start - 1;
 					}
 					else
-						arg = str_replace_segment(arg, env_var->value, start, env_key_len);
+					{	
+						arg = str_replace_segment(arg, env_var->value, start, env_key_len); // ver os leaks do str_replace_segment
+						i += ft_strlen(env_var->value) - 1;
+					}
 					free(tmp);
 				}
 				else // env not found, env == NULL
 				{
 					start = i;
-					while ((ft_isalnum(arg[i]) == 1 || arg[i] == '_') && arg[i])
-						i++;
-					i -= 1;
+					i += 1; // we want to skip the $
+					while (arg[i])
+					{
+						if (ft_isalnum(arg[i]) == 1 || arg[i] == '_')
+							i++;
+						else
+							break ;
+					}
 					arg = str_replace_segment(arg, "", start, i - start);
-					printf("arg: %s\n", arg);
-					fflush(stdout);
+					i = start - 1;
 				}
 			}
 			else if (arg[i + 1] == '?')
+			{
 				arg = str_replace_segment(arg, ft_itoa(shell->exit_value), i, 2);
+				i = i + ft_strlen(ft_itoa(shell->exit_value)) - 2;
+			}
 			else if (arg[i + 1] == '$')
+			{	
 				arg = str_replace_segment(arg, ft_itoa(shell->main_pid), i, 2);
+				i = i + ft_strlen(ft_itoa(shell->main_pid)) - 2;
+			}
 		}
 		i++;
 	}
