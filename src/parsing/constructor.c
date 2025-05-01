@@ -221,6 +221,33 @@ static void	process_cmd_args(t_cmd *cmd)
 	cmd->args = newargs;
 }
 
+static char* set_name(char **args)
+{
+	int		i;
+	char	*str;
+
+	i = 0;
+	str = NULL;
+
+	if (!args)
+		return (NULL);
+
+	while (args[i])
+	{
+		while (args[i][0] != '\0' && (args[i][0] == '<' || args[i][0] == '>'))
+			i++;
+		if (args[i][0] != '\0')
+		{
+			str = ft_strdup(args[i]);
+			break ;
+		}
+		i++;
+	}
+	return (str);
+}
+
+
+
 // funciton that takes tokens and assembles into commands
 // we check if the command is a built-in command and if it is we set the is_builtin to true
 // we also check if the command is a redirection
@@ -235,8 +262,11 @@ t_cmd	*build_cmds(t_shell *shell)
 	t_cmd	*head_cmd;
 	char	**args;
 	char	**redirs;
-		char *aux;
+	char	*aux;
 
+	char	*str;
+
+	str = NULL;
 	i = 0;
 	head_cmd = NULL;
 	redirs = NULL;
@@ -245,7 +275,11 @@ t_cmd	*build_cmds(t_shell *shell)
 		aux = ft_strdup(shell->tokens[i]);
 		mark_and_replace(shell->tokens[i], ' ', 2);
 		args = ft_split(shell->tokens[i], 2);
-		cmd = init_cmd(args[0], args);
+		
+		str = set_name(args);
+		cmd = init_cmd(str, args);
+		free(str);
+
 		check_builtin(cmd);
 		if (cmd->is_builtin)
 			build_builtin(cmd, args);
