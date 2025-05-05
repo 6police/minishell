@@ -57,7 +57,7 @@ void	print_command(t_cmd *cmd)
 		ft_printf("next: %s\n", cmd->next->name);
 	if (cmd->prev)
 		ft_printf("prev: %s\n", cmd->prev->name);
-	ft_printf("\n");
+	ft_printf(BLUE"OUTPUT:\n"RESET);
 }
 
 // print all the commands

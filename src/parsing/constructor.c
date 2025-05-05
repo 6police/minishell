@@ -52,10 +52,11 @@ static t_cmd	*init_cmd(char *name, char **args)
 	cmd->prev = NULL;
 	cmd->FD[0] = STDIN_FILENO;
 	cmd->FD[1] = STDOUT_FILENO;
-	cmd->redirs = ft_calloc(sizeof(t_redirs), 1);
+	cmd->FD[2] = STDERR_FILENO;
+/*	cmd->redirs = ft_calloc(sizeof(t_redirs), 1);
 	cmd->redirs->append = NULL;
 	cmd->redirs->write = NULL;
-	cmd->redirs->read = NULL;
+	cmd->redirs->read = NULL;*/
 	cmd->has_heredoc = false;
 	return (cmd);
 }
@@ -164,6 +165,7 @@ t_cmd	*build_cmds(t_shell *shell)
 			build_cmd(cmd, args, shell);
 		add_last_cmd(&shell->cmds, cmd);
 		free_split(args);
+		dollar_sign(cmd, shell);
 		i++;
 	}
 	return (head_cmd);

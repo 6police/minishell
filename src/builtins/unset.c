@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 20:00:06 by joamiran          #+#    #+#             */
-/*   Updated: 2025/04/03 15:44:06 by nuno             ###   ########.fr       */
+/*   Updated: 2025/04/24 23:54:57 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	unset_vars(t_cmd *cmd, t_shell *shell)
 	int	i;
 	char	**keys;
 
-	keys = cmd->args + 1;
+	keys = cmd->args;
 	i = 0;
 	while (keys[i])
 	{

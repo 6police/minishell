@@ -48,6 +48,12 @@ typedef struct here_doc
 	int fd; // file descriptor
 }						t_here_doc;
 
+typedef struct s_wildcard
+{
+	char	**wildcard;
+	int	nbr_of_files;
+}		t_wildcard;
+
 typedef enum s_type
 {
 	HEREDOC,
@@ -69,7 +75,7 @@ struct					cmd
 	char *name;  // command name
 	char **args; // arguments
 	char *path;  // path to the command,
-	int		FD[2];
+	int		FD[3];
 	pid_t	pid;
 
 	bool is_builtin; // if the command is a built-in command

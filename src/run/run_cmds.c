@@ -22,6 +22,8 @@ void	run_commands(t_shell *shell)
 
 void	pipe_builtin(t_cmd *cmd, t_shell *shell)
 {
+	int	status;
+
 	if (shell->is_pipe == true && cmd->is_builtin == true)
 	{
 		cmd->pid = fork();
@@ -40,15 +42,15 @@ void	pipe_builtin(t_cmd *cmd, t_shell *shell)
 		}
 		else
 		{
-			waitpid(cmd->pid, &shell->exit_value, 0);
-			if (WIFSIGNALED(shell->exit_value))
+			waitpid(cmd->pid, &status, 0);
+			if (WIFSIGNALED(status))
 			{
-				if (WTERMSIG(shell->exit_value) == SIGQUIT)
+				if (WTERMSIG(status) == SIGQUIT)
 					ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
-				shell->exit_value = 128 + WTERMSIG(shell->exit_value);
+				shell->exit_value = 128 + WTERMSIG(status);
 			}
-			else if (WIFEXITED(shell->exit_value))
-				shell->exit_value = WEXITSTATUS(shell->exit_value);
+			else if (WIFEXITED(status))
+				shell->exit_value = WEXITSTATUS(status);
 		}
 	}
 	else

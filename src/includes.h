@@ -24,7 +24,7 @@
 # include "../inc/lib_ft/get_next_line.h"
 # include "../inc/lib_ft/libft.h"
 
-// headers from inc directory
+// headers from inc directorys
 # include "ft_typedefs.h"
 # include "unicodes.h"
 
@@ -42,7 +42,7 @@
 # include "history/ft_history.h"
 # include "dirent.h"
 # include "redirections/redirections.h"
-
+# include "cmd_as_regular_user/ft_cmd_as_regular_user.h"
 
 
 # ifndef PATH_MAX

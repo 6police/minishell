@@ -1,0 +1,30 @@
+#include "ft_utils.h"
+
+char	*str_replace_segment(const char *src, const char *replace, int start, int len_to_delete)
+{
+	int		new_len;
+	char	*new_str;
+	int		i;
+	int		j;
+
+	if (!src || !replace || start < 0 || len_to_delete < 0)
+		return (NULL);
+	new_len = strlen(src) - len_to_delete + strlen(replace);
+	new_str = malloc(sizeof(char) * (new_len + 1));
+	if (!new_str)
+		return (NULL);
+	i = 0;
+	while (i < start)
+	{
+		new_str[i] = src[i];
+		i++;
+	}
+	j = 0;
+	while (replace[j])
+		new_str[i++] = replace[j++];
+	j = start + len_to_delete;
+	while (src[j])
+		new_str[i++] = src[j++];
+	new_str[i] = '\0';
+	return (new_str);
+}
