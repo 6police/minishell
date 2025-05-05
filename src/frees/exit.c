@@ -167,16 +167,21 @@ void	flush_commands(t_shell *shell)
 		tmp = next;
 	}
 	shell->cmds = NULL;
+	shell->is_pipe = false;
 }
 
 // exit the shell
 void	clean_exit(t_shell **shell)
 {
-	int status;
+	int	status;
 
  	status = (*shell)->exit_value;
 	if ((*shell)->debug)
-		printf(EMOJI_BRAIN "exiting shell\n");
+	{
+		// in red
+		ft_printf(RED "exiting shell with status: %d\n" RESET, status);
+		printf(EMOJI_BRAIN "exiting shell\n\n");
+	}
 	if (shell)
 		free_shell(shell, (*shell)->debug);
 	clear_history();
