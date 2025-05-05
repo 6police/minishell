@@ -50,8 +50,9 @@ int handle_redirections(t_fd *fd_struct, t_shell *shell)
 
 	if (!tmp)
 		return (shell->exit_value = 1, 1);
-	// if (tmp->type == HERE_DOC_)
-	// 	handle_heredoc(tmp, shell);
+	
+	if (tmp->type == HERE_DOC_)
+		return(handle_heredoc(tmp, shell));
 
 	else if (tmp->type == REDIR_OUT)
 		return(handle_redir_out(tmp, shell));
@@ -67,7 +68,7 @@ int handle_redirections(t_fd *fd_struct, t_shell *shell)
 }
 
 // function to open and manage all the redirections in a single command
-void manage_redirs(t_fd *fd_struct, t_shell *shell)
+/* void manage_redirs(t_fd *fd_struct, t_shell *shell)
 {
 	if (!fd_struct)
 		return;
@@ -108,7 +109,7 @@ void manage_redirs(t_fd *fd_struct, t_shell *shell)
 			last_out = tmp->fd;
 		tmp = tmp->next;
 	}
-}
+} */
 
 // function to close all the redirections in a single command
 void close_cmd_redirs(t_cmd *cmd)
@@ -132,7 +133,7 @@ void close_cmd_redirs(t_cmd *cmd)
 	}
 }
 
-int assign_redirs(t_cmd *cmd, t_shell *shell)
+/* int assign_redirs(t_cmd *cmd, t_shell *shell)
 {
 	if (!cmd->fd_struct)
 		return 1;
@@ -181,6 +182,7 @@ int assign_redirs(t_cmd *cmd, t_shell *shell)
 			shell->exit_value = 1;
 			return (1);
 		}
+		ft_printf_fd(STDERR_FILENO, "dup2 from fd %d to STDIN\n", last_in->fd);
 		if (dup2(last_in->fd, STDIN_FILENO) == -1)
 		{
 			ft_printf_fd(STDERR_FILENO, "minishell: dup2 input %s \n", last_in->file);
@@ -198,6 +200,7 @@ int assign_redirs(t_cmd *cmd, t_shell *shell)
 			shell->exit_value = 1;
 			return (1);
 		}
+		ft_printf_fd(STDERR_FILENO, "dup2 from fd %d to STDOUT\n", last_out->fd);
 		if (dup2(last_out->fd, STDOUT_FILENO) == -1)
 		{
 			ft_printf_fd(STDERR_FILENO, "minishell: dup2 output %s \n", last_out->file);
@@ -205,6 +208,62 @@ int assign_redirs(t_cmd *cmd, t_shell *shell)
 			return (1);
 		}
 		close(last_out->fd);
+	}
+	return (0);
+} */
+
+int setup_redirections(t_cmd *cmd, t_shell *shell)
+{
+	if (!cmd || !cmd->fd_struct)
+		return (0);
+
+	t_fd *tmp = cmd->fd_struct;
+	t_fd *last_in = NULL;
+	t_fd *last_out = NULL;
+
+	// First, open all
+	while (tmp)
+	{
+		if (handle_redirections(tmp, shell) == 1)
+			return (1); // open failed
+		if (tmp->type == REDIR_IN)
+			last_in = tmp;
+		else if (tmp->type == REDIR_OUT || tmp->type == REDIR_APPEND)
+			last_out = tmp;
+		tmp = tmp->next;
+	}
+
+	// Second, dup2 only last input/output
+	if (last_in && last_in->fd != -1)
+	{
+		if (dup2(last_in->fd, STDIN_FILENO) == -1)
+		{
+			perror("dup2 input");
+			shell->exit_value = 1;
+			return (1);
+		}
+	}
+
+	if (last_out && last_out->fd != -1)
+	{
+		if (dup2(last_out->fd, STDOUT_FILENO) == -1)
+		{
+			perror("dup2 output");
+			shell->exit_value = 1;
+			return (1);
+		}
+	}
+
+	// Finally, close everything (but NOT STDIN/OUT)
+	tmp = cmd->fd_struct;
+	while (tmp)
+	{
+		if (tmp->fd != -1)
+		{
+			close(tmp->fd);
+			tmp->fd = -1;
+		}
+		tmp = tmp->next;
 	}
 	return (0);
 }

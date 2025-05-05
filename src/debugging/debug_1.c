@@ -129,6 +129,32 @@ void	print_command(t_cmd *cmd)
 		ft_printf("prev: %s\n", cmd->prev->name);
 	ft_printf("\n");
 	ft_printf(RED " --- END ---\n" RESET);
+
+	//print the input and output redirection names
+	ft_printf("input redirection: ");
+	if (cmd->fd[0] != STDIN_FILENO)
+		ft_printf("%s\n", cmd->fd_struct->file);
+	else if (cmd->fd[0] == STDIN_FILENO)
+		ft_printf("stdin\n");
+	else
+		ft_printf("NULL\n");
+	ft_printf("output redirection: ");
+	if (cmd->fd[1] != STDOUT_FILENO)
+		ft_printf("%s\n", cmd->fd_struct->file);
+	else if (cmd->fd[1] == STDOUT_FILENO)
+		ft_printf("stdout\n");
+	else
+		ft_printf("NULL\n");
+	ft_printf("error redirection: ");
+	if (cmd->fd[2] != STDERR_FILENO)
+		ft_printf("%s\n", cmd->fd_struct->file);
+	else if (cmd->fd[2] == STDERR_FILENO)
+		ft_printf("stderr\n");
+	else
+		ft_printf("NULL\n");
+	ft_printf("\n");
+	ft_printf(" --- END ---\n" RESET);
+	ft_printf("\n");
 }
 
 // print all the commands
