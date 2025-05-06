@@ -12,7 +12,7 @@
 # define CYAN "\033[0;36m"
 # define RESET "\033[0m"
 
-# define HERE_DOC "here_doc"
+# define HERE_DOC ".here_doc"
 # define HD_TEMP_FILE ".hd_temp"
 # define HISTORY ".minishell_history"
 
