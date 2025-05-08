@@ -288,8 +288,8 @@ t_cmd	*build_cmds(t_shell *shell)
 		add_last_cmd(&shell->cmds, cmd);
 		cmd->line = ft_strdup(aux);
 		free_split(args);
-		check_for_redirs(cmd->line);
-		if (check_for_redirs(cmd->line) > 0)
+		int redir_check = check_for_redirs(cmd->line);
+		if (redir_check > 0)
 		{
 			cmd->redirs = split_into_redirs(cmd->line);
 			redirs = cmd->redirs;
