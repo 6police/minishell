@@ -9,10 +9,10 @@ void	dollar_sign(t_cmd *cmd, t_shell *shell)
 	int		quote_type;
 	bool	has_dollar;
 
-	i = -1;
+	i = 0;
 	quote_type = 0;
 	has_dollar = false;
-	while (cmd->args[++i])
+	while (cmd->args[i])
 	{
 		if (strstr(cmd->args[i], "$") != NULL) // mudar para ft_strstr
 		{
@@ -25,6 +25,7 @@ void	dollar_sign(t_cmd *cmd, t_shell *shell)
 				cmd->args[i] = remove_quotes(cmd->args[i]);
 			cmd->args[i] = handle_dollar(cmd->args[i], shell);
 		}
+		i++;
 	}
 }
 static char	*handle_dollar(char *arg, t_shell *shell)

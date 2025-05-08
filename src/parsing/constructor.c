@@ -39,7 +39,7 @@ static char	**copy_array(char **array)
 }
 
 // function to create a new t_cmd
-static t_cmd	*init_cmd(char *name, char **args)
+t_cmd	*init_cmd(char *name, char **args)
 {
 	t_cmd	*cmd;
 
