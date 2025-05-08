@@ -50,13 +50,14 @@ static t_cmd	*init_cmd(char *name, char **args)
 	cmd->is_builtin = false;
 	cmd->next = NULL;
 	cmd->prev = NULL;
-	cmd->FD[0] = STDIN_FILENO;
-	cmd->FD[1] = STDOUT_FILENO;
-	cmd->FD[2] = STDERR_FILENO;
-/*	cmd->redirs = ft_calloc(sizeof(t_redirs), 1);
-	cmd->redirs->append = NULL;
-	cmd->redirs->write = NULL;
-	cmd->redirs->read = NULL;*/
+	cmd->fd[0] = STDIN_FILENO;
+	cmd->fd[1] = STDOUT_FILENO;
+	cmd->fd[2] = STDERR_FILENO;
+	cmd->fd_struct = NULL;
+	cmd->redirs = NULL;
+	cmd->is_valid = false;
+	cmd->builtin_func = NULL;
+	cmd->pid = 0;
 	cmd->has_heredoc = false;
 	return (cmd);
 }
@@ -137,6 +138,116 @@ void	build_builtin(t_cmd *cmd, char **args)
 	cmd->args = copy_array(args + 1);
 }
 
+static bool	is_redir_noarg(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (!str)
+		return (false);
+	while (str[i])
+	{
+		while ((str[i] == '<' || str[i] == '>'))
+			i++;
+		if (str[i] == '\0' || str[i] == ' ')
+			return (true);
+		if (str[i] != ' ' && str[i] != '\0')
+			return (false);
+		i++;
+	}
+	return (false);
+}
+
+static bool	is_redir(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (!str)
+		return (false);
+	while (str[i])
+	{
+		if (str[i] == '>' || str[i] == '<')
+			return (true);
+		i++;
+	}
+	return (false);
+}
+
+// function that normalizes the command->arg array.
+// if there are redirs in the args we remove them from the args
+// if there are redirs BEFORE the nnevargs we remove them from the args,
+// if there are redirs AFTER the args we remove them from the args as well
+// if an arg is just a redir symbol, we then remove as well the next arg
+static void	process_cmd_args(t_cmd *cmd)
+{
+	char	**newargs;
+	int		arg_count;
+	int		i;
+
+	if (!cmd || !cmd->args)
+		return ;
+	arg_count = 0;
+	i = 0;
+	while (cmd->args[i] && cmd->args[i][0] != '\0')
+	{
+		if (is_redir_noarg(cmd->args[i]))
+			i += 2;
+		else if (is_redir(cmd->args[i]))
+			i++;
+		else
+		{
+			arg_count++;
+			i++;
+		}
+	}
+	newargs = ft_calloc(sizeof(char *), arg_count + 1);
+	i = 0;
+	arg_count = 0;
+	while (cmd->args[i] && cmd->args[i][0] != '\0')
+	{
+		if (is_redir_noarg(cmd->args[i]))
+			i += 2;
+		else if (is_redir(cmd->args[i]))
+			i++;
+		else
+		{
+			newargs[arg_count] = ft_strdup(cmd->args[i]);
+			arg_count++;
+			i++;
+		}
+	}
+	free_split(cmd->args);
+	cmd->args = newargs;
+}
+
+static char* set_name(char **args)
+{
+	int		i;
+	char	*str;
+
+	i = 0;
+	str = NULL;
+
+	if (!args)
+		return (NULL);
+
+	while (args[i])
+	{
+		while (args[i][0] != '\0' && (args[i][0] == '<' || args[i][0] == '>'))
+			i++;
+		if (args[i][0] != '\0')
+		{
+			str = ft_strdup(args[i]);
+			break ;
+		}
+		i++;
+	}
+	return (str);
+}
+
+
+
 // funciton that takes tokens and assembles into commands
 // we check if the command is a built-in command and if it is we set the is_builtin to true
 // we also check if the command is a redirection
@@ -146,27 +257,55 @@ void	build_builtin(t_cmd *cmd, char **args)
 // if not found we set the path to NULL and command is now invalid
 t_cmd	*build_cmds(t_shell *shell)
 {
-	int i;
-	t_cmd *cmd;
-	t_cmd *head_cmd;
-	char **args;
+	int		i;
+	t_cmd	*cmd;
+	t_cmd	*head_cmd;
+	char	**args;
+	char	**redirs;
+	char	*aux;
 
+	char	*str;
+
+	str = NULL;
 	i = 0;
 	head_cmd = NULL;
+	redirs = NULL;
 	while (shell->tokens[i])
 	{
+		aux = ft_strdup(shell->tokens[i]);
 		mark_and_replace(shell->tokens[i], ' ', 2);
 		args = ft_split(shell->tokens[i], 2);
-		cmd = init_cmd(args[0], args);
+		
+		str = set_name(args);
+		cmd = init_cmd(str, args);
+		free(str);
+
 		check_builtin(cmd);
 		if (cmd->is_builtin)
 			build_builtin(cmd, args);
 		else
 			build_cmd(cmd, args, shell);
 		add_last_cmd(&shell->cmds, cmd);
+		cmd->line = ft_strdup(aux);
 		free_split(args);
 		dollar_sign(cmd, shell);
+		int redir_check = check_for_redirs(cmd->line);
+		if (redir_check > 0)
+		{
+			cmd->redirs = split_into_redirs(cmd->line);
+			redirs = cmd->redirs;
+			cmd->fd_struct = assemble_redirs(redirs);
+			if (cmd->fd_struct == NULL)
+			{
+				free_cmd(cmd);
+				return (NULL);
+			}
+			if (cmd->fd_struct->type == HERE_DOC_)
+				cmd->has_heredoc = true;
+		}
 		i++;
+		free(aux);
+		process_cmd_args(cmd);
 	}
 	return (head_cmd);
 }

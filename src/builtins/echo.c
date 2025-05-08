@@ -32,6 +32,6 @@ static void	echoing(t_cmd *cmd, bool will_remove_nl)
 		ft_printf_fd(cmd->FD[1], "%s", cmd->args[i]);
 		// check if there is more so we can put wc_type space ' '
 		if (cmd->args[i + 1])
-			ft_putchar_fd(' ', cmd->FD[1]);
+			ft_putchar_fd(' ', cmd->fd[1]);
 	}
 }
