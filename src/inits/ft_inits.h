@@ -5,5 +5,6 @@
 
 // function to initialize the shell
 t_shell	*init_shell(char **env);
+int		disable_echo(int disable);
 
 #endif

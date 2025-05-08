@@ -117,7 +117,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 
 
 	@echo -n "] $(PERCENT)% $(RED)Compiling:$(NOCOLOR) $<"
-	@sleep 0.1  # Just to make the bar smooth
+#	@sleep 0.1  # Just to make the bar smooth
 
 # Create the library from object files with progress bar
 $(NAME): $(OBJ_FILES)

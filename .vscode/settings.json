@@ -1,11 +1,4 @@
 {
-  "files.associations": {
-	"minishell.h": "c",
-	"includes.h": "c",
-	"ft_builtins.h": "c",
-	"ft_typedefs.h": "c",
-	"ft_validations.h": "c"
-},
   "C_Cpp_Runner.cCompilerPath": "gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",
   "C_Cpp_Runner.debuggerPath": "gdb",
@@ -62,5 +55,13 @@
   "C_Cpp_Runner.useLeakSanitizer": false,
   "C_Cpp_Runner.showCompilationTime": false,
   "C_Cpp_Runner.useLinkTimeOptimization": false,
-  "C_Cpp_Runner.msvcSecureNoWarnings": false
+  "C_Cpp_Runner.msvcSecureNoWarnings": false,
+  "files.associations": {
+	"cstring": "c",
+	"libft.h": "c",
+	"ft_builtins.h": "c",
+	"minishell.h": "c",
+	"wildcard.h": "c",
+	"format": "c"
+}
 }

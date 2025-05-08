@@ -13,12 +13,12 @@ int *init_separator(void)
         exit(1);
     }
     // assign the values for the separators
-    separators[0] = ';'; // semicolon
-    separators[1] = '|'; // pipe
-    separators[2] = '<'; // input redirection
-    separators[3] = '>'; // output redirection
-    separators[4] = '\''; // single quote
-    separators[5] = '\"'; // double quote
+    separators[0] = '|'; // pipe
+    separators[1] = '<'; // input redirection
+    separators[2] = '>'; // output redirection
+    separators[3] = '\''; // single quote
+    separators[4] = '\"'; // double quote
+    separators[5] = ' '; // space
     return (separators);
 }
 
@@ -39,6 +39,12 @@ t_shell	*init_shell(char **env)
 	ft_printf("Copying the environment\n");
     shell->env = copy_env(env);
     shell->separators = init_separator();
+    shell->token = NULL;
+    shell->main_pid = ft_get_pid();
+    shell->is_child = false;
+    shell->exit_value = 0;
+	shell->main_pid = ft_get_pid();
+	//disable_echo(1);
     ft_printf("Environment copied\n");
 	// initialize the file descriptors
 	// initialize the commands
@@ -46,3 +52,27 @@ t_shell	*init_shell(char **env)
     ft_print_minishell();
 	return (shell);
 }
+
+/*#include "termios.h"
+
+int	disable_echo(int disable)
+{
+	struct	termios	term;
+	static struct termios term_old;
+
+	if (disable != 0)
+	{
+		if (tcgetattr(STDIN_FILENO, &term) == -1)
+			return (EXIT_FAILURE);
+		term_old = term;
+		term.c_lflag &= ~ECHOCTL;
+		if (tcsetattr(0, TCSANOW, &term) == -1)
+			return (EXIT_FAILURE);
+	}
+	else
+	{
+		if (tcsetattr(0, TCSANOW, &term_old) == -1)
+			return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
+}*/

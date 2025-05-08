@@ -21,7 +21,7 @@ c - the delimiter character
 */
 
 // count the nbr of words
-
+/*
 static size_t	ft_word_count(char const *s, char sep)
 {
 	size_t	words;
@@ -68,6 +68,7 @@ static void	word_copying(char **vector, char const *s, char c)
 			i = j;
 		}
 	}
+	vector[k] = NULL;
 }
 
 char	**ft_split(char const *s, char c)
@@ -79,7 +80,6 @@ char	**ft_split(char const *s, char c)
 		words_vector = ft_calloc(1, sizeof(char *));
 		if (!words_vector)
 			return (NULL);
-		words_vector[0] = NULL;
 		return (words_vector);
 	}
 	words_vector = ft_calloc(((ft_word_count(s, c)) + 1), sizeof(char *));
@@ -89,16 +89,94 @@ char	**ft_split(char const *s, char c)
 	return (words_vector);
 }
 
-/* int main()
+int	main(void)
 {
-	char *s = NULL;
-	char **words = ft_split(s, ',');
-	int i = 0;
+	char	*s;
+	char	**words;
+	int		i;
+
+	s = NULL;
+	words = ft_split(s, ',');
+	i = 0;
 	while (words[i])
 	{
 		printf("%s\n", words[i]);
 		i++;
 	}
-	return 0;
+	return (0);
 }
  */
+
+static int	count_words(const char *s, char c)
+{
+	int	i;
+	int	result;
+
+	i = 1;
+	result = 0;
+	if (!*s)
+		return (0);
+	while (s[i])
+	{
+		if (s[0] != c && i == 1)
+			result++;
+		if (s[i - 1] == c && s[i] != c)
+			result++;
+		i++;
+	}
+	if (s[0] != c && i == 1 && ft_strlen(s) == 1)
+		result++;
+	return (result);
+}
+
+static int	find_del(char *s, char c)
+{
+	int	i;
+
+	i = 0;
+	while (s[i] && s[i] != c)
+		i++;
+	if (s[i] == c || !s[i])
+		return (i);
+	return (0);
+}
+
+static char	**ft_free_malloc(char **ptr, int d)
+{
+	int	i;
+
+	i = 0;
+	while (i < d)
+		free(ptr[i++]);
+	free(ptr);
+	return (NULL);
+}
+
+char	**ft_split(char const *s, char c)
+{
+	int i;
+	int words;
+	int pos;
+	int d;
+	char **ptr;
+
+	if (!s)
+		return (NULL);
+	words = count_words(s, c);
+	ptr = ft_calloc((size_t)count_words((char *)s, c) + 1, sizeof(char *));
+	if (!ptr)
+		return (NULL);
+	i = 0;
+	d = -1;
+	while (++d < words)
+	{
+		while (s[i] == c)
+			i++;
+		pos = find_del((char *)s + i, c);
+		ptr[d] = ft_substr(s, (unsigned int)i, (size_t)pos);
+		if (!ptr[d])
+			return (ft_free_malloc(ptr, d));
+		i += pos + 1;
+	}
+	return (ptr);
+}

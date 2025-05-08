@@ -15,4 +15,10 @@ void	ft_print_harambe(void);
 // function to print minishell
 void	ft_print_minishell(void);
 
+// function to shell
+void	shelling(t_shell *shell);
+
+// function to run the commands
+void    run_commands(t_shell *shell);
+
 #endif

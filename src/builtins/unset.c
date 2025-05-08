@@ -6,7 +6,7 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 20:00:06 by joamiran          #+#    #+#             */
-/*   Updated: 2025/01/15 21:17:59 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/04/24 23:54:57 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,13 +62,16 @@ void	unset_env_var(t_shell *shell, char *key)
 	env_var = find_env_var(shell->env, key);
 	if (env_var)
 		remove_env_var(shell->env, key);
+	shell->exit_value = 0;
 }
 
 // function to unset multiple environment variables
-void	unset_vars(t_shell *shell, char **keys)
+void	unset_vars(t_cmd *cmd, t_shell *shell)
 {
 	int	i;
+	char	**keys;
 
+	keys = cmd->args;
 	i = 0;
 	while (keys[i])
 	{

@@ -1,35 +1,37 @@
 #include "ft_builtins.h"
 
-void echo_shell(t_shell *shell, t_cmd *cmd)
-{
-	int newline;
-	int i;
-	int	a;
+static void	echoing(t_cmd *cmd, bool will_remove_nl);
 
-	newline = 1;
-	i = 1;
-	a = 1;
-	if (!shell)
+void	echo_shell(t_cmd *cmd, t_shell *shell)
+{
+	bool	will_remove_nl;
+
+	will_remove_nl = false;
+	if (!cmd || !cmd->args)
+	{
+		ft_putchar_fd('\n', cmd->FD[1]);
+		shell->exit_value = 0;
 		return ;
-	while (cmd->args[a])
-	{
-		// if arg == * (wildcard)
-		if (ft_strcmp(cmd->args[a], "*") == 0)
-			printf("PLACEHOLDER FOR WILDCARD");
-		a++;
 	}
-	if (cmd->args[1] && ft_strcmp(cmd->args[1], "-n") == 0)
-	{
-		newline = 0;
+	if (cmd->args[0] && ft_strcmp(cmd->args[0], "-n") == 0)
+		will_remove_nl = true;
+	echoing(cmd, will_remove_nl);
+	if (will_remove_nl == false)
+		ft_putchar_fd('\n', cmd->FD[1]);
+}
+
+static void	echoing(t_cmd *cmd, bool will_remove_nl)
+{
+	int	i;
+
+	i = -1;
+	if (will_remove_nl == true)
 		i++;
-	}
-	while (cmd->args[i])
+	while (cmd->args[++i])
 	{
-		ft_putstr_fd(cmd->args[i], STDOUT_FILENO);
+		ft_printf_fd(cmd->FD[1], "%s", cmd->args[i]);
+		// check if there is more so we can put wc_type space ' '
 		if (cmd->args[i + 1])
-			ft_putchar_fd(' ', STDOUT_FILENO);
-		i++;
+			ft_putchar_fd(' ', cmd->FD[1]);
 	}
-	if (newline)
-		ft_putchar_fd('\n', STDOUT_FILENO);
 }

@@ -1,7 +1,6 @@
 #ifndef FT_TYPEDEFS_H
 # define FT_TYPEDEFS_H
 
-
 # define PROMPT monke " minishell _$ "
 # define PROMPT_SIZE 11
 
@@ -17,17 +16,28 @@
 # define HD_TEMP_FILE ".hd_temp"
 # define HISTORY ".minishell_history"
 
-typedef enum e_exit_status
+typedef struct env		t_env;
+typedef struct shell	t_shell;
+typedef struct cmd t_cmd; // Define a type for the function pointer
+
+typedef enum e_exit_code
 {
-	EXITSUCCESS = 0, // Successful execution
-	EXITFAILURE = 1,
-		// General failure (often used by programs to indicate an error)
-
-	// Shell-specific exit codes (for shell-like environments)
-	EXIT_COMMAND_NOT_FOUND = 127, // Command not found (shell scripts)
-
-	SIG = 128 //+ SIGSEGV,			// + signal - For all the other SIG's
-}				t_exit_status;
+    EXIT_CODE_SUCCESS = 0,            // No error, command executed successfully
+    EXIT_CODE_GENERAL_ERROR = 1,      // General error occurred
+    EXIT_CODE_MALLOC_FAILURE = 2,     // Memory allocation failure
+    EXIT_CODE_PERMISSION_DENIED = 126,// Permission denied (common for exec errors)
+    EXIT_CODE_CMD_NOT_FOUND = 127,    // Command not found
+    EXIT_CODE_INVALID_ARGUMENT = 128, // Invalid argument passed to a command
+    EXIT_CODE_SYNTAX_ERROR = 129,     // Syntax error in the command line
+    EXIT_CODE_ENV_FAILURE = 130,      // Error with environment variable manipulation
+    EXIT_CODE_BUILTIN_FAILURE = 131,  // Builtin command failure
+    EXIT_CODE_REDIRECTION_ERROR = 132,// Error during redirection processing
+    EXIT_CODE_PIPE_FAILURE = 133,     // Failure in creating or handling pipes
+    EXIT_CODE_FORK_FAILURE = 134,     // Failure in forking a new process
+    EXIT_CODE_SIGNAL_TERMINATION = 135,// Process terminated due to a signal
+    EXIT_CODE_NOT_A_DIRECTORY = 136,  // Path provided is not a directory when expected
+    EXIT_CODE_FILE_NOT_FOUND = 137    // Specified file does not exist
+} t_exit_code;
 
 // struct to store the here document information
 typedef struct here_doc
@@ -35,45 +45,53 @@ typedef struct here_doc
 	char *delim;   // delimiter of the here document
 	char *content; // content of the here document
 	char *file;    // file to store the here document
-
 	int fd; // file descriptor
-}				t_here_doc;
+}						t_here_doc;
 
-// struct to store the redirection information
-typedef struct redir
+typedef struct s_wildcard
 {
-	char *input;    // input redirection
-	char *output;   // output redirection
-	char *error;    // error redirection
-	char *here_doc; // here document
-}				t_redir;
+	char	**wildcard;
+	int	nbr_of_files;
+}		t_wildcard;
+
+typedef enum s_type
+{
+	HEREDOC,
+	APPEND,
+	CREATE,
+	READ
+}						t_type;
+
+typedef struct s_redirs
+{
+	char	*append;
+	char	*write;
+	char	*read;
+}						t_redirs;
 
 // struct to store the command information
-typedef struct cmd
+struct					cmd
 {
 	char *name;  // command name
 	char **args; // arguments
 	char *path;  // path to the command,
+	int		FD[3];
+	pid_t	pid;
 
 	bool is_builtin; // if the command is a built-in command
+	bool is_valid;   // if the command is valid
 
+	// pointer for the builtin functions
+	void (*builtin_func)(t_cmd *cmd, t_shell *shell);
+		// Function pointer to the built-in function
 
 	struct cmd *next; // next command
 	struct cmd *prev; // previous command
+	
+	t_redirs *redirs;
 
-	t_redir **redirs; // redirections
-	int		last_fd;
-	int		last_read;
-}				t_cmd;
-
-// struct to store the file descriptors
-typedef struct fds
-{
-	int fd_in;       // file descriptor for the input
-	int fd_out;      // file descriptor for the output
-	int fd_err;      // file descriptor for the error
-	int fd_here_doc; // file descriptor for the here document
-}				t_fds;
+	bool				has_heredoc;
+};
 
 // struct to store the environment variable and its value
 typedef struct env_var
@@ -84,34 +102,46 @@ typedef struct env_var
 
 	struct env_var *next; // next environment variable
 	struct env_var *prev; // previous environment variable
-}				t_env_var;
+}						t_env_var;
 
 // struct to store the environment variables
-typedef struct env
+struct					env
 {
 	t_env_var *head; // head of the environment variables
 	t_env_var *last; // last of the environment variables
-}				t_env;
+};
+
+typedef struct token
+{
+	char				**token;
+	struct token		*next;
+}						t_token;
 
 // struct to store the shell information
-typedef struct shell
+struct					shell
 {
-	t_here_doc	*hd;
+	t_here_doc			*hd;
 
 	t_env *env;         // environment variables
 	char *line;         // line read from the input
 	char *history_file; // file to store the history
 
-	char **tokens; // tokens from the line
+	char **tokens; // tokens from the line after pipe separation
+	bool	is_pipe; // if the command has a pipe
+	pid_t main_pid; // process id of the command
+	bool is_child; // if the command is a child process
 
-	int ret;    // return value
-	int status; // status of the shell
-	int			exit_value;
+	t_token *token; // tokens from the line after parsing
 
-    int         *separators; // separators for the parsing
+	int debug; // debug mode
 
-	t_fds *fds;   // file descriptors
-	t_cmd **cmds; // commands
-}				t_shell;
+	int	ret;    // return value
+	int	status; // status of the shell
+	int		exit_value;
 
-#endif
+	int *separators; // separators for the parsing
+
+	t_cmd *cmds; // commands
+};
+
+# endif

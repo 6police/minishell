@@ -1,11 +1,8 @@
 
 #include "ft_run.h"
 
-
-void run_shell_debug(t_shell *shell)
+void	run_shell_debug(t_shell *shell)
 {
-	// setup the signal handler
-	setup_signals();
 	// for now it just starts the shell
 	while (1)
 	{
@@ -14,44 +11,70 @@ void run_shell_debug(t_shell *shell)
 		if (!shell->line)
 		{
 			printf(EMOJI_BRAIN "exiting shell\n");
-			exit_shell(shell, 1);
+			exit_shell(&(t_cmd){0}, shell);
 		}
-		if (shell->line)
+		else
 		{
 			add_history(shell->line);
-			parse(shell, 1); // parse the line and tokens
+			parse(shell); // parse the line and tokens
+			run_commands(shell);
 			if (shell->tokens)
 			{
-				free_tokens(shell->tokens); // free the tokens
-				printf(EMOJI_COOL "tokens cleared \n");
-				free(shell->line);
-				printf(EMOJI_COOL "line cleared \n");
+				free_tokens(shell->tokens);
+				shell->tokens = NULL;
 			}
+			flush_commands(shell);
+			free(shell->line);
+			shell->is_pipe = false;
 		}
 	}
 }
 
-void run_shell(t_shell *shell)
+void	run_shell(t_shell *shell)
 {
-	// setup the signal handler
-	setup_signals();
 	// for now it just starts the shell
 	while (1)
 	{
 		// read the input
 		shell->line = readline(PROMPT);
 		if (!shell->line)
-			exit_shell(shell, 0);
-		if (shell->line)
+			exit_shell(&(t_cmd){0}, shell);
+		else
 		{
-			parse(shell, 0); // parse the line and tokens
-			if (shell->tokens)
-			{
-				printf(EMOJI_COOL "PLACEHOLDER \n something will happen here\n");
-			}
+			add_history(shell->line);
+			static t_cmd test;
 
-			free_tokens(shell->tokens); // free the tokens
-			free(shell->line);
+			shell->cmds = &test;
+			test.is_valid = true;
+			test.is_builtin = false;
+
+
+			test.name = "cat";
+			static char *args[] = {"cat", "Makefile", NULL};
+			test.args = args;
+			test.path = "/bin/cat";
+			test.FD[0] = open("Makefile", O_RDONLY);
+			test.FD[1] = open("ola.c", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			test.builtin_func = execute_external; // Assign the function pointer
+			run_commands(shell);
+			/*add_history(shell->line);
+			parse(shell); // parse the line and tokens
+			if (shell->tokens)
+				printf(EMOJI_COOL "PLACEHOLDER \n something will happen here\n");
+			if (shell->cmds)
+				run_commands(shell);
+			free_cmds(shell->cmds);
+			free(shell->line);*/
 		}
+		//free_tokens(shell->tokens); // free the tokens
 	}
+}
+
+void	shelling(t_shell *shell)
+{
+	setup_signals();
+	if (shell->debug)
+		run_shell_debug(shell);
+	else
+		run_shell(shell);
 }
