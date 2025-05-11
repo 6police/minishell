@@ -1,0 +1,19 @@
+     18      49     343
+[0;31mexiting shell with status: 0
+[0m🧠exiting shell
+
+freeing line
+freeing cmds
+freeing args[0]: 0x4b9b7c0 -> "KEKW"
+freeing args array: 0x4b9b770
+args freed: (nil)
+cmd freed
+freeing args[0]: 0x4b9cb40 -> wc
+freeing args array: 0x4b9caf0
+args freed: (nil)
+redirs freed
+cmd freed
+freeing env
+freeing tokens
+freeing separator
+freeing shell
