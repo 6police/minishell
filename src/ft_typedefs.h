@@ -45,14 +45,6 @@ typedef enum e_exit_code
 }						t_exit_code;
 
 // struct to store the here document information
-typedef struct here_doc
-{
-	char *delim;   // delimiter of the here document
-	char *content; // content of the here document
-	char *file;    // file to store the here document
-	int fd;        // file descriptor
-}						t_here_doc;
-
 typedef struct s_wildcard
 {
 	char	**wildcard;
@@ -132,7 +124,7 @@ typedef struct token
 // struct to store the shell information
 struct					shell
 {
-	t_here_doc			*hd;
+	bool			hd;
 
 	t_env *env;         // environment variables
 	char *line;         // line read from the input

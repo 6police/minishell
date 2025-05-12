@@ -64,7 +64,8 @@ t_fd *create_redir(char *str);
 // function to assemble all the redirections
 t_fd *assemble_redirs(char **redirs);
 
-
+// function to create a new command
+t_cmd    *init_cmd(char *name, char **args);
 
 
 

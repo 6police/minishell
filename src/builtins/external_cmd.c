@@ -52,7 +52,7 @@ void	execute_external(t_cmd *cmd, t_shell *shell)
 		if (WIFSIGNALED(status))
 		{
 			if (WTERMSIG(status) == SIGQUIT)
-				ft_printf_fd(cmd->FD[2], "Quit (core dumped)\n");
+				ft_printf_fd(cmd->fd[2], "Quit (core dumped)\n");
 			shell->exit_value = 128 + WTERMSIG(status);
 		}
 		else if (WIFEXITED(status))

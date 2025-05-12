@@ -21,3 +21,52 @@ char	*remove_quotes(char *arg)
 	 // Return the new string
 	return (arg);
 }
+
+// // remove all occurences of quotes from a string
+// char *remove_all_quotes(char *arg)
+// {
+// 	char	*new_str;
+// 	char	*temp;
+
+// 	if (!arg)
+// 		return (NULL);
+// 	new_str = ft_strdup(arg);
+// 	temp = new_str;
+	
+// 	while (*temp)
+// 	{
+// 		if (*temp == '\"' || *temp == '\'')
+// 		{
+// 			ft_memmove(temp, temp + 1, ft_strlen(temp));
+// 			temp--;
+// 		}
+// 		temp++;
+// 	}
+// 	free(arg); // Free the old arg
+// 	return (new_str);
+// }
+
+char *remove_all_quotes(char *arg)
+{
+	char *new_str;
+	char *temp;
+
+	if (!arg)
+		return (NULL);
+	new_str = ft_strdup(arg);
+	if (!new_str)
+		return (NULL);
+
+	temp = new_str;
+	while (*temp)
+	{
+		if (*temp == '\'' || *temp == '\"')
+		{
+			ft_memmove(temp, temp + 1, ft_strlen(temp)); // includes null byte
+			continue; // don't decrement, just recheck current temp
+		}
+		temp++;
+	}
+	free(arg);
+	return (new_str);
+}

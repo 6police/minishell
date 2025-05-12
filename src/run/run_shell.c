@@ -1,7 +1,7 @@
 
 #include "ft_run.h"
 
-void	run_shell_debug(t_shell *shell)
+/* void	run_shell_debug(t_shell *shell)
 {
 	// for now it just starts the shell
 	while (1)
@@ -43,14 +43,85 @@ void	run_shell_debug(t_shell *shell)
 			shell->is_pipe = false;
 		}
 	}
+} */
+
+void	run_shell_debug(t_shell *shell)
+{
+	while (1)
+	{	
+
+		shell->line = readline(PROMPT RED "DEBUG" RESET EMOJI_HAMMER);
+		if (!shell->line)
+		{
+			printf(EMOJI_BRAIN "exiting shell\n");
+			exit_shell(&(t_cmd){0}, shell);
+		}
+		else
+		{
+			add_history(shell->line);
+			parse(shell); // builds tokens and cmd structs
+
+			// Optional: track if redirs were added during parsing or setup
+			bool has_redirs = false;
+			t_cmd *tmp = shell->cmds;
+			while (tmp)
+			{
+				if (tmp->fd_struct)
+					has_redirs = true;
+				tmp = tmp->next;
+			}
+
+			int backup_stdin = -1;
+			int backup_stdout = -1;
+
+			if (has_redirs)
+			{
+				printf(RED"---/n---/n---/nHAS REDIRS/n---/n---/n"RESET);
+				backup_stdin = dup(STDIN_FILENO);
+				backup_stdout = dup(STDOUT_FILENO);
+			}
+
+			run_commands(shell);
+
+			if (backup_stdin != -1)
+			{
+				dup2(backup_stdin, STDIN_FILENO);
+				close(backup_stdin);
+			}
+			if (backup_stdout != -1)
+			{
+				dup2(backup_stdout, STDOUT_FILENO);
+				close(backup_stdout);
+			}
+
+			if (shell->tokens)
+			{
+				free_tokens(shell->tokens);
+				shell->tokens = NULL;
+			}
+			flush_commands(shell);
+			free(shell->line);
+			shell->is_pipe = false;
+		}
+	}
 }
+
+
+
 
 void	run_shell(t_shell *shell)
 {
-	static t_cmd	test;
-	static char		*args[] = {"cat", "Makefile", NULL};
+	t_cmd	*tmp;
+	int backup_stdin;
+	int backup_stdout;
+	bool has_redirs;
 
-	// for now it just starts the shell
+	backup_stdin = -1;
+	backup_stdout = -1;
+	has_redirs = false;
+	tmp = NULL;
+
+
 	while (1)
 	{
 		// read the input
@@ -59,22 +130,45 @@ void	run_shell(t_shell *shell)
 			exit_shell(&(t_cmd){0}, shell);
 		else
 		{
-			add_history(shell->line);
-			shell->cmds = &test;
-			test.is_valid = true;
-			test.is_builtin = false;
-			test.name = "cat";
-			test.args = args;
-			test.path = "/bin/cat";
-			test.fd[0] = open("Makefile", O_RDONLY);
-			test.fd[1] = open("ola.c", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			test.builtin_func = execute_external; // Assign the function pointer
+			add_history(shell->line); // add the line to history
+			parse(shell); // parse the line and tokens
+			
+			tmp = shell->cmds;
+			while (tmp)
+			{
+				if (tmp->fd_struct)
+					has_redirs = true;
+				tmp = tmp->next;
+			}
+			if (has_redirs)
+			{
+				backup_stdin = dup(STDIN_FILENO);
+				backup_stdout = dup(STDOUT_FILENO);
+			}
+
 			run_commands(shell);
+			if (backup_stdin != -1)
+			{
+				dup2(backup_stdin, STDIN_FILENO);
+				close(backup_stdin);
+			}
+			if (backup_stdout != -1)
+			{
+				dup2(backup_stdout, STDOUT_FILENO);
+				close(backup_stdout);
+			}
+			if (shell->tokens)
+			{
+				free_tokens(shell->tokens);
+				shell->tokens = NULL;
+			}
+			flush_commands(shell);
+			free(shell->line);
+			shell->is_pipe = false;
 		}
-		// free_tokens(shell->tokens); // free the tokens
 	}
 }
-
+	
 void	shelling(t_shell *shell)
 {
 	setup_signals();
