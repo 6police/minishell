@@ -174,6 +174,47 @@ static bool	is_redir(char *str)
 	return (false);
 }
 
+static char **ft_removequotes(char **args)
+{
+	int i, j, k;
+	char **newargs;
+
+	// Count number of args
+	for (i = 0; args[i]; i++)
+		;
+
+	newargs = ft_calloc(i + 1, sizeof(char *));
+	if (!newargs)
+		return (NULL);
+
+	for (i = 0; args[i]; i++)
+	{
+		int len = 0;
+		// Count non-quote characters
+		for (j = 0; args[i][j]; j++)
+		{
+			if (args[i][j] != '\'' && args[i][j] != '"')
+				len++;
+		}
+
+		newargs[i] = ft_calloc(len + 1, sizeof(char));
+		if (!newargs[i])
+			return (NULL); // You should free previous on error
+
+		// Copy non-quote characters
+		for (j = 0, k = 0; args[i][j]; j++)
+		{
+			if (args[i][j] != '\'' && args[i][j] != '"')
+				newargs[i][k++] = args[i][j];
+		}
+		newargs[i][k] = '\0';
+	}
+	newargs[i] = NULL;
+	free_split(args);
+	return (newargs);
+}
+
+
 // function that normalizes the command->arg array.
 // if there are redirs in the args we remove them from the args
 // if there are redirs BEFORE the nnevargs we remove them from the args,
@@ -218,13 +259,15 @@ static void	process_cmd_args(t_cmd *cmd)
 		}
 	}
 	free_split(cmd->args);
-	cmd->args = newargs;
+	cmd->args = ft_removequotes(newargs);
+
 }
 
 static char* set_name(char **args)
 {
 	int		i;
 	char	*str;
+	char	*name;
 
 	i = 0;
 	str = NULL;
@@ -243,7 +286,8 @@ static char* set_name(char **args)
 		}
 		i++;
 	}
-	return (str);
+	name = remove_all_quotes(str);
+	return (name);
 }
 
 

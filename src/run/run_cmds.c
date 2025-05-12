@@ -46,8 +46,7 @@ void	run_commands(t_shell *shell)
 	if (!shell->cmds)
 		return ;
 	
-	signal(SIGQUIT, SIG_DFL);
-	signal(SIGINT, SIG_DFL);
+
 	
 		// Setup pipes
 	tmp = shell->cmds;
@@ -71,8 +70,7 @@ void	run_commands(t_shell *shell)
 	// Wait for all children
 	tmp = shell->cmds;
 	while (tmp)
-	{
-		if (tmp->pid > 0)
+	{	if (tmp->pid > 0)
 			waitpid(tmp->pid, NULL, 0);
 		tmp = tmp->next;
 	}

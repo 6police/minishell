@@ -9,12 +9,10 @@ int	make_pipes(t_cmd *cmd, t_shell *shell)
 	t_cmd	*tmp;
 	
 	tmp = cmd;
-	printf("Creating pipes... %p \n", cmd->prev);
 	while (tmp->next)
 	{
 		if (pipe(tmp->fd) == -1)
 		{
-			ft_printf_fd(STDERR_FILENO, "Error: pipe failed\n");
 			shell->exit_value = 1;
 			return (1);
 		}
@@ -61,7 +59,9 @@ void	manage_pipes(t_cmd *cmd, t_shell *shell)
 	{
 		dup2(cmd->fd[1], STDOUT_FILENO);
 		close(cmd->fd[1]);
+		close(cmd->fd[0]);
 	}
-	if (!cmd->next)
-		close (cmd->fd[0]);
+	// if (!cmd->next)
+	// 	close (cmd->fd[0] );
 }
+
