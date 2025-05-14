@@ -9,7 +9,7 @@ void	print_env(t_env *env, t_cmd *cmd)
 	while (tmp)
 	{
 		if (tmp->value)
-			ft_printf_fd(cmd->fd[1],RED "%s" RESET "=%s\n", tmp->key, tmp->value);
+			ft_printf_fd(cmd->fd[1],"%s=%s\n", tmp->key, tmp->value);
 		tmp = tmp->next;
 	}
 }

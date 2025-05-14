@@ -21,6 +21,8 @@ void	execute_external(t_cmd *cmd, t_shell *shell)
 		//shell->exit_value = 1; ?? confirmar
 		return ;
 	}
+	// signal(SIGQUIT, SIG_IGN);
+	// signal(SIGINT, SIG_IGN);
 	cmd->pid = fork();
 	if (cmd->pid == 0)
 	{
@@ -49,6 +51,7 @@ void	execute_external(t_cmd *cmd, t_shell *shell)
 	else
 	{
 		waitpid(cmd->pid, &status, 0);
+		setup_signals();
 		if (WIFSIGNALED(status))
 		{
 			if (WTERMSIG(status) == SIGQUIT)
