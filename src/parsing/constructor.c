@@ -174,33 +174,30 @@ static bool	is_redir(char *str)
 	return (false);
 }
 
-static char **ft_removequotes(char **args)
+static char	**ft_removequotes(char **args)
 {
-	int i, j, k;
-	char **newargs;
+	char	**newargs;
+	int		len;
 
+	int i, j, k;
 	// Count number of args
 	for (i = 0; args[i]; i++)
 		;
-
 	newargs = ft_calloc(i + 1, sizeof(char *));
 	if (!newargs)
 		return (NULL);
-
 	for (i = 0; args[i]; i++)
 	{
-		int len = 0;
+		len = 0;
 		// Count non-quote characters
 		for (j = 0; args[i][j]; j++)
 		{
 			if (args[i][j] != '\'' && args[i][j] != '"')
 				len++;
 		}
-
 		newargs[i] = ft_calloc(len + 1, sizeof(char));
 		if (!newargs[i])
 			return (NULL); // You should free previous on error
-
 		// Copy non-quote characters
 		for (j = 0, k = 0; args[i][j]; j++)
 		{
@@ -213,7 +210,6 @@ static char **ft_removequotes(char **args)
 	free_split(args);
 	return (newargs);
 }
-
 
 // function that normalizes the command->arg array.
 // if there are redirs in the args we remove them from the args
@@ -260,37 +256,47 @@ static void	process_cmd_args(t_cmd *cmd)
 	}
 	free_split(cmd->args);
 	cmd->args = ft_removequotes(newargs);
-
 }
 
-static char* set_name(char **args)
+static char	*set_name(char **args)
 {
 	int		i;
+	int		j;
 	char	*str;
 	char	*name;
+	int		redir_flag;
 
 	i = 0;
 	str = NULL;
-
 	if (!args)
 		return (NULL);
-
-	while (args[i])
+	redir_flag = check_for_redirs(args[0]);
+	if (redir_flag > 0)
 	{
-		while (args[i][0] != '\0' && (args[i][0] == '<' || args[i][0] == '>'))
-			i++;
-		if (args[i][0] != '\0')
+		while (args[i])
 		{
-			str = ft_strdup(args[i]);
-			break ;
+			j = 0;
+			while (args[i][0] != '\0' && (args[i][0] == '<' || args[i][0] == '>') && ft_strlen(args[i]) <= 2)
+				i++;
+			if (args[i][j] != '\0' && ft_strlen(args[i]) > 2)
+			{
+				while (args[i][j] == '<' || args[i][j] == '>')
+					j++;
+				str = ft_substr(args[i], j, ft_strlen(args[i]) - j);
+				if (str == NULL)
+					return (NULL);
+				break ;
+			}
+			i++;
 		}
-		i++;
 	}
+	else
+		str = ft_strdup(args[0]);
+	if (str == NULL)
+		return (NULL);
 	name = remove_all_quotes(str);
 	return (name);
 }
-
-
 
 // funciton that takes tokens and assembles into commands
 // we check if the command is a built-in command and if it is we set the is_builtin to true
@@ -307,8 +313,8 @@ t_cmd	*build_cmds(t_shell *shell)
 	char	**args;
 	char	**redirs;
 	char	*aux;
-
 	char	*str;
+	int		redir_check;
 
 	str = NULL;
 	i = 0;
@@ -319,11 +325,9 @@ t_cmd	*build_cmds(t_shell *shell)
 		aux = ft_strdup(shell->tokens[i]);
 		mark_and_replace(shell->tokens[i], ' ', 2);
 		args = ft_split(shell->tokens[i], 2);
-		
 		str = set_name(args);
 		cmd = init_cmd(str, args);
 		free(str);
-
 		check_builtin(cmd);
 		if (cmd->is_builtin)
 			build_builtin(cmd, args);
@@ -333,7 +337,7 @@ t_cmd	*build_cmds(t_shell *shell)
 		cmd->line = ft_strdup(aux);
 		free_split(args);
 		dollar_sign(cmd, shell);
-		int redir_check = check_for_redirs(cmd->line);
+		redir_check = check_for_redirs(cmd->line);
 		if (redir_check > 0)
 		{
 			cmd->redirs = split_into_redirs(cmd->line);

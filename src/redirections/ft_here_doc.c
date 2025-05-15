@@ -68,20 +68,61 @@ static char *ft_expand(char *line, t_shell *shell)
 
 
 
-void	ft_handle_heredoc(t_fd *fd_struct, t_shell *shell)
-{
-	int		fd;
-	char	*line;
-	char	*limiter;
+// void	ft_handle_heredoc(t_fd *fd_struct, t_shell *shell)
+// {
+// 	int		fd;
+// 	char	*line;
+// 	char	*limiter;
 
-	limiter = fd_struct->file;
-	shell->hd = true;
+// 	limiter = fd_struct->file;
+// 	shell->hd = true;
+// 	fd = open(HERE_DOC, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+// 	while (1)
+// 	{
+
+
+
+
+// 		line = readline("> ");
+// 		if (!line || (ft_strncmp(line, limiter, ft_strlen(line)) == 0
+// 				&& line[ft_strlen(line)] == '\0'))
+// 		{
+// 			free(line);
+// 			break ;
+// 		}
+// 		if (has_expansion(line))
+// 			line = ft_expand(line, shell);
+// 		write(fd, line, ft_strlen(line));
+// 		write(fd, "\n", 1);
+// 		free(line);
+// 	}
+// 	close(fd);
+// }
+
+
+static void	close_hd(int sig)
+{
+	(void)sig;
+	write(1, "\n", 1);
+	exit(130); // Signal exit status for SIGINT
+}
+
+void	do_heredoc_child(char *limiter, t_shell *shell)
+{
+	char	*line;
+	int		fd;
+
+	signal(SIGINT, close_hd);      // Catch Ctrl+C
+	signal(SIGQUIT, SIG_IGN);      // Ignore 'Ctrl+ \'
+
 	fd = open(HERE_DOC, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	if (fd < 0)
+		exit(1);
+
 	while (1)
 	{
 		line = readline("> ");
-		if (!line || (ft_strncmp(line, limiter, ft_strlen(line)) == 0
-				&& line[ft_strlen(line)] == '\0'))
+		if (!line || (ft_strcmp(line, limiter) == 0))
 		{
 			free(line);
 			break ;
@@ -93,4 +134,32 @@ void	ft_handle_heredoc(t_fd *fd_struct, t_shell *shell)
 		free(line);
 	}
 	close(fd);
+	clean_exit(&shell); // Clean up and exit
 }
+
+
+
+
+void	ft_handle_heredoc(t_fd *fd_struct, t_shell *shell)
+{
+	pid_t	pid;
+	int		status;
+
+	shell->hd = true;
+	pid = fork();
+	if (pid == 0)
+		do_heredoc_child(fd_struct->file, shell);
+	else
+	{
+		signal(SIGINT, SIG_IGN); // Ignore Ctrl+C in parent during heredoc
+		waitpid(pid, &status, 0);
+		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+		{
+			shell->exit_value = 130;
+			// Optional: mark cmd as invalid to skip execution
+		}
+		setup_signals(); // Restore signal handling
+	}
+}
+
+

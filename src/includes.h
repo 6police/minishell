@@ -17,6 +17,7 @@
 # include <sys/wait.h>
 # include <unistd.h>
 # include <linux/types.h>
+# include <termios.h>
 
 
 // headers from lib_ft directory

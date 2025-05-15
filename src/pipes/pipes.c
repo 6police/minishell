@@ -60,6 +60,7 @@ void	manage_pipes(t_cmd *cmd, t_shell *shell)
 		dup2(cmd->fd[1], STDOUT_FILENO);
 		close(cmd->fd[1]);
 		close(cmd->fd[0]);
+		cmd->fd[1] = STDOUT_FILENO;
 	}
 	// if (!cmd->next)
 	// 	close (cmd->fd[0] );

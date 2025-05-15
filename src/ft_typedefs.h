@@ -147,6 +147,9 @@ struct					shell
 
 	int *separators; // separators for the parsing
 
+	struct termios orig_termios;
+
+
 	t_cmd *cmds; // commands
 };
 

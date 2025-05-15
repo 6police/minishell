@@ -27,7 +27,44 @@ void	siginfo_handler(int sig, siginfo_t *info, void *context)
 	}*/
 	if (sig == SIGINT)
 	{
-
 		new_prompt(); // ctrl-C - Print new prompt
 	}
 }
+
+// void save_terminal_state(t_shell *shell)
+// {
+//     tcgetattr(STDIN_FILENO, &shell->orig_termios);
+// }
+
+// void restore_terminal_state(t_shell *shell)
+// {
+//     tcsetattr(STDIN_FILENO, TCSAFLUSH, &shell->orig_termios);
+// }
+
+// void disable_raw_mode(void)
+// {
+//     // Restore original terminal settings before exit
+//     tcsetattr(STDIN_FILENO, TCSAFLUSH, &g_orig_termios);
+// }
+
+// void enable_raw_mode(void)
+// {
+//     struct termios raw;
+
+//     // Get current terminal attributes and save them globally
+//     if (tcgetattr(STDIN_FILENO, &g_orig_termios) == -1)
+//         perror("tcgetattr");
+
+//     // Copy to raw to modify
+//     raw = g_orig_termios;
+
+//     // Disable canonical mode and echo
+//     raw.c_lflag &= ~(ICANON | ECHO);
+
+//     // Optionally disable ISIG if you want to handle signals yourself
+//     // raw.c_lflag &= ~(ISIG);
+
+//     // Apply raw mode settings immediately
+//     if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw) == -1)
+//         perror("tcsetattr");
+// }
