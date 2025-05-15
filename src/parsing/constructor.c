@@ -166,6 +166,7 @@ t_cmd	*build_cmds(t_shell *shell)
 		add_last_cmd(&shell->cmds, cmd);
 		free_split(args);
 		dollar_sign(cmd, shell);
+		ft_new_wildcard(cmd, shell);
 		i++;
 	}
 	return (head_cmd);

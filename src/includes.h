@@ -43,6 +43,7 @@
 # include "dirent.h"
 # include "redirections/redirections.h"
 # include "cmd_as_regular_user/ft_cmd_as_regular_user.h"
+# include "wildcards/ft_wildcard.h"
 
 
 # ifndef PATH_MAX
