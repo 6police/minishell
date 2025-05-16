@@ -10,5 +10,4 @@ void	exit_code_printer(t_cmd *cmd, t_shell *shell)
 	}
 	(void)cmd;
 	ft_printf_fd(cmd->FD[1], "%d: command not found\n", shell->exit_value);
-	shell->exit_value = 127;
 }

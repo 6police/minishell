@@ -62,6 +62,7 @@
 	"ft_builtins.h": "c",
 	"minishell.h": "c",
 	"wildcard.h": "c",
-	"format": "c"
+	"format": "c",
+	"ctype.h": "c"
 }
 }

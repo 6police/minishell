@@ -46,8 +46,12 @@ void	pipe_builtin(t_cmd *cmd, t_shell *shell)
 			if (WIFSIGNALED(status))
 			{
 				if (WTERMSIG(status) == SIGQUIT)
+				{
 					ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
-				shell->exit_value = 128 + WTERMSIG(status);
+					shell->exit_value = 128 + WTERMSIG(status);
+				}
+				else if (WTERMSIG(status) == SIGINT)
+					shell->exit_value = 130 + WTERMSIG(status);
 			}
 			else if (WIFEXITED(status))
 				shell->exit_value = WEXITSTATUS(status);
