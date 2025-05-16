@@ -57,12 +57,12 @@
   "C_Cpp_Runner.useLinkTimeOptimization": false,
   "C_Cpp_Runner.msvcSecureNoWarnings": false,
   "files.associations": {
-	"cstring": "c",
-	"libft.h": "c",
-	"ft_builtins.h": "c",
-	"minishell.h": "c",
-	"wildcard.h": "c",
-	"format": "c",
-	"ctype.h": "c"
-}
+    "cstring": "c",
+    "libft.h": "c",
+    "ft_builtins.h": "c",
+    "minishell.h": "c",
+    "wildcard.h": "c",
+    "format": "c",
+    "ctype.h": "c"
+  }
 }
