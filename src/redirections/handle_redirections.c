@@ -163,3 +163,4 @@ int setup_redirections(t_cmd *cmd, t_shell *shell)
 	}
 	return (0);
 }
+

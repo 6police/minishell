@@ -32,7 +32,7 @@ void free_redir_structs(t_fd *redirs)
 		free(tmp);
 		tmp = next;
 	}
-	ft_printf("redirs freed\n");
+	//ft_printf("redirs freed\n");
 }
 
 
@@ -212,5 +212,7 @@ void	clean_exit(t_shell **shell)
 	if (shell)
 		free_shell(shell, (*shell)->debug);
 	clear_history();
+	if (!(*shell)->is_child)
+		ft_printf_fd(STDERR_FILENO, "exit\n");
 	exit(status);
 }

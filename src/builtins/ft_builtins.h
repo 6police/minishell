@@ -20,7 +20,7 @@ void		pwd_shell(t_cmd *cmd, t_shell *shell);
 void		export_var(char *var, t_env *env);
 
 // export env var without arguments
-void		export_no_args(t_env *env);
+void		export_no_args(t_env *env, t_cmd *cmd);
 
 // export env var with arguments
 void		ft_export(char *var, char *value, t_env *env);

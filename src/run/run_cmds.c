@@ -18,8 +18,13 @@ void	pipe_builtin(t_cmd *cmd, t_shell *shell)
 	{
 		shell->is_child = true;
 
+		
+		// if (setup_redirections(cmd, shell) == 1)
+		// 	clean_exit(&shell);
+		
 		manage_pipes(cmd, shell);
 		//close_pipes(cmd);
+		
 		
 		// Builtin execution
 		cmd->builtin_func(cmd, shell);
@@ -28,16 +33,13 @@ void	pipe_builtin(t_cmd *cmd, t_shell *shell)
 	// In parent process, after forking
 	else
 	{
-		if (cmd->prev )
-		{
+		if (cmd->prev && !cmd->next)
 			close(cmd->prev->fd[0]);
-		}
-		if (cmd->next)
-		{
+		if (cmd->next && !cmd->prev)
 			close(cmd->fd[1]);
-		}
 	}
 }
+
 
 void	run_commands(t_shell *shell)
 {
@@ -48,23 +50,35 @@ void	run_commands(t_shell *shell)
 	
 
 	
-		// Setup pipes
+	// Setup pipes
+	tmp = shell->cmds;
+	
+	while (tmp)
+	{
+		if (setup_redirections(tmp, shell) == 1)
+		{
+			shell->exit_value = 1;
+			return ;
+		}
+		tmp = tmp->next;
+	}
+
 	tmp = shell->cmds;
 	if (shell->is_pipe)
 		if (make_pipes(tmp, shell) == 1)
 			return ;
 
-	while (tmp)
-	{
-		setup_redirections(tmp, shell);
-		tmp = tmp->next;
-	}
 	// Launch commands
 	tmp = shell->cmds;
 	while (tmp)
 	{
 		if (tmp->is_valid)
 			pipe_builtin(tmp, shell);
+		else
+		{
+			ft_printf_fd(STDERR_FILENO, "%s: command not found\n", tmp->args[0]);
+			shell->exit_value = 127;
+		}
 		tmp = tmp->next;
 	}
 	// Wait for all children

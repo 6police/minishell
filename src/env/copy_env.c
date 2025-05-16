@@ -57,6 +57,9 @@ void	add_env_var(t_env **env)
 t_env	*copy_env(char **env)
 {
 	t_env *env_cpy;
+	t_env_var	*shlvl;
+	char *shlvl_value;
+	int shlvl_int;
 
 	if (!env)
 	{
@@ -64,6 +67,8 @@ t_env	*copy_env(char **env)
 		exit(1);
 	}
 
+	shlvl_int = 0;
+	
 	env_cpy = ft_calloc(1, sizeof(t_env)); // Allocate for the environment list
 	if (!env_cpy)
 	{
@@ -79,5 +84,20 @@ t_env	*copy_env(char **env)
 			// Assign the key and value for the variable
 		env++;
 	}
+
+	shlvl = find_env_var(env_cpy, "SHLVL");
+	shlvl_int = ft_atoi(shlvl->value);
+	shlvl_int++;
+	shlvl_value = ft_itoa(shlvl_int);
+	if (!shlvl_value)
+	{
+		ft_putstr_fd("Error: malloc failed\n", 2);
+		exit(1);
+	}
+	free(shlvl->value);
+	shlvl->value = shlvl_value;
+	// Update the SHLVL value
+	 
+
 	return (env_cpy); // Return the t_env list
 }

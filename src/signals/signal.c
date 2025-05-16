@@ -27,7 +27,8 @@ void	siginfo_handler(int sig, siginfo_t *info, void *context)
 	}*/
 	if (sig == SIGINT)
 	{
-
 		new_prompt(); // ctrl-C - Print new prompt
 	}
 }
+
+// Removed unused commented-out terminal state helper functions to reduce clutter.

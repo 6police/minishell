@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: joamiran <joamiran@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 23:47:26 by nuno              #+#    #+#             */
-/*   Updated: 2025/04/03 15:46:31 by nuno             ###   ########.fr       */
+/*   Updated: 2025/05/15 21:32:47 by joamiran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	export_var(char *var, t_env *env)
 }
 
 
-void	export_no_args(t_env *env)
+void	export_no_args(t_env *env, t_cmd *cmd)
 {
     t_env_var	*env_var;
 
@@ -38,9 +38,9 @@ void	export_no_args(t_env *env)
     while (env_var)
     {
         if (!env_var->value)
-            printf("declare -x " RED"%s"RESET "=\n", env_var->key);
+            ft_printf_fd(cmd->fd[1], "declare -x " RED"%s"RESET "=\n", env_var->key);
         else
-            printf("declare -x  " RED"%s"RESET  "=\"%s\"\n", env_var->key, env_var->value);
+            ft_printf_fd(cmd->fd[1], "declare -x  " RED"%s"RESET  "=\"%s\"\n", env_var->key, env_var->value);
         env_var = env_var->next;
     }
 }
@@ -71,7 +71,7 @@ void export_builtin(t_cmd *cmd, t_shell *shell)
     // add a checker for '*'
     if (cmd->args[0] == NULL)
     {
-        export_no_args(shell->env);
+        export_no_args(shell->env, cmd);
         return;
     }
 

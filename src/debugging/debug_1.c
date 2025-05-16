@@ -5,11 +5,14 @@ void	print_env(t_env *env, t_cmd *cmd)
 {
 	t_env_var	*tmp;
 
+	//(void)cmd;
 	tmp = env->head;
 	while (tmp)
 	{
 		if (tmp->value)
-			ft_printf_fd(cmd->fd[1],RED "%s" RESET "=%s\n", tmp->key, tmp->value);
+			ft_printf_fd(cmd->fd[1],"%s=%s\n", tmp->key, tmp->value);
+		// if (tmp->value)
+		// 	printf("%s=%s\n", tmp->key, tmp->value);
 		tmp = tmp->next;
 	}
 }
