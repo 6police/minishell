@@ -16,8 +16,6 @@ int	make_pipes(t_cmd *cmd, t_shell *shell)
 			shell->exit_value = 1;
 			return (1);
 		}
-		//ft_printf_fd(2, "READ: %d\n", tmp->fd[0]);
-		//ft_printf_fd(2, "WRITE: %d\n", tmp->fd[1]);
 		tmp = tmp->next;
 	}
 	return (0);
@@ -63,6 +61,5 @@ void	manage_pipes(t_cmd *cmd, t_shell *shell)
 		cmd->fd[1] = STDOUT_FILENO;
 	}
 	// if (!cmd->next)
-	// 	close (cmd->fd[0] );
+		// close (cmd->fd[0] );
 }
-

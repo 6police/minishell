@@ -18,6 +18,8 @@ void	pipe_builtin(t_cmd *cmd, t_shell *shell)
 	{
 		shell->is_child = true;
 
+		
+
 		manage_pipes(cmd, shell);
 		//close_pipes(cmd);
 		
@@ -39,6 +41,7 @@ void	pipe_builtin(t_cmd *cmd, t_shell *shell)
 	}
 }
 
+
 void	run_commands(t_shell *shell)
 {
 	t_cmd	*tmp;
@@ -48,7 +51,7 @@ void	run_commands(t_shell *shell)
 	
 
 	
-		// Setup pipes
+	// Setup pipes
 	tmp = shell->cmds;
 	if (shell->is_pipe)
 		if (make_pipes(tmp, shell) == 1)
@@ -65,6 +68,11 @@ void	run_commands(t_shell *shell)
 	{
 		if (tmp->is_valid)
 			pipe_builtin(tmp, shell);
+		else
+		{
+			ft_printf_fd(STDERR_FILENO, "%s: command not found\n", tmp->args[0]);
+			shell->exit_value = 127;
+		}
 		tmp = tmp->next;
 	}
 	// Wait for all children

@@ -148,7 +148,10 @@ void	ft_handle_heredoc(t_fd *fd_struct, t_shell *shell)
 	shell->hd = true;
 	pid = fork();
 	if (pid == 0)
+	{
+		shell->is_child = true;
 		do_heredoc_child(fd_struct->file, shell);
+	}
 	else
 	{
 		signal(SIGINT, SIG_IGN); // Ignore Ctrl+C in parent during heredoc
