@@ -30,7 +30,6 @@ static void	do_wildcard(char *arg_str, t_cmd *cmd)
 {
 	int	wild_card_type;
 	
-	wild_card_type = 0;
 	wild_card_type = check_wildcard_type(arg_str);
 	wilding(arg_str, wild_card_type, cmd);
 }
