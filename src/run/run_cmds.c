@@ -51,7 +51,7 @@ void	pipe_builtin(t_cmd *cmd, t_shell *shell)
 					shell->exit_value = 128 + WTERMSIG(status);
 				}
 				else if (WTERMSIG(status) == SIGINT)
-					shell->exit_value = 130 + WTERMSIG(status);
+					shell->exit_value = 128 + WTERMSIG(status);
 			}
 			else if (WIFEXITED(status))
 				shell->exit_value = WEXITSTATUS(status);
