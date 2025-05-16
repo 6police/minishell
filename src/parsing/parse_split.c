@@ -74,8 +74,6 @@ char	**ft_parse_split(char *line, int letter, int sub)
 	if (count_quotes(line) != 0)
 		return (ft_printf_fd(2, "Error: Odd number of quotes\n"), NULL);
 	mark_pipes(line);
-	// mark_and_replace(line, letter, sub);
-	// printf("line: %s\n", line);
 	return (ft_split(line, sub));
 }
 

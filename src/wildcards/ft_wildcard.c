@@ -90,7 +90,7 @@ static void wilding(char *arg, int wc_type, t_cmd *cmd)
 	first = true;
 	if (wc_type == 0) // No wildcard
 	{
-		ft_printf_fd(cmd->FD[1], "%s", arg);
+		ft_printf_fd(cmd->fd[1], "%s", arg);
 		return ;
 	}
 	dir = opendir(".");
@@ -104,11 +104,11 @@ static void wilding(char *arg, int wc_type, t_cmd *cmd)
 			if (entry->d_name[0] != '.')
 			wc.nbr_of_files++;
 		}
-		ft_printf_fd(cmd->FD[1], "%d\n", wc.nbr_of_files);
+		ft_printf_fd(cmd->fd[1], "%d\n", wc.nbr_of_files);
 		closedir(dir);
 		if (wc.nbr_of_files == 0)
 		{
-			ft_printf_fd(cmd->FD[1], "%s", arg);
+			ft_printf_fd(cmd->fd[1], "%s", arg);
 			return ;
 		}
 		dir = opendir(".");
@@ -116,7 +116,7 @@ static void wilding(char *arg, int wc_type, t_cmd *cmd)
 		if (!wc.wildcard)
 		{
 			closedir(dir);
-			ft_printf_fd(cmd->FD[2], "Error: Memory allocation failed\n");
+			ft_printf_fd(cmd->fd[2], "Error: Memory allocation failed\n");
 			return;
 		}
 		i = 0;
@@ -129,9 +129,9 @@ static void wilding(char *arg, int wc_type, t_cmd *cmd)
 		for (i = 0; i < wc.nbr_of_files; i++)
 		{
 			if (!first)
-				ft_putchar_fd(' ', cmd->FD[1]);
+				ft_putchar_fd(' ', cmd->fd[1]);
 			first = false;
-			ft_printf_fd(cmd->FD[1], "%s", wc.wildcard[i]);
+			ft_printf_fd(cmd->fd[1], "%s", wc.wildcard[i]);
 			free(wc.wildcard[i]);
 		}
 		free(wc.wildcard);
@@ -145,11 +145,11 @@ static void wilding(char *arg, int wc_type, t_cmd *cmd)
 			if ((ft_str_r_cmp((strrchr(arg, '*') +1), entry->d_name) == 0) && entry->d_name[0] != '.')
 				wc.nbr_of_files++;
 		}
-		ft_printf_fd(cmd->FD[1], "%d\n", wc.nbr_of_files);
+		ft_printf_fd(cmd->fd[1], "%d\n", wc.nbr_of_files);
 		closedir(dir);
 		if (wc.nbr_of_files == 0)
 		{
-			ft_printf_fd(cmd->FD[1], "%s", arg);
+			ft_printf_fd(cmd->fd[1], "%s", arg);
 			return ;
 		}
 		dir = opendir(".");
@@ -157,7 +157,7 @@ static void wilding(char *arg, int wc_type, t_cmd *cmd)
 		if (!wc.wildcard)
 		{
 			closedir(dir);
-			ft_printf_fd(cmd->FD[2], "Error: Memory allocation failed\n");
+			ft_printf_fd(cmd->fd[2], "Error: Memory allocation failed\n");
 			return;
 		}
 		i = 0;
@@ -170,9 +170,9 @@ static void wilding(char *arg, int wc_type, t_cmd *cmd)
 		for (i = 0; i < wc.nbr_of_files; i++)
 		{
 			if (!first)
-				ft_putchar_fd(' ', cmd->FD[1]);
+				ft_putchar_fd(' ', cmd->fd[1]);
 			first = false;
-			ft_printf_fd(cmd->FD[1], "%s", wc.wildcard[i]);
+			ft_printf_fd(cmd->fd[1], "%s", wc.wildcard[i]);
 			free(wc.wildcard[i]);
 		}
 		free(wc.wildcard);
@@ -186,11 +186,11 @@ static void wilding(char *arg, int wc_type, t_cmd *cmd)
 			if ((ft_strncmp(arg, entry->d_name, (ft_strlen(arg) - 1)) == 0) && (entry->d_name[0] == '.' && entry->d_name[1] != '.' && entry->d_name[1] != '\0'))
 				wc.nbr_of_files++;
 		}
-		ft_printf_fd(cmd->FD[1], "Number of files:%d\n"RESET, wc.nbr_of_files);
+		ft_printf_fd(cmd->fd[1], "Number of files:%d\n"RESET, wc.nbr_of_files);
 		closedir(dir);
 		if (wc.nbr_of_files == 0)
 		{
-			ft_printf_fd(cmd->FD[1], "%s", arg);
+			ft_printf_fd(cmd->fd[1], "%s", arg);
 			return ;
 		}
 		dir = opendir(".");
@@ -198,7 +198,7 @@ static void wilding(char *arg, int wc_type, t_cmd *cmd)
 		if (!wc.wildcard)
 		{
 			closedir(dir);
-			ft_printf_fd(cmd->FD[2], "Error: Memory allocation failed\n");
+			ft_printf_fd(cmd->fd[2], "Error: Memory allocation failed\n");
 			return;
 		}
 		i = 0;
@@ -211,9 +211,9 @@ static void wilding(char *arg, int wc_type, t_cmd *cmd)
 		for (i = 0; i < wc.nbr_of_files; i++)
 		{
 			if (!first)
-				ft_putchar_fd(' ', cmd->FD[1]);
+				ft_putchar_fd(' ', cmd->fd[1]);
 			first = false;
-			ft_printf_fd(cmd->FD[1], "%s", wc.wildcard[i]);
+			ft_printf_fd(cmd->fd[1], "%s", wc.wildcard[i]);
 			free(wc.wildcard[i]);
 		}
 		free(wc.wildcard);
@@ -229,11 +229,11 @@ static void wilding(char *arg, int wc_type, t_cmd *cmd)
 			if (ft_strnstr(entry->d_name, tmp, ft_strlen(entry->d_name)) && entry->d_name[0] != '.')
 				wc.nbr_of_files++;
 		}
-		ft_printf_fd(cmd->FD[1], "Number of files:%d\n"RESET, wc.nbr_of_files);
+		ft_printf_fd(cmd->fd[1], "Number of files:%d\n"RESET, wc.nbr_of_files);
 		closedir(dir);
 		if (wc.nbr_of_files == 0)
 		{
-			ft_printf_fd(cmd->FD[1], "%s", arg);
+			ft_printf_fd(cmd->fd[1], "%s", arg);
 			return ;
 		}
 		dir = opendir(".");
@@ -241,7 +241,7 @@ static void wilding(char *arg, int wc_type, t_cmd *cmd)
 		if (!wc.wildcard)
 		{
 			closedir(dir);
-			ft_printf_fd(cmd->FD[2], "Error: Memory allocation failed\n");
+			ft_printf_fd(cmd->fd[2], "Error: Memory allocation failed\n");
 			return;
 		}
 		i = 0;
@@ -254,9 +254,9 @@ static void wilding(char *arg, int wc_type, t_cmd *cmd)
 		for (i = 0; i < wc.nbr_of_files; i++)
 		{
 			if (!first)
-				ft_putchar_fd(' ', cmd->FD[1]);
+				ft_putchar_fd(' ', cmd->fd[1]);
 			first = false;
-			ft_printf_fd(cmd->FD[1], "%s", wc.wildcard[i]);
+			ft_printf_fd(cmd->fd[1], "%s", wc.wildcard[i]);
 			free(wc.wildcard[i]);
 		}
 		free(wc.wildcard);
@@ -270,11 +270,11 @@ static void wilding(char *arg, int wc_type, t_cmd *cmd)
 			if (ft_strnstr(entry->d_name, tmp, ft_strlen(entry->d_name)))
 				wc.nbr_of_files++;
 		}
-		ft_printf_fd(cmd->FD[1], "Number of files:%d\n"RESET, wc.nbr_of_files);
+		ft_printf_fd(cmd->fd[1], "Number of files:%d\n"RESET, wc.nbr_of_files);
 		closedir(dir);
 		if (wc.nbr_of_files == 0)
 		{
-			ft_printf_fd(cmd->FD[1], "%s", arg);
+			ft_printf_fd(cmd->fd[1], "%s", arg);
 			return ;
 		}
 		dir = opendir(".");
@@ -282,7 +282,7 @@ static void wilding(char *arg, int wc_type, t_cmd *cmd)
 		if (!wc.wildcard)
 		{
 			closedir(dir);
-			ft_printf_fd(cmd->FD[2], "Error: Memory allocation failed\n");
+			ft_printf_fd(cmd->fd[2], "Error: Memory allocation failed\n");
 			return;
 		}
 		i = 0;
@@ -295,9 +295,9 @@ static void wilding(char *arg, int wc_type, t_cmd *cmd)
 		for (i = 0; i < wc.nbr_of_files; i++)
 		{
 			if (!first)
-				ft_putchar_fd(' ', cmd->FD[1]);
+				ft_putchar_fd(' ', cmd->fd[1]);
 			first = false;
-			ft_printf_fd(cmd->FD[1], "%s", wc.wildcard[i]);
+			ft_printf_fd(cmd->fd[1], "%s", wc.wildcard[i]);
 			free(wc.wildcard[i]);
 		}
 		free(wc.wildcard);

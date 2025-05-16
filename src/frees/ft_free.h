@@ -8,6 +8,9 @@
 // free one array
 void	free_array(char **array);
 
+// free the redirections
+void	free_redir_structs(t_fd *redirs);
+
 // free ONE cmd
 void	free_cmd(t_cmd *cmd);
 

@@ -15,13 +15,43 @@ void	free_split(char **split)
 	free(split);
 }
 
+// free the redirections
+void free_redir_structs(t_fd *redirs)
+{
+	t_fd	*tmp;
+	t_fd	*next;
+
+	if (!redirs)
+		return ;
+	tmp = redirs;
+	while (tmp)
+	{
+		if(tmp->file)
+			free(tmp->file);
+		next = tmp->next;
+		free(tmp);
+		tmp = next;
+	}
+	ft_printf("redirs freed\n");
+}
+
+
 // free ONE cmd
 void	free_cmd(t_cmd *cmd)
 {
-	int	i;
-
 	if (!cmd)
 		return ;
+	if (cmd->line)
+	{
+		free(cmd->line);
+		cmd->line = NULL;
+	}
+	if (cmd->redirs)
+	{
+		free_split(cmd->redirs);
+		cmd->redirs = NULL;
+	}
+
 	if (cmd->name)
 	{
 		free(cmd->name);
@@ -29,25 +59,20 @@ void	free_cmd(t_cmd *cmd)
 	}
 	if (cmd->args)
 	{
-		i = 0;
-		while (cmd->args[i])
-		{
-			printf("freeing args[%d]: %p -> %s\n", i, (void *)cmd->args[i],
-				cmd->args[i]);
-			i++;
-		}
-		printf("freeing args array: %p\n", (void *)cmd->args);
 		free_split(cmd->args);
 		cmd->args = NULL;
-		printf("args freed: %p\n", (void *)cmd->args);
 	}
 	if (cmd->path)
 	{
 		free(cmd->path);
 		cmd->path = NULL;
 	}
+	if (cmd->fd_struct)
+	{
+		free_redir_structs(cmd->fd_struct);
+		cmd->fd_struct = NULL;
+	}
 	free(cmd);
-	ft_printf("cmd freed\n");
 }
 
 // free ALL cmds
@@ -115,6 +140,8 @@ void	free_tokens(char **tokens)
 // free the shell
 void	free_shell(t_shell **shell, int debug)
 {
+
+	
 	if (!shell)
 		return ;
 	if ((*shell)->line && *(*shell)->line)

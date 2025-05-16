@@ -1,6 +1,6 @@
 // exit status of the last executed function/program/command
 
-# include "ft_builtins.h"
+#include "ft_builtins.h"
 
 void	exit_code_printer(t_cmd *cmd, t_shell *shell)
 {
@@ -9,5 +9,5 @@ void	exit_code_printer(t_cmd *cmd, t_shell *shell)
 		cmd->pid = fork();
 	}
 	(void)cmd;
-	ft_printf_fd(cmd->FD[1], "%d: command not found\n", shell->exit_value);
+	ft_printf_fd(cmd->fd[1], "%d: command not found\n", shell->exit_value);
 }

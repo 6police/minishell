@@ -27,11 +27,42 @@ static void	print_tokens(t_shell *shell)
 		i++;
 	}
 }
+static bool	check_redir_validity(t_shell *shell)
+{
+	t_cmd	*tmp;
+
+	tmp = shell->cmds;
+	while (tmp)
+	{
+		if (tmp->fd_struct)
+		{
+			if (tmp->fd_struct->file == NULL)
+			{
+				ft_printf(RED REDIR_FAILURE " %s\n" RESET, tmp->name);
+				return (false);
+			}
+		}
+		tmp = tmp->next;
+	}
+	return (true);
+}
+
+static void	invalidate_cmds(t_shell *shell)
+{
+	t_cmd	*tmp;
+
+	tmp = shell->cmds;
+	while (tmp)
+	{
+		tmp->is_valid = false;
+		tmp = tmp->next;
+	}
+}
 
 // parse the line according to priority
 void	parse(t_shell *shell)
 {
-	int sub;
+	int	sub;
 
 	sub = 7; // the character to replace the separator
 	shell->tokens = parse_line(shell->line, shell->separators[0], sub);
@@ -42,6 +73,8 @@ void	parse(t_shell *shell)
 		shell->is_pipe = true;
 	else
 		shell->is_pipe = false;
+	if (!check_redir_validity(shell))
+		invalidate_cmds(shell);
 	if (shell->debug)
 	{
 		print_tokens(shell);
@@ -50,4 +83,4 @@ void	parse(t_shell *shell)
 	}
 }
 
-//ver onde estao os redirections, e para onde e que manda.
+// ver onde estao os redirections, e para onde e que manda.
