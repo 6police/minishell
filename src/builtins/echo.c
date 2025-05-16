@@ -7,10 +7,10 @@ void	echo_shell(t_cmd *cmd, t_shell *shell)
 	bool	will_remove_nl;
 
 	will_remove_nl = false;
+	(void) shell;
 	if (!cmd || !cmd->args)
 	{
 		ft_putchar_fd('\n', cmd->fd[1]);
-		shell->exit_value = 0;
 		return ;
 	}
 	if (cmd->args[0] && ft_strcmp(cmd->args[0], "-n") == 0)
