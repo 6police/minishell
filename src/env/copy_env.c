@@ -101,3 +101,45 @@ t_env	*copy_env(char **env)
 
 	return (env_cpy); // Return the t_env list
 }
+
+static void	populate_env(t_env *env)
+{
+	add_env_var(&env);
+	assign_env_var(env->last, "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin");
+	add_env_var(&env);
+	assign_env_var(env->last, "PWD=/home/user");
+	add_env_var(&env);
+	assign_env_var(env->last, "OLDPWD=/home/user");
+	add_env_var(&env);
+	assign_env_var(env->last, "SHLVL=1");
+	add_env_var(&env);
+	assign_env_var(env->last, "HOME=/home/user");
+	add_env_var(&env);
+	assign_env_var(env->last, "USER=user");
+	add_env_var(&env);
+	assign_env_var(env->last, "LOGNAME=user");
+	add_env_var(&env);
+	assign_env_var(env->last, "TERM=xterm-256color");
+	add_env_var(&env);
+	assign_env_var(env->last, "SHELL=/bin/bash");
+	add_env_var(&env);
+	assign_env_var(env->last, "LANG=en_US.UTF-8");
+	add_env_var(&env);
+	assign_env_var(env->last, "LC_ALL=en_US.UTF-8");
+	env->head = find_env_var(env, "PATH");
+}
+
+
+t_env *new_env(void)
+{
+	t_env *new_env;
+
+	new_env = ft_calloc(1, sizeof(t_env));
+	if (!new_env)
+	{
+		ft_putstr_fd("Error: malloc failed\n", 2);
+		exit(1);
+	}
+	populate_env(new_env);
+	return (new_env);
+}

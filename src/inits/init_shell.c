@@ -76,3 +76,33 @@ int	disable_echo(int disable)
 	}
 	return (EXIT_SUCCESS);
 }*/
+
+t_shell	*init_shell_no_env(void)
+{
+	t_shell	*shell;
+
+	// declare the shell
+	//ft_printf("Initializing shell\n");     // print initializing shell
+	shell = ft_calloc(1, sizeof(t_shell)); // allocate memory for the shell
+	if (!shell)
+	{
+		ft_putstr_fd("Error: malloc failed\n", 2);
+		exit(1);
+	}
+	// copy the environment
+	//ft_printf("Copying the environment\n");
+    shell->env = new_env();
+    shell->separators = init_separator();
+    shell->token = NULL;
+	shell->main_pid = ft_get_pid();
+    shell->is_child = false;
+    shell->exit_value = 0;
+	//shell->main_pid = ft_get_pid();
+	//disable_echo(1);
+    //ft_printf("Environment copied\n");
+	// initialize the file descriptors
+	// initialize the commands
+	// ft_printf("Shell initialized\n");
+    // ft_print_minishell();
+	return (shell);
+}
