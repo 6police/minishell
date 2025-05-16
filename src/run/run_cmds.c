@@ -19,12 +19,12 @@ void	pipe_builtin(t_cmd *cmd, t_shell *shell)
 		shell->is_child = true;
 
 		
+		// if (setup_redirections(cmd, shell) == 1)
+		// 	clean_exit(&shell);
 		
 		manage_pipes(cmd, shell);
 		//close_pipes(cmd);
 		
-		if (setup_redirections(cmd, shell) ==1)
-			clean_exit(&shell);
 		
 		// Builtin execution
 		cmd->builtin_func(cmd, shell);
@@ -51,13 +51,17 @@ void	run_commands(t_shell *shell)
 
 	
 	// Setup pipes
-	// tmp = shell->cmds;
+	tmp = shell->cmds;
 	
-	// while (tmp)
-	// {
-	// 	setup_redirections(tmp, shell);
-	// 	tmp = tmp->next;
-	// }
+	while (tmp)
+	{
+		if (setup_redirections(tmp, shell) == 1)
+		{
+			shell->exit_value = 1;
+			return ;
+		}
+		tmp = tmp->next;
+	}
 
 	tmp = shell->cmds;
 	if (shell->is_pipe)
