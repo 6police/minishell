@@ -58,8 +58,36 @@ void	manage_pipes(t_cmd *cmd, t_shell *shell)
 		dup2(cmd->fd[1], STDOUT_FILENO);
 		close(cmd->fd[1]);
 		close(cmd->fd[0]);
-		cmd->fd[1] = STDOUT_FILENO;
 	}
 	// if (!cmd->next)
 		// close (cmd->fd[0] );
 }
+
+
+
+// if (cmd_index == 0)
+// 	{
+// 		close(pipex->cmds[cmd_index]->fd[0]);
+// 		dup2(pipex->infile, STDIN_FILENO);
+// 		close(pipex->infile);
+// 		dup2(pipex->cmds[cmd_index]->fd[1], STDOUT_FILENO);
+// 		close(pipex->cmds[cmd_index]->fd[1]);
+// 	}
+// 	else if (cmd_index == pipex->n_cmds - 1)
+// 	{
+// 		close(pipex->cmds[cmd_index - 1]->fd[1]);
+// 		dup2(pipex->outfile, STDOUT_FILENO);
+// 		close(pipex->outfile);
+// 		dup2(pipex->cmds[cmd_index - 1]->fd[0], STDIN_FILENO);
+// 		close(pipex->cmds[cmd_index - 1]->fd[0]);
+// 	}
+// 	else
+// 	{
+// 		close(pipex->cmds[cmd_index - 1]->fd[1]);
+// 		close(pipex->cmds[cmd_index]->fd[0]);
+// 		dup2(pipex->cmds[cmd_index - 1]->fd[0], STDIN_FILENO);
+// 		close(pipex->cmds[cmd_index - 1]->fd[0]);
+// 		dup2(pipex->cmds[cmd_index]->fd[1], STDOUT_FILENO);
+// 		close(pipex->cmds[cmd_index]->fd[1]);
+// 	}
+// }
