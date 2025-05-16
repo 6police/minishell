@@ -30,7 +30,7 @@ void	dollar_sign(t_cmd *cmd, t_shell *shell)
 }
 static char	*handle_dollar(char *arg, t_shell *shell)
 {
-	int				i;
+	int			i;
 	int			delete;
 	int			start;
 	int			env_key_len;

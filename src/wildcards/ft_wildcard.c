@@ -21,10 +21,17 @@ void	ft_wildcard(t_cmd *cmd, t_shell *shell)
 	{
 		wildcard = has_wildcard(cmd->args[i]);
 		quotes = is_there_quotes(cmd->args[i]);
-		cmd->args[i] = remove_quotes(cmd->args[i]);
 		if (wildcard == true && quotes == false)
 			do_wildcard(cmd->args[i], cmd);
 	}
+}
+
+static void	do_wildcard(char *arg_str, t_cmd *cmd)
+{
+	int	wild_card_type;
+	
+	wild_card_type = check_wildcard_type(arg_str);
+	wilding(arg_str, wild_card_type, cmd);
 }
 
 static bool	has_wildcard(char *arg)
@@ -38,15 +45,6 @@ static bool	has_wildcard(char *arg)
 			return (true);
 	}
 	return (false);
-}
-
-static void	do_wildcard(char *arg_str, t_cmd *cmd)
-{
-	int	wild_card_type;
-	
-	wild_card_type = 0;
-	wild_card_type = check_wildcard_type(arg_str);
-	wilding(arg_str, wild_card_type, cmd);
 }
 
 static bool	is_there_quotes(char *str)

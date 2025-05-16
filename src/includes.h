@@ -43,6 +43,7 @@
 # include "dirent.h"
 # include "redirections/redirections.h"
 # include "cmd_as_regular_user/ft_cmd_as_regular_user.h"
+# include "wildcards/ft_wildcard.h"
 
 // headers from src/pipes directory
 # include "pipes/ft_pipes.h"

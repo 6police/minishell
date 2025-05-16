@@ -333,6 +333,7 @@ t_cmd	*build_cmds(t_shell *shell)
 		cmd->line = ft_strdup(aux);
 		free_split(args);
 		dollar_sign(cmd, shell);
+		ft_new_wildcard(cmd, shell);
 		int redir_check = check_for_redirs(cmd->line);
 		if (redir_check > 0)
 		{
