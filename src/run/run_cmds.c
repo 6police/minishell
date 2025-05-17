@@ -38,7 +38,7 @@ void	pipe_builtin(t_cmd *cmd, t_shell *shell)
 			if (setup_redirections(cmd, shell) == 1)
 				clean_exit(&shell);
 			cmd->builtin_func(cmd, shell);
-			clean_exit(&shell);
+			//clean_exit(&shell);
 		}
 		return ;
 	}
