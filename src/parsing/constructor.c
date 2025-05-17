@@ -50,6 +50,8 @@ t_cmd	*init_cmd(char *name, char **args)
 	cmd->is_builtin = false;
 	cmd->next = NULL;
 	cmd->prev = NULL;
+	cmd->fd_pipe[0] = -1;
+	cmd->fd_pipe[1] = -1;
 	cmd->fd[0] = STDIN_FILENO;
 	cmd->fd[1] = STDOUT_FILENO;
 	cmd->fd[2] = STDERR_FILENO;

@@ -81,6 +81,8 @@ struct					cmd
 	char **args; // arguments
 	char *path;  // path to the command,
 	int					fd[3];
+	int		fd_pipe[2]; // file descriptor for the pipe
+
 	pid_t				pid;
 
 	bool is_builtin; // if the command is a built-in command
@@ -139,7 +141,7 @@ struct					shell
 
 	int debug; // debug mode
 
-	int fd[2]; // file descriptor for the pipe
+	int fd[2]; // file descriptor for the redirections
 
 	int ret;    // return value
 	int status; // status of the shell
