@@ -80,8 +80,6 @@ static void	check_builtin(t_cmd *cmd)
 		cmd->is_builtin = true;
 	if (ft_strcmp(cmd->name, "echo") == 0)
 		cmd->is_builtin = true;
-	if (ft_strcmp(cmd->name, "$?") == 0)
-		cmd->is_builtin = true;
 }
 
 void	build_cmd(t_cmd *cmd, char **args, t_shell *shell)
@@ -133,8 +131,6 @@ void	build_builtin(t_cmd *cmd, char **args)
 		cmd->builtin_func = exit_shell;
 	if (ft_strcmp(cmd->name, "env") == 0)
 		cmd->builtin_func = env;
-	if (ft_strcmp(cmd->name, "$?") == 0)
-		cmd->builtin_func = exit_code_printer;
 	cmd->args = copy_array(args + 1);
 }
 

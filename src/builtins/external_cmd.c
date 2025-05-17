@@ -34,12 +34,12 @@ void	execute_external(t_cmd *cmd, t_shell *shell)
 			if (errno == ENOENT)
 			{
 				ft_printf_fd(cmd->fd[2], "minishell: command not found: %s\n", cmd->name);
-				shell->exit_value = 127; // or should i exit(127);?
+				exit(127); // or should i exit(127);? shell->exit_value = 127;
 			}
 			else
 			{
 				perror("Aii nu cu nao\n");
-				shell->exit_value = 126; // or should i exit(126);?
+				exit(126); // or should i exit(126);? shell->exit_value = 126;
 			}
 		}
 	}
@@ -60,6 +60,7 @@ void	execute_external(t_cmd *cmd, t_shell *shell)
 		}
 		else if (WIFEXITED(status))
 			shell->exit_value = WEXITSTATUS(status);
+	
 	}
 	free_env_array(envp);
 }

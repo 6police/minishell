@@ -47,17 +47,17 @@ void	manage_pipes(t_cmd *cmd, t_shell *shell)
 	tmp = cmd;
 
 
-	if (cmd->prev)
+	if (tmp->prev)
 	{
-		dup2(cmd->prev->fd[0], STDIN_FILENO);
-		close(cmd->prev->fd[0]);
-		close(cmd->prev->fd[1]);
+		dup2(tmp->prev->fd[0], STDIN_FILENO);
+		close(tmp->prev->fd[0]);
+		close(tmp->prev->fd[1]);
 	}
-	if (cmd->next)
+	if (tmp->next)
 	{
-		dup2(cmd->fd[1], STDOUT_FILENO);
-		close(cmd->fd[1]);
-		close(cmd->fd[0]);
+		dup2(tmp->fd[1], STDOUT_FILENO);
+		close(tmp->fd[1]);
+		close(tmp->fd[0]);
 	}
 	// if (!cmd->next)
 		// close (cmd->fd[0] );
