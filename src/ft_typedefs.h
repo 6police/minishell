@@ -134,6 +134,8 @@ struct					shell
 
 	char **tokens;  // tokens from the line after pipe separation
 	bool is_pipe;   // if the command has a pipe
+	bool wait;    // if the command should wait for the child process to finish
+	
 	pid_t main_pid; // process id of the command
 	bool is_child;  // if the command is a child process
 

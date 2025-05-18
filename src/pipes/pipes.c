@@ -40,128 +40,29 @@ void	close_pipes(t_cmd *cmd)
 	}
 }
 
-// void	close_pipes(t_cmd *cmd)
-// {
-// 	t_cmd	*tmp;
-
-// 	if (!cmd || !cmd->next)
-// 		return ;
-// 	tmp = cmd;
-// 	while (tmp && tmp->next)
-// 	{
-// 		close(tmp->fd_pipe[0]);
-// 		close(tmp->fd_pipe[1]);
-// 		tmp = tmp->next;
-// 	}
-// }
-
-// function to manage pipes
-// void	manage_pipes(t_cmd *cmd, t_shell *shell)
-// {
-// 	t_cmd	*tmp;
-
-// 	if (!cmd || shell->is_pipe == false)
-// 		return ;
-
-// 	tmp = cmd;
-// 	// If there's input from previous pipe
-// 	if (cmd->prev)
-// 		dup2(cmd->prev->fd_pipe[0], STDIN_FILENO);
-// 	// If there's output to next pipe
-// 	if (cmd->next)
-// 		dup2(cmd->fd_pipe[1], STDOUT_FILENO);
-// 	// Now close ALL pipe fd_pipes in the current cmd
-// 	if (cmd->prev)
-// 	{
-// 		close(cmd->prev->fd_pipe[0]);
-// 		close(cmd->prev->fd_pipe[1]);
-// 	}
-// 	if (cmd->next)
-// 	{
-// 		close(cmd->fd_pipe[0]);
-// 		close(cmd->fd_pipe[1]);
-// 	}
-// 	// if (!cmd->next)
-// 	// close (cmd->fd_pipe[0] );
-// }
-void	manage_pipes(t_cmd *cmd, t_shell *shell)
+void manage_pipes(t_cmd *cmd, t_shell *shell)
 {
-	t_cmd	*tmp;
+	if (!cmd || !shell->is_pipe)
+		return;
 
-	if (!cmd || shell->is_pipe == false)
-		return ;
-
-	// INPUT: redir input has priority, else pipe input from prev
+	// If input redirection is set, use it
 	if (cmd->fd[0] != -1)
-	{
 		dup2(cmd->fd[0], STDIN_FILENO);
-		close(cmd->fd[0]);
-		cmd->fd[0] = -1;
-	}
-	else if (cmd->prev && cmd->prev->fd_pipe[0] != -1)
-	{
+	else if (cmd->prev)
 		dup2(cmd->prev->fd_pipe[0], STDIN_FILENO);
-		close(cmd->prev->fd_pipe[0]);
-		cmd->prev->fd_pipe[0] = -1;
-	}
-	
-	// OUTPUT: redir output has priority, else pipe output to next
+
+	// If output redirection is set, use it
 	if (cmd->fd[1] != -1)
-	{
 		dup2(cmd->fd[1], STDOUT_FILENO);
-		close(cmd->fd[1]);
-		cmd->fd[1] = -1;
-	}
-	else if (cmd->next && cmd->fd_pipe[1] != -1)
-	{
+	else if (cmd->next)
 		dup2(cmd->fd_pipe[1], STDOUT_FILENO);
-		close(cmd->fd_pipe[1]);
-		cmd->fd_pipe[1] = -1;
-	}
-
-
-	// Close all pipe fds inherited from parent
-	
-	tmp = shell->cmds;
-	while (tmp)
-	{
-		if (tmp != cmd->prev && tmp->fd_pipe[0] != -1)
-		{
-			close(tmp->fd_pipe[0]);
-			tmp->fd_pipe[0] = -1;
-		}
-		if (tmp != cmd && tmp->fd_pipe[1] != -1)
-		{
-			close(tmp->fd_pipe[1]);
-			tmp->fd_pipe[1] = -1;
-		}
-		tmp = tmp->next;
-	}
 }
 
-// if (cmd_index == 0)
-// 	{
-// 		close(pipex->cmds[cmd_index]->fd_pipe[0]);
-// 		dup2(pipex->infile, STDIN_FILENO);
-// 		close(pipex->infile);
-// 		dup2(pipex->cmds[cmd_index]->fd_pipe[1], STDOUT_FILENO);
-// 		close(pipex->cmds[cmd_index]->fd_pipe[1]);
-// 	}
-// 	else if (cmd_index == pipex->n_cmds - 1)
-// 	{
-// 		close(pipex->cmds[cmd_index - 1]->fd_pipe[1]);
-// 		dup2(pipex->outfile, STDOUT_FILENO);
-// 		close(pipex->outfile);
-// 		dup2(pipex->cmds[cmd_index - 1]->fd_pipe[0], STDIN_FILENO);
-// 		close(pipex->cmds[cmd_index - 1]->fd_pipe[0]);
-// 	}
-// 	else
-// 	{
-// 		close(pipex->cmds[cmd_index - 1]->fd_pipe[1]);
-// 		close(pipex->cmds[cmd_index]->fd_pipe[0]);
-// 		dup2(pipex->cmds[cmd_index - 1]->fd_pipe[0], STDIN_FILENO);
-// 		close(pipex->cmds[cmd_index - 1]->fd_pipe[0]);
-// 		dup2(pipex->cmds[cmd_index]->fd_pipe[1], STDOUT_FILENO);
-// 		close(pipex->cmds[cmd_index]->fd_pipe[1]);
-// 	}
-// }
+void close_pipes_after_fork(t_cmd *cmd)
+{
+	if (cmd->prev)
+		close_safe(cmd->prev->fd_pipe[0]);
+	if (cmd->next)
+		close_safe(cmd->fd_pipe[1]);
+}
+

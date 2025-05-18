@@ -25,8 +25,6 @@ static bool	has_expansion(char *line)
 	return (expansion);
 }
 
-
-
 static char *ft_expand(char *line, t_shell *shell)
 {
 	if (!line)
@@ -66,40 +64,6 @@ static char *ft_expand(char *line, t_shell *shell)
 	return (expanded_line);
 }
 
-
-
-// void	ft_handle_heredoc(t_fd *fd_struct, t_shell *shell)
-// {
-// 	int		fd;
-// 	char	*line;
-// 	char	*limiter;
-
-// 	limiter = fd_struct->file;
-// 	shell->hd = true;
-// 	fd = open(HERE_DOC, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-// 	while (1)
-// 	{
-
-
-
-
-// 		line = readline("> ");
-// 		if (!line || (ft_strncmp(line, limiter, ft_strlen(line)) == 0
-// 				&& line[ft_strlen(line)] == '\0'))
-// 		{
-// 			free(line);
-// 			break ;
-// 		}
-// 		if (has_expansion(line))
-// 			line = ft_expand(line, shell);
-// 		write(fd, line, ft_strlen(line));
-// 		write(fd, "\n", 1);
-// 		free(line);
-// 	}
-// 	close(fd);
-// }
-
-
 static void	close_hd(int sig)
 {
 	(void)sig;
@@ -134,7 +98,7 @@ void	do_heredoc_child(char *limiter, t_shell *shell)
 		free(line);
 	}
 	close(fd);
-	clean_exit(&shell); // Clean up and exit
+	//clean_exit(&shell); // Clean up and exit
 }
 
 

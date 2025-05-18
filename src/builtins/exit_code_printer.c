@@ -9,5 +9,5 @@ void	exit_code_printer(t_cmd *cmd, t_shell *shell)
 		cmd->pid = fork();
 	}
 	(void)cmd;
-	ft_printf_fd(cmd->fd[1], "%d: command not found\n", shell->exit_value);
+	ft_printf_fd(STDOUT_FILENO, "%d: command not found\n", shell->exit_value);
 }

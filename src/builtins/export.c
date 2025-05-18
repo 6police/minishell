@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joamiran <joamiran@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 23:47:26 by nuno              #+#    #+#             */
-/*   Updated: 2025/05/15 21:32:47 by joamiran         ###   ########.fr       */
+/*   Updated: 2025/05/18 21:40:03 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,15 +32,16 @@ void	export_no_args(t_env *env, t_cmd *cmd)
 {
     t_env_var	*env_var;
 
+    (void)cmd; // to avoid unused parameter warning
     sort_env_list(env);
 
     env_var = env->head;
     while (env_var)
     {
         if (!env_var->value)
-            ft_printf_fd(cmd->fd[1], "declare -x " RED"%s"RESET "=\n", env_var->key);
+            ft_printf_fd(STDOUT_FILENO, "declare -x " RED"%s"RESET "=\n", env_var->key);
         else
-            ft_printf_fd(cmd->fd[1], "declare -x  " RED"%s"RESET  "=\"%s\"\n", env_var->key, env_var->value);
+            ft_printf_fd(STDOUT_FILENO, "declare -x  " RED"%s"RESET  "=\"%s\"\n", env_var->key, env_var->value);
         env_var = env_var->next;
     }
 }

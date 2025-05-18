@@ -44,6 +44,7 @@ t_shell	*init_shell(char **env)
     shell->is_child = false;
     shell->exit_value = 0;
 	shell->main_pid = ft_get_pid();
+	shell->wait = false;
 	//disable_echo(1);
     //ft_printf("Environment copied\n");
 	// initialize the file descriptors
