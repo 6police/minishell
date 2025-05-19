@@ -126,6 +126,7 @@ int setup_redirections(t_cmd *cmd, t_shell *shell)
 	// Second, dup2 only last input/output
 	if (last_in && last_in->fd != -1)
 	{
+		cmd->fd[0] = last_in->fd;
 		if (dup2(last_in->fd, STDIN_FILENO) == -1)
 		{
 			perror("dup2 input");
@@ -136,6 +137,7 @@ int setup_redirections(t_cmd *cmd, t_shell *shell)
 
 	if (last_out && last_out->fd != -1)
 	{
+		cmd->fd[1] = last_out->fd;
 		if (dup2(last_out->fd, STDOUT_FILENO) == -1)
 		{
 			perror("dup2 output");

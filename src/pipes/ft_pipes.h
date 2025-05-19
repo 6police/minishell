@@ -11,6 +11,9 @@ int make_pipes(t_cmd *cmd, t_shell *shell);
 // function to close pipes
 void close_pipes(t_cmd *cmd);
 
+// function to close pipes after forking
+void close_pipes_after_fork(t_cmd *cmd);
+
 // function to manage pipes
 void manage_pipes(t_cmd *cmd, t_shell *shell);
 
