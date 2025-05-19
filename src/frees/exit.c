@@ -209,10 +209,10 @@ void	clean_exit(t_shell **shell)
 		ft_printf(RED "exiting shell with status: %d\n" RESET, status);
 		printf(EMOJI_BRAIN "exiting shell\n\n");
 	}
+	if (!(*shell)->is_child)
+		ft_printf_fd(STDERR_FILENO, "exit\n");
 	if (shell && *shell)
 		free_shell(shell, (*shell)->debug);
 	clear_history();
-	if (!(*shell)->is_child)
-		ft_printf_fd(STDERR_FILENO, "exit\n");
 	exit(status);
 }
