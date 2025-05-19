@@ -1,10 +1,13 @@
 #include "ft_run.h"
 
-void eggxecutor (t_cmd *cmd, t_shell *shell)
+void eggxecutor (t_cmd *cmd, t_shell *shell, int flag)
 {
     shell->is_child = true;
-    signal(SIGQUIT, SIG_DFL);
-    signal(SIGINT, SIG_DFL);
+    if (flag == 1)
+    {
+        signal(SIGQUIT, SIG_DFL);
+        signal(SIGINT, SIG_DFL);
+    }
     if (setup_redirections(cmd, shell) == 1)
         clean_exit(&shell);
 }
@@ -24,7 +27,7 @@ void run_pipe(t_cmd *cmd, t_shell *shell)
     }
     if (cmd->pid == 0)
     {
-        eggxecutor(cmd, shell);
+        eggxecutor(cmd, shell, 1);
         manage_pipes(cmd, shell);
         close_pipes(shell->cmds);
         cmd->builtin_func(cmd, shell);
@@ -51,7 +54,7 @@ void run_no_pipe(t_cmd *cmd, t_shell *shell)
         }
         if (cmd->pid == 0)
         {
-            eggxecutor(cmd, shell);
+            eggxecutor(cmd, shell, 1);
             cmd->builtin_func(cmd, shell);
             clean_exit(&shell);
         }
@@ -59,7 +62,7 @@ void run_no_pipe(t_cmd *cmd, t_shell *shell)
     else
     {
         shell->wait = false;
-        eggxecutor(cmd, shell);
+        eggxecutor(cmd, shell, 0);
         shell->is_child = false;
         cmd->builtin_func(cmd, shell);
     }
@@ -69,7 +72,7 @@ void processor(t_cmd *cmd, t_shell *shell)
 {
     if (!cmd || !shell)
         return ;
-    
+
     if (shell->is_pipe)
         run_pipe(cmd, shell);
     else

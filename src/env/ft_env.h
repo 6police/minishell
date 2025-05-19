@@ -12,6 +12,9 @@ void	add_env_var(t_env **env);
 // Function to create a copy of the environment
 t_env	*copy_env(char **env);
 
+// function to copy the environment list
+t_env	*copy_env_list(t_env *env);
+
 // fucntions to sort the environment variables
 
 // function to swap the position of two environment variables
