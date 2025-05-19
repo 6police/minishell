@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joamiran <joamiran@student.42lisboa.com>   +#+  +:+       +#+        */
+/*   By: joamiran <joamiran@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 20:56:43 by joamiran          #+#    #+#             */
-/*   Updated: 2025/02/10 18:28:46 by joamiran         ###   ########.fr       */
+/*   Updated: 2025/05/16 21:45:38 by joamiran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,10 @@ int	main(int argc, char **argv, char **env)
 			2);
 		return (1);
 	}
-	shell = init_shell(env);
+	if (!env || !*env)
+		shell = init_shell_no_env();
+	else
+		shell = init_shell(env);
 	if (argc == 2)
 	{
 		if ((ft_strncmp(argv[1], "-d", 2) == 0) || (ft_strncmp(argv[1],

@@ -34,7 +34,7 @@ static bool	check_redir_validity(t_shell *shell)
 	tmp = shell->cmds;
 	while (tmp)
 	{
-		if (tmp->fd_struct)
+		if (tmp->fd_struct != NULL)
 		{
 			if (tmp->fd_struct->file == NULL)
 			{

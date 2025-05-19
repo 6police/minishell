@@ -1,94 +1,45 @@
 #include "ft_run.h"
 
-void	pipe_builtin(t_cmd *cmd, t_shell *shell)
+void wait_commands(t_shell *shell)
 {
-	if (!shell->is_pipe)
-	{
-		cmd->builtin_func(cmd, shell);
-		return ;
-	}
-	cmd->pid = fork();
-	if (cmd->pid == -1)
-	{
-		ft_putstr_fd("minishell: fork failed\n", STDERR_FILENO);
-		shell->exit_value = 1;
-		return ;
-	}
-	if (cmd->pid == 0)
-	{
-		shell->is_child = true;
-
-		
-		// if (setup_redirections(cmd, shell) == 1)
-		// 	clean_exit(&shell);
-		
-		manage_pipes(cmd, shell);
-		//close_pipes(cmd);
-		
-		
-		// Builtin execution
-		cmd->builtin_func(cmd, shell);
-		clean_exit(&shell);
-	}
-	// In parent process, after forking
-	else
-	{
-		if (cmd->prev && !cmd->next)
-			close(cmd->prev->fd[0]);
-		if (cmd->next && !cmd->prev)
-			close(cmd->fd[1]);
-	}
-}
-
-
-void	run_commands(t_shell *shell)
-{
-	t_cmd	*tmp;
+	t_cmd *tmp;
 
 	if (!shell->cmds)
 		return ;
-	
 
-	
-	// Setup pipes
 	tmp = shell->cmds;
-	
 	while (tmp)
 	{
-		if (setup_redirections(tmp, shell) == 1)
-		{
-			shell->exit_value = 1;
-			return ;
-		}
+		if (tmp->pid > 0)
+			waitpid(tmp->pid, &shell->exit_value, 0);
 		tmp = tmp->next;
 	}
+}
+
+void	run_commands(t_shell *shell)
+{
+	t_cmd *tmp;
+
+	if (!shell->cmds)
+		return ;
 
 	tmp = shell->cmds;
 	if (shell->is_pipe)
 		if (make_pipes(tmp, shell) == 1)
 			return ;
-
-	// Launch commands
-	tmp = shell->cmds;
 	while (tmp)
 	{
 		if (tmp->is_valid)
-			pipe_builtin(tmp, shell);
+			processor(tmp, shell);
 		else
 		{
-			ft_printf_fd(STDERR_FILENO, "%s: command not found\n", tmp->args[0]);
+			ft_printf_fd(STDERR_FILENO, "%s command: not found\n", tmp->name);
 			shell->exit_value = 127;
 		}
 		tmp = tmp->next;
 	}
-	// Wait for all children
-	tmp = shell->cmds;
-	while (tmp)
-	{	if (tmp->pid > 0)
-			waitpid(tmp->pid, NULL, 0);
-		tmp = tmp->next;
-	}
-	// Close pipes
-	tmp = shell->cmds;
-	close_pipes(tmp);
+	if (shell->is_pipe)
+		close_pipes(shell->cmds);
+	if (shell->wait)
+	wait_commands(shell);
 }

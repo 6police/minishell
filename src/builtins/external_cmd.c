@@ -12,56 +12,55 @@ static char		**convert_env_to_array(t_env *env);
 void	execute_external(t_cmd *cmd, t_shell *shell)
 {
 	char	**envp;
-	int		status;
+	// int		status;
 
 	envp = convert_env_to_array(shell->env);
 	if (!envp)
 	{
-		ft_printf_fd(cmd->fd[2], "minishell: malloc failed\n");
+		ft_printf_fd(STDERR_FILENO, "minishell: malloc failed\n");
 		//shell->exit_value = 1; ?? confirmar
 		return ;
 	}
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, SIG_IGN);
-	cmd->pid = fork();
-	if (cmd->pid == 0)
+	// cmd->pid = fork();
+	// if (cmd->pid == 0)
+	// {
+	// 	shell->is_child = true;
+	// 	signal(SIGQUIT, SIG_DFL);
+	// 	signal(SIGINT, SIG_DFL);
+	if (execve(cmd->path, cmd->args, envp) == -1)
 	{
-		shell->is_child = true;
-		signal(SIGQUIT, SIG_DFL);
-		signal(SIGINT, SIG_DFL);
-		if (execve(cmd->path, cmd->args, envp) == -1)
-		{
 			if (errno == ENOENT)
 			{
-				ft_printf_fd(cmd->fd[2], "minishell: command not found: %s\n", cmd->name);
+				ft_printf_fd(STDERR_FILENO, "minishell: command not found: %s\n", cmd->name);
 				exit(127); // or should i exit(127);? shell->exit_value = 127;
 			}
 			else
 			{
 				perror("Aii nu cu nao\n");
-				exit(126); // or should i exit(126);? shell->exit_value = 126;
+				shell->exit_value = 126; // or should i exit(126);?
 			}
 		}
-	}
-	else if (cmd->pid < 0)
-	{
-		ft_printf_fd(cmd->fd[2], "minishell: fork failed\n");
-		shell->exit_value = 1;
-	}
-	else
-	{
-		waitpid(cmd->pid, &status, 0);
-		setup_signals();
-		if (WIFSIGNALED(status))
-		{
-			if (WTERMSIG(status) == SIGQUIT)
-				ft_printf_fd(cmd->fd[2], "Quit (core dumped)\n");
-			shell->exit_value = 128 + WTERMSIG(status);
-		}
-		else if (WIFEXITED(status))
-			shell->exit_value = WEXITSTATUS(status);
-	
-	}
+
+	// else if (cmd->pid < 0)
+	// {
+	// 	ft_printf_fd(cmd->fd[2], "minishell: fork failed\n");
+	// 	shell->exit_value = 1;
+	// }
+	// else
+	// {
+	// 	waitpid(cmd->pid, &status, 0);
+	// 	setup_signals();
+	// 	if (WIFSIGNALED(status))
+	// 	{
+	// 		if (WTERMSIG(status) == SIGQUIT)
+	// 			ft_printf_fd(cmd->fd[2], "Quit (core dumped)\n");
+	// 		shell->exit_value = 128 + WTERMSIG(status);
+	// 	}
+	// 	else if (WIFEXITED(status))
+	// 		shell->exit_value = WEXITSTATUS(status);
+	// }
 	free_env_array(envp);
 }
 

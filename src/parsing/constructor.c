@@ -50,9 +50,11 @@ t_cmd	*init_cmd(char *name, char **args)
 	cmd->is_builtin = false;
 	cmd->next = NULL;
 	cmd->prev = NULL;
-	cmd->fd[0] = STDIN_FILENO;
-	cmd->fd[1] = STDOUT_FILENO;
-	cmd->fd[2] = STDERR_FILENO;
+	cmd->fd_pipe[0] = -1;
+	cmd->fd_pipe[1] = -1;
+	cmd->fd[0] = -1;
+	cmd->fd[1] = -1;
+	cmd->fd[2] = -1;
 	cmd->fd_struct = NULL;
 	cmd->redirs = NULL;
 	cmd->is_valid = false;
@@ -333,7 +335,6 @@ t_cmd	*build_cmds(t_shell *shell)
 		cmd->line = ft_strdup(aux);
 		free_split(args);
 		dollar_sign(cmd, shell);
-
 		ft_new_wildcard(cmd, shell);
 		redir_check = check_for_redirs(cmd->line);
 		if (redir_check > 0)
