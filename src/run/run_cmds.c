@@ -33,7 +33,7 @@ void	run_commands(t_shell *shell)
 			processor(tmp, shell);
 		else
 		{
-			ft_printf_fd(STDERR_FILENO, "%s command: not found\n", tmp->name);
+			ft_printf_fd(STDERR_FILENO, "%s command: not found\n", tmp->args[0]);
 			shell->exit_value = 127;
 		}
 		tmp = tmp->next;

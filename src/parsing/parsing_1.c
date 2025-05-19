@@ -63,9 +63,20 @@ static void	invalidate_cmds(t_shell *shell)
 void	parse(t_shell *shell)
 {
 	int	sub;
+	int token_count;
 
+	token_count = 0;
 	sub = 7; // the character to replace the separator
 	shell->tokens = parse_line(shell->line, shell->separators[0], sub);
+	while( shell->tokens && shell->tokens[token_count])
+		token_count++;
+	if (token_count >= MAX_PIPES)
+	{
+		ft_printf_fd(STDERR_FILENO, "minishell: too many pipes (max %d)\n", MAX_PIPES);
+		free_tokens(shell->tokens);
+		shell->tokens = NULL;
+		return ;
+	}
 	if (!shell->tokens)
 		return ;
 	build_cmds(shell);

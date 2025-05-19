@@ -28,13 +28,18 @@ void	run_shell_debug(t_shell *shell)
 	}
 }
 
-
 void	run_shell(t_shell *shell)
 {
 	while (1)
 	{
 		// read the input
 		shell->line = readline(PROMPT);
+		if (shell->line && ft_strlen(shell->line) > MAX_LINE_LENGTH)
+		{
+			ft_printf_fd(STDERR_FILENO, "minishell: input too long (max %d chars)\n", MAX_LINE_LENGTH);
+			free(shell->line);
+			continue;
+		}
 		if (!shell->line)
 			exit_shell(&(t_cmd){0}, shell);
 		else
