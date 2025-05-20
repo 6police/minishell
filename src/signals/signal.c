@@ -11,7 +11,7 @@ void	setup_signals(void)
 	sa.sa_sigaction = siginfo_handler;
 	sigemptyset(&sa.sa_mask);
 	sigaction(SIGINT, &sa, NULL); // Handle SIGINT = ctrl-C
-	//sigaction(SIGQUIT, &sa, NULL);
+	//sigaction(SIGKILL, &sa, NULL); // Handle SIGKILL
 }
 
 void	siginfo_handler(int sig, siginfo_t *info, void *context)
@@ -20,11 +20,6 @@ void	siginfo_handler(int sig, siginfo_t *info, void *context)
 	(void)context;
 	if (!info)
 		return ;
-/*	if (sig == SIGQUIT)
-	{
-		rl_on_new_line();
-		rl_redisplay();
-	}*/
 	if (sig == SIGINT)
 	{
 		new_prompt(); // ctrl-C - Print new prompt
