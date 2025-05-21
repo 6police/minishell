@@ -22,7 +22,7 @@ void	shelling(t_shell *shell);
 void    run_commands(t_shell *shell);
 
 // wrapper for executing commands
-void eggxecutor(t_cmd *cmd, t_shell *shell, int flag);
+void eggxecutor(t_cmd *cmd, t_shell *shell);
 
 // function to run a command with pipes
 // void run_pipe(t_cmd *cmd, t_shell *shell);

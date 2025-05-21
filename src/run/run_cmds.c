@@ -13,27 +13,21 @@ void wait_commands(t_shell *shell)
 	{
 		if (tmp->pid > 0)
 		{
-			printf("Waiting for pid: %d\n", tmp->pid);
 			waitpid(tmp->pid, &status, 0);
 			if (WIFSIGNALED(status))
 			{
-				printf("Signal received: %d\n", WTERMSIG(status));
-				if (WTERMSIG(status) == SIGQUIT)
-					ft_printf_fd(STDERR_FILENO, "Quit (core dumped)\n");
+				if (WTERMSIG(status) == SIGINT)
+					ft_putstr_fd("\n", STDERR_FILENO);
+				else if (WTERMSIG(status) == SIGQUIT)
+					ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
 				shell->exit_value = 128 + WTERMSIG(status);
-				break ;
 			}
 			else if (WIFEXITED(status))
-			{
-				printf("Exit status: %d\n", WEXITSTATUS(status));
 				shell->exit_value = WEXITSTATUS(status);
-				break ;
-			}
 		}
-		printf("alguma coisa\n");
 		tmp = tmp->next;
 	}
-	setup_signals();
+	setup_signals(shell);
 }
 
 void	run_commands(t_shell *shell)

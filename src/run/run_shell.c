@@ -56,7 +56,7 @@ void	run_shell(t_shell *shell)
 	
 void	shelling(t_shell *shell)
 {
-	setup_signals();
+	setup_signals(shell);
 	if (shell->debug)
 		run_shell_debug(shell);
 	else
