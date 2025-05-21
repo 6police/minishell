@@ -51,7 +51,7 @@ static void	change_dir(char *path, t_shell *shell, t_cmd *cmd)
 	{
 		if (!oldpwd || !oldpwd->value || oldpwd->value[0] == '\0')
 		{
-			ft_printf_fd(shell->fd[2], "minishell: cd: OLDPWD not set\n");
+			ft_printf_fd(STDERR_FILENO, "minishell: cd: OLDPWD not set\n");
 			shell->exit_value = 1;
 			return;
 		}
