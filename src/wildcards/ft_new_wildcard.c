@@ -1,15 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_new_wildcard.c                                  :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/16 17:04:22 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/05/16 19:54:25 by nneves-a         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
+// ft_wildcard.c
 #include "ft_wildcard.h"
 #include <dirent.h>
 #include <stdlib.h>
@@ -17,397 +6,201 @@
 #include <ctype.h>
 #include <stdbool.h>
 
-// Helpers
-static bool has_wildcard(char *arg)
-{
-    int i;
+// --- Helpers from your original code ----------------------------------------
 
-    i = 0;
-    while (arg[i])
-    {
+static bool has_wildcard(const char *arg) {
+    for (int i = 0; arg[i]; i++)
         if (arg[i] == '*')
-            return (true);
-        i++;
-    }
-    return (false);
+            return true;
+    return false;
 }
 
-static bool is_there_quotes(char *str)
-{
-    int i;
-
-    i = 0;
-    while (str[i])
-    {
+static bool is_there_quotes(const char *str) {
+    for (int i = 0; str[i]; i++)
         if (str[i] == '"' || str[i] == '\'')
-            return (true);
-        i++;
-    }
-    return (false);
+            return true;
+    return false;
 }
 
-// Split argument into directory and pattern
-static void split_dir_pattern(const char *arg, char **dirp, char **patp)
-{
-    int i;
-
-    i = (int)strlen(arg) - 1;
-    while (i >= 0 && arg[i] != '/')
-        i--;
-    if (i < 0)
-    {
-        *dirp = strdup(".");
-        *patp = strdup(arg);
-    }
-    else
-    {
-        *dirp = strndup(arg, i);
-        *patp = strdup(arg + i + 1);
-    }
+static int tolower_ci(int c) {
+    if (c >= 'A' && c <= 'Z') return c + 32;
+    return c;
 }
 
-// Case-sensitive substring offset
-static int strstr_off(const char *hay, const char *ndl)
-{
-    const char *p;
-
-    p = strstr(hay, ndl);
-    if (!p)
-        return (-1);
-    return ((int)(p - hay));
-}
-
-// Free split array
-static void split_free(char **spl)
-{
-    int i;
-
-    i = 0;
-    while (spl[i])
-    {
-        free(spl[i]);
-        i++;
-    }
-    free(spl);
-}
-
-// Remove empty tokens
-static void filter_chunks(char **chunks)
-{
-    int ri;
-    int wi;
-
-    ri = 0;
-    wi = 0;
-    while (chunks[ri])
-    {
-        if (chunks[ri][0])
-            chunks[wi++] = chunks[ri];
-        else
-            free(chunks[ri]);
-        ri++;
-    }
-    chunks[wi] = NULL;
-}
-
-// Case-insensitive compare helper for sort
-static int tolower_ci(int c)
-{
-    if (c >= 'A' && c <= 'Z')
-        return (c + 32);
-    return (c);
-}
-
-static int strcmp_dot(const char *s1, const char *s2)
-{
-    int c1;
-    int c2;
-
-    while (*s1 && *s2)
-    {
+static int strcmp_dot(const char *s1, const char *s2) {
+    int c1, c2;
+    while (*s1 && *s2) {
         c1 = tolower_ci((unsigned char)*s1);
         c2 = tolower_ci((unsigned char)*s2);
-        if (c1 != c2)
-        {
-            if (c1 == '.')
-                return (1);
-            if (c2 == '.')
-                return (-1);
+        if (c1 != c2) {
+            if (c1 == '.') return  1;
+            if (c2 == '.') return -1;
             return (c1 - c2);
         }
-        s1++;
-        s2++;
+        s1++; s2++;
     }
     return (tolower_ci((unsigned char)*s1) 
           - tolower_ci((unsigned char)*s2));
 }
 
-// Sort wildcard matches
-static void sort_wildcard(t_wildcard *wc)
-{
-    int i;
-    int j;
-    char *tmp;
-
-    i = 0;
-    while (i + 1 < wc->nbr_of_files)
-    {
-        j = i + 1;
-        while (j < wc->nbr_of_files)
-        {
-            if (strcmp_dot(wc->wildcard[i], wc->wildcard[j]) > 0)
-            {
-                tmp = wc->wildcard[i];
-                wc->wildcard[i] = wc->wildcard[j];
-                wc->wildcard[j] = tmp;
+static void sort_strs(char **arr, int n) {
+    for (int i = 0; i + 1 < n; i++)
+        for (int j = i + 1; j < n; j++)
+            if (strcmp_dot(arr[i], arr[j]) > 0) {
+                char *t = arr[i];
+                arr[i] = arr[j];
+                arr[j] = t;
             }
-            j++;
-        }
-        i++;
-    }
 }
 
-// Check if a filename matches chunks with anchors
-static bool match_chunks(const char *name,
-    char **chunks, bool must_start, bool must_end)
-{
-    int pos;
-    int off;
-    int nch;
-    int i;
-    size_t len_name;
-    size_t len_chunk;
-
-    pos = 0;
-    nch = 0;
-    while (chunks[nch])
-        nch++;
-    i = 0;
-    if (must_start)
-    {
-        len_chunk = strlen(chunks[0]);
-        if (strncmp(name, chunks[0], len_chunk) != 0)
-            return (false);
-        pos = (int)len_chunk;
-        i = 1;
-    }
-    while (i < nch)
-    {
-        if (must_end && i == nch - 1)
-            break;
-        off = strstr_off(name + pos, chunks[i]);
-        if (off < 0)
-            return (false);
-        pos += off + (int)strlen(chunks[i]);
-        i++;
-    }
-    if (must_end)
-    {
-        len_chunk = strlen(chunks[nch - 1]);
-        len_name = strlen(name);
-        if (len_name < len_chunk)
-            return (false);
-        if (strncmp(name + len_name - len_chunk,
-            chunks[nch - 1], len_chunk) != 0)
-            return (false);
-    }
-    return (true);
+// split path by '/', returns NULL-terminated array
+static char **split_path(const char *path) {
+    return ft_split(path, '/');
 }
 
-// Expand '*' or '**' in directory
-static void expand_all(char **argp, const char *dirpath)
-{
-    t_wildcard wc;
-    DIR *dir;
-    struct dirent *entry;
-    char *out;
-    char *sep;
-    int idx;
-
-    wc.nbr_of_files = 0;
-    dir = opendir(dirpath);
-    if (!dir)
-        return;
-    while ((entry = readdir(dir)))
-        if (entry->d_name[0] != '.')
-            wc.nbr_of_files++;
-    closedir(dir);
-    if (wc.nbr_of_files == 0)
-        return;
-
-    wc.wildcard = malloc(sizeof(char *) * wc.nbr_of_files);
-    if (!wc.wildcard)
-        return;
-    dir = opendir(dirpath);
-    if (!dir)
-    {
-        free(wc.wildcard);
-        return;
-    }
-    idx = 0;
-    while ((entry = readdir(dir)))
-    {
-        if (entry->d_name[0] != '.')
-            wc.wildcard[idx++] = strdup(entry->d_name);
-    }
-    closedir(dir);
-
-    sort_wildcard(&wc);
-
-    free(*argp);
-    out = NULL;
-    idx = 0;
-    while (idx < wc.nbr_of_files)
-    {
-        char *name = wc.wildcard[idx];
-        char *full;
-        if (strcmp(dirpath, ".") == 0)
-            full = strdup(name);
-        else
-        {
-            sep = ft_strjoin(dirpath, "/");
-            full = ft_strjoin(sep, name);
-            free(sep);
-        }
-        if (!out)
-            out = strdup(full);
-        else
-        {
-            char *tmp = ft_strjoin(out, " ");
-            free(out);
-            out = ft_strjoin(tmp, full);
-            free(tmp);
-        }
-        free(full);
-        free(name);
-        idx++;
-    }
-    free(wc.wildcard);
-    *argp = out;
+static void free_strarr(char **a) {
+    for (int i = 0; a[i]; i++)
+        free(a[i]);
+    free(a);
 }
 
-// Main wildcard expander
-static void wilding(char **argp)
-{
-    char            *dirpath;
-    char            *pat;
-    bool            must_start;
-    bool            must_end;
-    char            **chunks;
-    DIR             *dir;
-    struct dirent   *entry;
-    t_wildcard      wc;
-    int             count;
-    char            *out;
-    char            *sep;
-    char            *full;
-
-    split_dir_pattern(*argp, &dirpath, &pat);
-    must_start = (pat[0] != '*');
-    must_end = (pat[strlen(pat) - 1] != '*');
-    if (strspn(pat, "*") == strlen(pat))
-    {
-        expand_all(argp, dirpath);
-        free(pat);
-        free(dirpath);
-        return;
-    }
-    chunks = ft_split(pat, '*');
-    free(pat);
-    if (!chunks)
-    {
-        free(dirpath);
-        return;
-    }
-    filter_chunks(chunks);
-
-    wc.nbr_of_files = 0;
-    dir = opendir(dirpath);
-    if (!dir)
-    {
-        split_free(chunks);
-        free(dirpath);
-        return;
-    }
-    while ((entry = readdir(dir)))
-    {
-        if (entry->d_name[0] == '.')
-            continue;
-        if (match_chunks(entry->d_name,
-            chunks, must_start, must_end))
-            wc.nbr_of_files++;
-    }
-    closedir(dir);
-    if (wc.nbr_of_files == 0)
-    {
-        split_free(chunks);
-        free(dirpath);
-        return;
-    }
-    wc.wildcard = malloc(sizeof(char *) * wc.nbr_of_files);
-    if (!wc.wildcard)
-    {
-        split_free(chunks);
-        free(dirpath);
-        return;
-    }
-    count = 0;
-    dir = opendir(dirpath);
-    while ((entry = readdir(dir)))
-    {
-        if (entry->d_name[0] == '.')
-            continue;
-        if (match_chunks(entry->d_name,
-            chunks, must_start, must_end))
-            wc.wildcard[count++] = strdup(entry->d_name);
-    }
-    closedir(dir);
-
-    sort_wildcard(&wc);
-
-    free(*argp);
-    out = NULL;
-    count = 0;
-    while (count < wc.nbr_of_files)
-    {
-        char *name = wc.wildcard[count];
-        if (strcmp(dirpath, ".") == 0)
-            full = strdup(name);
+// test if `name` matches wildcard chunk `pat`
+static bool match_pat(const char *name, const char *pat) {
+    bool must_start = pat[0] != '*';
+    bool must_end   = pat[strlen(pat) - 1] != '*';
+    char **chunks   = ft_split(pat, '*');
+    if (!chunks) return false;
+    int wi = 0;
+    for (int ri = 0; chunks[ri]; ri++) {
+        if (chunks[ri][0])
+            chunks[wi++] = chunks[ri];
         else
-        {
-            sep = ft_strjoin(dirpath, "/");
-            full = ft_strjoin(sep, name);
-            free(sep);
-        }
-        if (!out)
-            out = strdup(full);
-        else
-        {
-            char *tmp = ft_strjoin(out, " ");
-            free(out);
-            out = ft_strjoin(tmp, full);
-            free(tmp);
-        }
-        free(full);
-        free(name);
-        count++;
+            free(chunks[ri]);
     }
-    free(wc.wildcard);
-    *argp = out;
-    split_free(chunks);
-    free(dirpath);
+    chunks[wi] = NULL;
+    int nch = wi;
+    int pos = 0;
+    if (must_start && nch > 0) {
+        int len = strlen(chunks[0]);
+        if (strncmp(name, chunks[0], len) != 0) {
+            free_strarr(chunks);
+            return false;
+        }
+        pos = len;
+    }
+    for (int i = must_start ? 1 : 0; i < nch - (must_end ? 1 : 0); i++) {
+        char *p = strstr(name + pos, chunks[i]);
+        if (!p) {
+            free_strarr(chunks);
+            return false;
+        }
+        pos = (int)(p - name) + strlen(chunks[i]);
+    }
+    if (must_end && nch > 0) {
+        int len = strlen(chunks[nch - 1]);
+        int namelen = strlen(name);
+        if (namelen < len ||
+            strncmp(name + namelen - len, chunks[nch - 1], len) != 0) {
+            free_strarr(chunks);
+            return false;
+        }
+    }
+    free_strarr(chunks);
+    return true;
 }
 
-void ft_new_wildcard(t_cmd *cmd, t_shell *shell)
-{
-    int i;
+// join two path segments with '/'
+static char *join_path(const char *a, const char *b) {
+    if (!a || a[0] == '\0')
+        return strdup(b);
+    char *tmp = ft_strjoin(a, "/");
+    char *res = ft_strjoin(tmp, b);
+    free(tmp);
+    return res;
+}
 
+// --- Recursive expansion -----------------------------------------------------
+
+typedef struct {
+    char **arr;
+    int    cap;
+    int    len;
+} t_collect;
+
+static void collect_init(t_collect *c) {
+    c->cap = 16;
+    c->len = 0;
+    c->arr = malloc(sizeof(char*) * c->cap);
+}
+
+static void collect_add(t_collect *c, char *s) {
+    if (c->len + 1 >= c->cap) {
+        c->cap *= 2;
+        c->arr = realloc(c->arr, sizeof(char*) * c->cap);
+    }
+    c->arr[c->len++] = s;
+}
+
+static void expand_recursive(char **components, int level,
+                             const char *base, t_collect *out)
+{
+    if (!components[level]) {
+        collect_add(out, strdup(base));
+        return;
+    }
+
+    DIR *d = opendir(base[0] ? base : ".");
+    if (!d) return;
+
+    struct dirent *e;
+    bool is_last = components[level + 1] == NULL;
+    while ((e = readdir(d))) {
+        if (e->d_name[0] == '.') continue;
+        if (!match_pat(e->d_name, components[level])) continue;
+        char *next = join_path(base, e->d_name);
+        if (is_last) {
+            collect_add(out, next);
+        } else {
+            expand_recursive(components, level + 1, next, out);
+            free(next);
+        }
+    }
+    closedir(d);
+}
+
+// --- Public interface -------------------------------------------------------
+
+void ft_new_wildcard(t_cmd *cmd, t_shell *shell) {
     (void)shell;
-    i = 0;
-    while (cmd->args[i])
-    {
-        if (has_wildcard(cmd->args[i]) && !is_there_quotes(cmd->args[i]))
-            wilding(&cmd->args[i]);
-        i++;
+    for (int i = 0; cmd->args[i]; i++) {
+        char *arg = cmd->args[i];
+        if (!has_wildcard(arg) || is_there_quotes(arg))
+            continue;
+
+        char **comps = split_path(arg);
+        if (!comps) continue;
+
+        t_collect coll;
+        collect_init(&coll);
+        expand_recursive(comps, 0, "", &coll);
+
+        free_strarr(comps);
+        if (coll.len > 0) {
+            sort_strs(coll.arr, coll.len);
+
+            size_t total = 1;
+            for (int j = 0; j < coll.len; j++)
+                total += strlen(coll.arr[j]) + 1;
+            char *out = malloc(total);
+            out[0] = '\0';
+            for (int j = 0; j < coll.len; j++) {
+                strcat(out, coll.arr[j]);
+                if (j + 1 < coll.len) strcat(out, " ");
+                free(coll.arr[j]);
+            }
+            free(cmd->args[i]);
+            cmd->args[i] = out;
+        }
+        free(coll.arr);
     }
 }

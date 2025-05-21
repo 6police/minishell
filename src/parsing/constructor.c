@@ -340,7 +340,6 @@ static char	*set_name(char **args)
 	return (name);
 }
 
-
 static void built_in_handle(t_cmd *cmd, t_shell *shell, char **args)
 {
 	check_builtin(cmd);

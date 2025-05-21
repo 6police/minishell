@@ -3,6 +3,7 @@
 void wait_commands(t_shell *shell)
 {
 	t_cmd *tmp;
+	int status;
 
 	if (!shell->cmds)
 		return ;
@@ -11,9 +12,22 @@ void wait_commands(t_shell *shell)
 	while (tmp)
 	{
 		if (tmp->pid > 0)
-			waitpid(tmp->pid, &shell->exit_value, 0);
+		{
+			waitpid(tmp->pid, &status, 0);
+			if (WIFSIGNALED(status))
+			{
+				if (WTERMSIG(status) == SIGINT)
+					ft_putstr_fd("\n", STDERR_FILENO);
+				else if (WTERMSIG(status) == SIGQUIT)
+					ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
+				shell->exit_value = 128 + WTERMSIG(status);
+			}
+			else if (WIFEXITED(status))
+				shell->exit_value = WEXITSTATUS(status);
+		}
 		tmp = tmp->next;
 	}
+	setup_signals(shell);
 }
 
 void	run_commands(t_shell *shell)

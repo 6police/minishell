@@ -125,7 +125,7 @@ void	ft_handle_heredoc(t_fd *fd_struct, t_shell *shell)
 			shell->exit_value = 130;
 			// Optional: mark cmd as invalid to skip execution
 		}
-		setup_signals(); // Restore signal handling
+		setup_signals(shell); // Restore signal handling
 	}
 }
 
