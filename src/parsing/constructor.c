@@ -356,6 +356,7 @@ static void cmd_processor_a(t_cmd *cmd, t_shell *shell, int i)
 	redir_check = 0;
 	cmd->line = ft_strdup(shell->tokens[i]);
 	dollar_sign(cmd, shell);
+	ft_new_wildcard(cmd, shell);
 	redir_check = check_for_redirs(cmd->line);
 	if (redir_check > 0)
 	{
