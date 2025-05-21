@@ -42,6 +42,7 @@ void	check_redir(char *token, int *j)
 
 	c = 0;
 	i = *j;
+	//printf("check_redir\n");
 	while (token[i] != '\0')
 	{
 		if ((token[i] == '"' || token[i] == '\'') && !c)
@@ -88,6 +89,7 @@ char	**split_into_redirs(char *line)
 		while (line[j] == ' ')
 			j++;
 		check_redir(line, &j);
+
 		redirs[k] = ft_substr(line, i, j - i);
 		if (redirs[k] == NULL)
 		{
