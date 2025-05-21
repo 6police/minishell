@@ -47,7 +47,10 @@ t_cmd	*init_cmd(char *name, char **args)
 	t_cmd	*cmd;
 
 	cmd = ft_calloc(sizeof(t_cmd), 1);
-	cmd->name = ft_strdup(name);
+	if (name)
+		cmd->name = ft_strdup(name);
+	else
+		cmd->name = ft_strdup("KEKW");
 	cmd->args = args;
 	cmd->path = NULL;
 	cmd->is_builtin = false;
@@ -146,38 +149,77 @@ void	build_builtin(t_cmd *cmd, char **args)
 static bool	is_redir_noarg(char *str)
 {
 	int	i;
+	int c;
 
 	i = 0;
+	c = 0;
+
 	if (!str)
 		return (false);
 	while (str[i])
 	{
+		if ((str[i] == '"' || str[i] == '\'') && !c)
+			c = str[i];
 		while ((str[i] == '<' || str[i] == '>'))
 			i++;
-		if (str[i] == '\0' || str[i] == ' ')
+		if ((str[i] == '\0' || str[i] == ' ') && !c)
 			return (true);
-		if (str[i] != ' ' && str[i] != '\0')
+		if ((str[i] != ' ' && str[i] != '\0') && !c)
 			return (false);
 		i++;
 	}
 	return (false);
 }
 
+// static bool	is_redir(char *str)
+// {
+// 	int	i;
+// 	int c;
+
+// 	i = 0;
+// 	c = 0;
+
+// 	if (!str)
+// 		return (false);
+// 	while (str[i])
+// 	{
+// 		if ((str[i] == '"' || str[i] == '\'') && !c)
+// 			c = str[i];
+		
+// 		if (str[i] == '>' || str[i] == '<')
+// 			return (true);
+// 		i++;
+// 	}
+// 	return (false);
+// }
+
 static bool	is_redir(char *str)
 {
 	int	i;
+	char	quote;
 
-	i = 0;
 	if (!str)
 		return (false);
+	quote = 0;
+	i = 0;
 	while (str[i])
 	{
-		if (str[i] == '>' || str[i] == '<')
+		if ((str[i] == '\'' || str[i] == '"'))
+		{
+			if (quote == 0)
+				quote = str[i];
+			else if (quote == str[i])
+				quote = 0;
+		}
+		else if ((str[i] == '>' || str[i] == '<') && quote == 0)
+		{
 			return (true);
+		}
 		i++;
 	}
 	return (false);
 }
+
 
 static char	**ft_removequotes(char **args)
 {
@@ -271,15 +313,17 @@ static char	*set_name(char **args)
 	str = NULL;
 	if (!args)
 		return (NULL);
+	if (!args[0])
+		return (NULL);
 	redir_flag = check_for_redirs(args[0]);
 	if (redir_flag > 0)
 	{
-		while (args[i])
+		while (args[i] != NULL)
 		{
 			j = 0;
-			while (args[i][0] != '\0' && (args[i][0] == '<' || args[i][0] == '>') && ft_strlen(args[i]) <= 2)
+			while (args[i][0] != '\0' && (args[i][0] == '<' || args[i][0] == '>') && ft_strlen(args[i]) <= 1)
 				i++;
-			if (args[i][j] != '\0' && ft_strlen(args[i]) > 2)
+			if (args[i][j] != '\0' && ft_strlen(args[i]) >= 2)
 			{
 				while (args[i][j] == '<' || args[i][j] == '>')
 					j++;
@@ -295,6 +339,7 @@ static char	*set_name(char **args)
 		str = ft_strdup(args[0]);
 	if (str == NULL)
 		return (NULL);
+	//printf("PASSOU !!!!! cmd->name: %s\n cmd->args: %s\n", str, args[1]);
 	name = remove_all_quotes(str);
 	return (name);
 }
@@ -395,4 +440,3 @@ t_cmd *build_cmds(t_shell *shell)
 		return (ft_printf_fd(2, "Error: No commands found.\n"), NULL);
 	return (head_cmd);
 }
-

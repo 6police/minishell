@@ -126,10 +126,10 @@ void	free_tokens(char **tokens)
 {
 	int	i;
 
-	if (!tokens)
+	if (!tokens || !(*tokens))
 		return ;
 	i = 0;
-	while (tokens[i])
+	while (tokens[i] != NULL)
 	{
 		free(tokens[i]);
 		i++;

@@ -41,5 +41,5 @@ void	run_commands(t_shell *shell)
 	if (shell->is_pipe)
 		close_pipes(shell->cmds);
 	if (shell->wait)
-	wait_commands(shell);
+		wait_commands(shell);
 }
