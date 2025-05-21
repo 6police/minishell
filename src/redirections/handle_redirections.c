@@ -43,7 +43,7 @@ static int handle_heredoc(t_fd *redir, t_shell *shell)
 	redir->fd = open(HERE_DOC, O_RDONLY);
 	if (redir->fd == -1)
 	{
-		ft_printf_fd(STDERR_FILENO, "minishell: %s: No such file or directory\n", redir->file);
+		//ft_printf_fd(STDERR_FILENO, "minishell: %s: No such file or directory\n", redir->file);
 		shell->exit_value = 1;
 		return (1);
 	}
@@ -127,6 +127,7 @@ int setup_redirections(t_cmd *cmd, t_shell *shell)
 	if (last_in && last_in->fd != -1)
 	{
 		cmd->fd[0] = last_in->fd;
+		
 		if (dup2(last_in->fd, STDIN_FILENO) == -1)
 		{
 			perror("dup2 input");
@@ -138,6 +139,8 @@ int setup_redirections(t_cmd *cmd, t_shell *shell)
 	if (last_out && last_out->fd != -1)
 	{
 		cmd->fd[1] = last_out->fd;
+		if (shell->wait)
+			return (0);
 		if (dup2(last_out->fd, STDOUT_FILENO) == -1)
 		{
 			perror("dup2 output");

@@ -18,6 +18,9 @@
 
 # define REDIR_FAILURE "minishell: syntax error near unexpected token"
 
+# define MAX_PIPES 100
+# define MAX_LINE_LENGTH 4096
+
 typedef struct env		t_env;
 typedef struct shell	t_shell;
 typedef struct cmd t_cmd; // Define a type for the function pointer

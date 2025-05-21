@@ -20,6 +20,13 @@ static void	print_tokens(t_shell *shell)
 	int	i;
 
 	i = 0;
+	if (!shell || !shell->tokens)
+		return ;
+	if (shell->tokens[0] == NULL)
+	{
+		ft_printf(RED "No tokens found\n" RESET);
+		return ;
+	}
 	while (shell->tokens[i])
 	{
 		ft_printf(GREEN "token" RESET " [ " RED "%d" RESET " ] --> %s\n", i,
@@ -59,13 +66,64 @@ static void	invalidate_cmds(t_shell *shell)
 	}
 }
 
+bool static invalidate_tokens(char **tokens)
+{
+	int i;
+	int j;
+	
+	i= 0;
+	if (!tokens || !(*tokens))
+		return (true);
+	while (tokens[i])
+	{
+		j = 0;
+		if (tokens[i][0] == '\0')
+		{
+			free_tokens(tokens);
+			return (true);
+		}
+		while (tokens[i][j])
+		{
+			if (tokens[i][j] == ' ')
+				j++;
+			else
+				break ;
+		}
+		i++;
+	}
+	if (i == 0)
+	{
+		free_tokens(tokens);
+		return (true);
+	}
+	return (false);
+}
+
 // parse the line according to priority
 void	parse(t_shell *shell)
 {
 	int	sub;
+	int token_count;
 
+	token_count = 0;
 	sub = 7; // the character to replace the separator
 	shell->tokens = parse_line(shell->line, shell->separators[0], sub);
+	if(invalidate_tokens(shell->tokens))
+	{
+		free_tokens(shell->tokens);
+		shell->tokens = NULL;
+		ft_printf_fd(STDERR_FILENO, "minishell: syntax error\n");
+		return ;
+	}
+	while( shell->tokens && shell->tokens[token_count])
+		token_count++;
+	if (token_count >= MAX_PIPES)
+	{
+		ft_printf_fd(STDERR_FILENO, "minishell: too many pipes (max %d)\n", MAX_PIPES);
+		free_tokens(shell->tokens);
+		shell->tokens = NULL;
+		return ;
+	}
 	if (!shell->tokens)
 		return ;
 	build_cmds(shell);
