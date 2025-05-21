@@ -27,8 +27,8 @@ void run_pipe(t_cmd *cmd, t_shell *shell)
     }
     if (cmd->pid == 0)
     {
-        eggxecutor(cmd, shell, 1);
         manage_pipes(cmd, shell);
+        eggxecutor(cmd, shell, 1);
         close_pipes(shell->cmds);
         cmd->builtin_func(cmd, shell);
         clean_exit(&shell);
@@ -93,6 +93,9 @@ void run_no_pipe(t_cmd *cmd, t_shell *shell)
 
 void processor(t_cmd *cmd, t_shell *shell)
 {
+    t_fd *tmp;
+
+    tmp = NULL;
     if (!cmd || !shell)
         return ;
 
@@ -100,6 +103,28 @@ void processor(t_cmd *cmd, t_shell *shell)
         run_pipe(cmd, shell);
     else
         run_no_pipe(cmd, shell);
+
+    if (cmd->fd_struct)
+	{
+        // Finally, close everything (but NOT STDIN/OUT) (this was in handle_redirections)
+	    tmp = cmd->fd_struct;
+	    while (tmp)
+	    {
+	    	if (tmp->fd != -1)
+	    	{
+            
+	    		close(tmp->fd);
+	    		tmp->fd = -1;
+	    		if (tmp->type == HERE_DOC_)
+	    		{
+	    			unlink(HERE_DOC);
+	    			free(tmp->file);
+	    			tmp->file = NULL;
+	    		}
+	    	}
+	    	tmp = tmp->next;
+	    }
+    }
 }
 
 

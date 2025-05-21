@@ -149,23 +149,24 @@ int setup_redirections(t_cmd *cmd, t_shell *shell)
 		}
 	}
 
-	// Finally, close everything (but NOT STDIN/OUT)
-	tmp = cmd->fd_struct;
-	while (tmp)
-	{
-		if (tmp->fd != -1)
-		{
-			close(tmp->fd);
-			tmp->fd = -1;
-			if (tmp->type == HERE_DOC_)
-			{
-				unlink(HERE_DOC);
-				free(tmp->file);
-				tmp->file = NULL;
-			}
-		}
-		tmp = tmp->next;
-	}
+	// // Finally, close everything (but NOT STDIN/OUT)
+	// tmp = cmd->fd_struct;
+	// while (tmp)
+	// {
+	// 	if (tmp->fd != -1)
+	// 	{
+			
+	// 		close(tmp->fd);
+	// 		tmp->fd = -1;
+	// 		if (tmp->type == HERE_DOC_)
+	// 		{
+	// 			unlink(HERE_DOC);
+	// 			free(tmp->file);
+	// 			tmp->file = NULL;
+	// 		}
+	// 	}
+	// 	tmp = tmp->next;
+	// }
 	return (0);
 }
 

@@ -339,7 +339,6 @@ static char	*set_name(char **args)
 		str = ft_strdup(args[0]);
 	if (str == NULL)
 		return (NULL);
-	//printf("PASSOU !!!!! cmd->name: %s\n cmd->args: %s\n", str, args[1]);
 	name = remove_all_quotes(str);
 	return (name);
 }
