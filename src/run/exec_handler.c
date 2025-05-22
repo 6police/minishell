@@ -2,21 +2,27 @@
 
 void eggxecutor (t_cmd *cmd, t_shell *shell, int flag)
 {
-    shell->is_child = true;
     if (flag == 1)
     {
+        shell->is_child = true;
         signal(SIGQUIT, SIG_DFL);
         signal(SIGINT, SIG_DFL);
+        if (cmd->fd[0] != -1)
+            dup2(cmd->fd[0], STDIN_FILENO);
+        if (cmd->fd[1] != -1)
+            dup2(cmd->fd[1], STDOUT_FILENO);
     }
-    if (setup_redirections(cmd, shell) == 1)
-        clean_exit(&shell);
+    (void)cmd;
+    // if (setup_redirections(cmd, shell) == 1)
+    //     clean_exit(&shell);
 }
 
 void run_pipe(t_cmd *cmd, t_shell *shell)
 {
     if (!cmd || !shell || !shell->is_pipe)
         return ;
-    
+    if (setup_redirections(cmd, shell) == 1)
+        clean_exit(&shell);
     shell->wait = true;
     cmd->pid = fork();
     if (cmd->pid == -1)
@@ -41,12 +47,8 @@ void run_no_pipe(t_cmd *cmd, t_shell *shell)
 {
     if (!cmd || !shell || shell->is_pipe)
         return ;
-    
-    int backup_stdin;
-    int backup_stdout;
-
-    backup_stdin = -1;
-    backup_stdout = -1;
+    if (setup_redirections(cmd, shell) == 1)
+        clean_exit(&shell);
     if (!cmd->is_builtin)
     {
         shell->wait = true;
@@ -66,27 +68,11 @@ void run_no_pipe(t_cmd *cmd, t_shell *shell)
     }
     else
     {
-        if (cmd->fd_struct)
-        {
-            backup_stdin = dup(STDIN_FILENO);
-			backup_stdout = dup(STDOUT_FILENO);
-
-        }
-		
         shell->wait = false;
         eggxecutor(cmd, shell, 0);
         shell->is_child = false;
         cmd->builtin_func(cmd, shell);
-        if (backup_stdin != -1)
-        {
-            dup2(backup_stdin, STDIN_FILENO);
-            close(backup_stdin);
-        }
-        if (backup_stdout != -1)
-        {
-            dup2(backup_stdout, STDOUT_FILENO);
-            close(backup_stdout);
-        }
+        
     }
 }
 
@@ -102,7 +88,7 @@ void processor(t_cmd *cmd, t_shell *shell)
     if (shell->is_pipe)
         run_pipe(cmd, shell);
     else
-        run_no_pipe(cmd, shell);
+        run_no_pipe(cmd, shell);//look after
 
     if (cmd->fd_struct)
 	{
@@ -127,70 +113,5 @@ void processor(t_cmd *cmd, t_shell *shell)
     }
 }
 
-
-
-
-
-
-// void	run_shell_debug(t_shell *shell)
-// {
-// 	while (1)
-// 	{	
-
-// 		shell->line = readline(PROMPT RED "DEBUG" RESET EMOJI_HAMMER);
-// 		if (!shell->line)
-// 		{
-// 			printf(EMOJI_BRAIN "exiting shell\n");
-// 			exit_shell(&(t_cmd){0}, shell);
-// 		}
-// 		else
-// 		{
-// 			add_history(shell->line);
-// 			parse(shell); // builds tokens and cmd structs
-
-// 			// Optional: track if redirs were added during parsing or setup
-// 			bool has_redirs = false;
-// 			t_cmd *tmp = shell->cmds;
-// 			while (tmp)
-// 			{
-// 				if (tmp->fd_struct)
-// 					has_redirs = true;
-// 				tmp = tmp->next;
-// 			}
-
-// 			int backup_stdin = -1;
-// 			int backup_stdout = -1;
-
-// 			if (has_redirs)
-// 			{
-// 				printf(RED"---/n---/n---/nHAS REDIRS/n---/n---/n"RESET);
-// 				backup_stdin = dup(STDIN_FILENO);
-// 				backup_stdout = dup(STDOUT_FILENO);
-// 			}
-
-// 			run_commands(shell);
-
-// 			if (backup_stdin != -1)
-// 			{
-// 				dup2(backup_stdin, STDIN_FILENO);
-// 				close(backup_stdin);
-// 			}
-// 			if (backup_stdout != -1)
-// 			{
-// 				dup2(backup_stdout, STDOUT_FILENO);
-// 				close(backup_stdout);
-// 			}
-
-// 			if (shell->tokens)
-// 			{
-// 				free_tokens(shell->tokens);
-// 				shell->tokens = NULL;
-// 			}
-// 			flush_commands(shell);
-// 			free(shell->line);
-// 			shell->is_pipe = false;
-// 		}
-// 	}
-// }
 
 

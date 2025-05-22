@@ -46,15 +46,11 @@ void manage_pipes(t_cmd *cmd, t_shell *shell)
 		return;
 
 	// If input redirection is set, use it
-	if (cmd->fd[0] != -1)
-		dup2(cmd->fd[0], STDIN_FILENO);
-	else if (cmd->prev)
+	if (cmd->prev)
 		dup2(cmd->prev->fd_pipe[0], STDIN_FILENO);
 
 	// If output redirection is set, use it
-	if (cmd->fd[1] != -1)
-		dup2(cmd->fd[1], STDOUT_FILENO);
-	else if (cmd->next)
+	if (cmd->next)
 		dup2(cmd->fd_pipe[1], STDOUT_FILENO);
 }
 

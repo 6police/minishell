@@ -1,12 +1,11 @@
 #include "ft_run.h"
 
-void wait_commands(t_shell *shell)
+void	wait_commands(t_shell *shell)
 {
-	t_cmd *tmp;
+	t_cmd	*tmp;
 
 	if (!shell->cmds)
 		return ;
-
 	tmp = shell->cmds;
 	while (tmp)
 	{
@@ -16,13 +15,20 @@ void wait_commands(t_shell *shell)
 	}
 }
 
+// static void close_reds(t_shell *shell){}
+
 void	run_commands(t_shell *shell)
 {
-	t_cmd *tmp;
+	t_cmd	*tmp;
+	// int		backup_stdin;
+	// int		backup_stdout;
 
+	// backup_stdin = -1;
+	// backup_stdout = -1;
+	// backup_stdin = dup(STDIN_FILENO);
+	// backup_stdout = dup(STDOUT_FILENO);
 	if (!shell->cmds)
 		return ;
-
 	tmp = shell->cmds;
 	if (shell->is_pipe)
 		if (make_pipes(tmp, shell) == 1)
@@ -33,7 +39,8 @@ void	run_commands(t_shell *shell)
 			processor(tmp, shell);
 		else
 		{
-			ft_printf_fd(STDERR_FILENO, "%s command: not found\n", tmp->args[0]);
+			ft_printf_fd(STDERR_FILENO, "%s command: not found\n",
+				tmp->args[0]);
 			shell->exit_value = 127;
 		}
 		tmp = tmp->next;
@@ -42,4 +49,8 @@ void	run_commands(t_shell *shell)
 		close_pipes(shell->cmds);
 	if (shell->wait)
 		wait_commands(shell);
+	// dup2(backup_stdin, STDIN_FILENO);
+	// close(backup_stdin);
+	// dup2(backup_stdout, STDOUT_FILENO);
+	// close(backup_stdout);
 }

@@ -1,9 +1,27 @@
 #include "redirections.h"
 
+/* void print_hex(char *str, int len)
+{
+	int i;
+
+	i = 0;
+	while (i < len)
+	{
+		write(1, &("0123456789abcdef"[str[i] / 16]), 1);
+		write(1, &("0123456789abcdef"[str[i] % 16]), 1);
+		write(1, " ", 1);
+		i++;
+	}
+	write(1, "\n", 1);
+
+} */
+
+
 
 static int handle_redir_out(t_fd *redir, t_shell *shell)
 {
 	redir->fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	//print_hex(redir->file, 3);
 	if (redir->fd == -1)
 	{
 		ft_printf_fd(STDERR_FILENO, "minishell: %s: No such file or directory\n", redir->file);
@@ -123,30 +141,30 @@ int setup_redirections(t_cmd *cmd, t_shell *shell)
 		tmp = tmp->next;
 	}
 
-	// Second, dup2 only last input/output
+	// // Second, dup2 only last input/output
 	if (last_in && last_in->fd != -1)
 	{
 		cmd->fd[0] = last_in->fd;
 		
-		if (dup2(last_in->fd, STDIN_FILENO) == -1)
-		{
-			perror("dup2 input");
-			shell->exit_value = 1;
-			return (1);
-		}
+	// 	if (dup2(last_in->fd, STDIN_FILENO) == -1)
+	// 	{
+	// 		perror("dup2 input");
+	// 		shell->exit_value = 1;
+	// 		return (1);
+	// 	}
 	}
 
 	if (last_out && last_out->fd != -1)
 	{
 		cmd->fd[1] = last_out->fd;
-		if (shell->wait)
-			return (0);
-		if (dup2(last_out->fd, STDOUT_FILENO) == -1)
-		{
-			perror("dup2 output");
-			shell->exit_value = 1;
-			return (1);
-		}
+	// 	if (shell->wait)
+	// 		return (0);
+	// 	if (dup2(last_out->fd, STDOUT_FILENO) == -1)
+	// 	{
+	// 		perror("dup2 output");
+	// 		shell->exit_value = 1;
+	// 		return (1);
+	// 	}
 	}
 
 	// // Finally, close everything (but NOT STDIN/OUT)
