@@ -3,7 +3,7 @@
 char	*handle_dollar(char *arg, t_shell *shell);
 static int	check_quotes_type(char *str);
 
-void	dollar_sign(t_cmd *cmd, t_shell *shell)
+void	dollar_sign(t_shell *shell, int n_toks)
 {
 	int	i;
 	int		quote_type;
@@ -12,18 +12,18 @@ void	dollar_sign(t_cmd *cmd, t_shell *shell)
 	i = 0;
 	quote_type = 0;
 	has_dollar = false;
-	while (cmd->args[i])
+	while (i < n_toks)
 	{
-		if (strstr(cmd->args[i], "$") != NULL) // mudar para ft_strstr
+		if (strstr(shell->tokens[i], "$") != NULL) // mudar para ft_strstr
 		{
-			quote_type = check_quotes_type(cmd->args[i]);
+			quote_type = check_quotes_type(shell->tokens[i]);
 			has_dollar = true;
 		}
 		if ((quote_type != 2) && has_dollar == true)
 		{
 			if (quote_type == 1)
-				cmd->args[i] = remove_quotes(cmd->args[i]);
-			cmd->args[i] = handle_dollar(cmd->args[i], shell);
+				shell->tokens[i] = remove_quotes(shell->tokens[i]);
+			shell->tokens[i] = handle_dollar(shell->tokens[i], shell);
 		}
 		i++;
 	}
