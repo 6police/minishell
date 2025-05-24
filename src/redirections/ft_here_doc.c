@@ -50,8 +50,8 @@ static char *ft_expand(char *line, t_shell *shell)
 		return (NULL);
 	}
 	tmp->args = &arg;
-	
-	dollar_sign(tmp, shell);
+	(void)shell; // shell is not used in this function, but kept for consistency
+	//dollar_sign(tmp, shell);
 		
 	expanded_line = ft_strdup(tmp->args[0]);
 	

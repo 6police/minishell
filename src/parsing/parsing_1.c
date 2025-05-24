@@ -66,7 +66,7 @@ static void	invalidate_cmds(t_shell *shell)
 	}
 }
 
-bool static invalidate_tokens(char **tokens)
+static bool invalidate_tokens(char **tokens)
 {
 	int i;
 	int j;
@@ -115,7 +115,7 @@ void	parse(t_shell *shell)
 		ft_printf_fd(STDERR_FILENO, "minishell: syntax error\n");
 		return ;
 	}
-	while( shell->tokens && shell->tokens[token_count])
+	while(shell->tokens && shell->tokens[token_count])
 		token_count++;
 	if (token_count >= MAX_PIPES)
 	{
@@ -126,6 +126,7 @@ void	parse(t_shell *shell)
 	}
 	if (!shell->tokens)
 		return ;
+	dollar_sign(shell, token_count);
 	build_cmds(shell);
 	if (shell->tokens[0] && shell->tokens[1])
 		shell->is_pipe = true;
