@@ -1,57 +1,30 @@
 #include "ft_env.h"
 
-static void swap_env_vars(t_env_var *a, t_env_var *b)
+static void	swap_env_vars(t_env_var *a, t_env_var *b)
 {
-    char *temp_key = a->key;
-    char *temp_value = a->value;
-    bool temp_exported = a->exported;
+	char	*temp_key;
+	char	*temp_value;
+	bool	temp_exported;
 
-    // Swap contents instead of pointers
-    a->key = b->key;
-    a->value = b->value;
-    a->exported = b->exported;
-
-    b->key = temp_key;
-    b->value = temp_value;
-    b->exported = temp_exported;
+	temp_key = a->key;
+	temp_value = a->value;
+	temp_exported = a->exported;
+	a->key = b->key;
+	a->value = b->value;
+	a->exported = b->exported;
+	b->key = temp_key;
+	b->value = temp_value;
+	b->exported = temp_exported;
 }
 
-// void sort_env_list(t_env *env)
-// {
-//     t_env_var *i;
-//     t_env_var *j;
-//     int swapped;
-
-//     if (!env || !env->head || !env->head->next)
-//         return;
-
-//     do
-//     {
-//         swapped = 0;
-//         i = env->head;
-        
-//         while (i->next)
-//         {
-//             j = i->next;
-//             if (ft_strcmp(i->key, j->key) > 0)
-//             {
-//                 swap_env_vars(i, j);
-//                 swapped = 1;
-//             }
-//             i = i->next;
-//         }
-//     } while (swapped);
-// }
-
-void sort_env_list(t_env *env)
+void	sort_env_list(t_env *env)
 {
-	t_env_var *i;
-	t_env_var *j;
-	int swapped;
+	t_env_var	*i;
+	t_env_var	*j;
+	int			swapped;
 
 	if (!env || !env->head || !env->head->next)
-		return;
-
+		return ;
 	swapped = 1;
 	while (swapped)
 	{
@@ -69,5 +42,3 @@ void sort_env_list(t_env *env)
 		}
 	}
 }
-
-

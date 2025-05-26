@@ -70,3 +70,37 @@ char *remove_all_quotes(char *arg)
 	free(arg);
 	return (new_str);
 }
+
+char	**ft_removequotes(char **args)
+{
+	char	**newargs;
+	int		len;
+
+	int i, j, k;
+	for (i = 0; args[i]; i++)
+		;
+	newargs = ft_calloc(i + 1, sizeof(char *));
+	if (!newargs)
+		return (NULL);
+	for (i = 0; args[i]; i++)
+	{
+		len = 0;
+		for (j = 0; args[i][j]; j++)
+		{
+			if (args[i][j] != '\'' && args[i][j] != '"')
+				len++;
+		}
+		newargs[i] = ft_calloc(len + 1, sizeof(char));
+		if (!newargs[i])
+			return (NULL); 
+		for (j = 0, k = 0; args[i][j]; j++)
+		{
+			if (args[i][j] != '\'' && args[i][j] != '"')
+				newargs[i][k++] = args[i][j];
+		}
+		newargs[i][k] = '\0';
+	}
+	newargs[i] = NULL;
+	free_split(args);
+	return (newargs);
+}

@@ -20,10 +20,10 @@ int		count_quotes(char *line);
 void	mark_and_replace(char *line, int letter, int sub);
 
 // mark the pipes
-int	mark_pipes(char *line);
+int		mark_pipes(char *line);
 
 // number of pipes in the line
-int	count_pipers(char *line);
+int		count_pipers(char *line);
 
 // split the line into tokens
 char	**ft_parse_split(char *line, int letter, int sub);
@@ -59,21 +59,55 @@ char	**split_into_redirs(char *token);
 void	add_last_redir(t_fd **head, t_fd *new_redir);
 
 // function to check and assign the redirection type
-int assign_redir_type(char *str);
+int		assign_redir_type(char *str);
 
 // function to assign the redirection file
-void assign_redir_file(t_fd *redir);
+void	assign_redir_file(t_fd *redir);
 
 // function to create a new redirection
-t_fd *create_redir(char *str);
+t_fd	*create_redir(char *str);
 
 // function to assemble all the redirections
-t_fd *assemble_redirs(char **redirs);
+t_fd	*assemble_redirs(char **redirs);
 
 // function to create a new command
-t_cmd    *init_cmd(char *name, char **args);
+t_cmd	*init_cmd(char *name, char **args);
 
+// function to handle built-in commands
+void	built_in_handle(t_cmd *cmd, t_shell *shell, char **args);
 
+// function to set the name of the command
+char	*set_name(char **args);
+
+// function to process the command arguments, normalizing the cmd->args
+void	process_cmd_args(t_cmd *cmd);
+
+// function to add a command to the linked list
+void	add_last_cmd(t_cmd **head, t_cmd *new_cmd);
+
+// function to copy an array of strings
+char	**copy_array(char **array);
+
+// function to check if the command is a built-in command
+void	check_builtin(t_cmd *cmd);
+
+// function to build a built-in command
+void	build_builtin(t_cmd *cmd, char **args);
+
+// function to build the command
+void	build_cmd(t_cmd *cmd, char **args, t_shell *shell);
+
+// function to assemble the command if the line is a path
+void assemble_cmd_path(t_cmd *cmd, char **args);
+
+// function to check for the command path and assemble the command
+void assemble_cmd(t_cmd *cmd, char **args, t_shell *shell);
+
+// check if the command is a redirection with no arguments
+bool is_redir_noarg(char *str);
+
+// check if the command is a redirection
+bool is_redir(char *str);
 
 
 
