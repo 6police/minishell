@@ -20,10 +20,16 @@ int		count_quotes(char *line);
 void	mark_and_replace(char *line, int letter, int sub);
 
 // mark the pipes
-void	mark_pipes(char *line);
+int	mark_pipes(char *line);
+
+// number of pipes in the line
+int	count_pipers(char *line);
 
 // split the line into tokens
 char	**ft_parse_split(char *line, int letter, int sub);
+
+// function to check if the token is not empty
+bool	token_not_empty(const char *token);
 
 // function to initialize tokens
 t_token	*init_token(char **tokens);

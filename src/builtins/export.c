@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   export.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/08 23:47:26 by nuno              #+#    #+#             */
-/*   Updated: 2025/05/19 19:14:54 by marvin           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "ft_builtins.h"
 
@@ -83,9 +72,9 @@ void	export_no_args(t_env *env, t_cmd *cmd)
     while (env_var)
     {
         if (!env_var->value)
-            ft_printf_fd(STDOUT_FILENO, "declare -x " RED"%s"RESET "=\n", env_var->key);
+            ft_printf_fd(cmd->fd[1], "declare -x " RED"%s"RESET "=\n", env_var->key);
         else
-            ft_printf_fd(STDOUT_FILENO, "declare -x  " RED"%s"RESET  "=\"%s\"\n", env_var->key, env_var->value);
+            ft_printf_fd(cmd->fd[1], "declare -x  " RED"%s"RESET  "=\"%s\"\n", env_var->key, env_var->value);
         env_var = env_var->next;
     }
 }

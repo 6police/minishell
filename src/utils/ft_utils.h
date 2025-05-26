@@ -18,4 +18,7 @@ char	*str_replace_segment(const char *src, const char *replace, int start, int l
 //get_pid, but ours, since its not permitted to use get_pid();
 int		ft_get_pid(void);
 
+// function to check if a character is a space
+bool	ft_isspace(char c);
+
 #endif

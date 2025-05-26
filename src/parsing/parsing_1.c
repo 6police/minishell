@@ -65,8 +65,58 @@ static void	invalidate_cmds(t_shell *shell)
 		tmp = tmp->next;
 	}
 }
+// static bool check_syntax(char **tokens)
+// {
+// 	int i;
 
-bool static invalidate_tokens(char **tokens)
+// 	i = 0;
+// 	if (!tokens || !(*tokens) || !tokens[0])
+// 		return (false);
+
+// 	if (ft_strcmp(tokens[0], "|") == 0)
+// 		return (false);
+	
+// 	while (tokens[i])
+// 	{
+// 		if (ft_strcmp(tokens[i], "|") == 0)
+// 		{
+// 			if (i == 0 || tokens[i + 1] == NULL || ft_strcmp(tokens[i + 1], "|") == 0)
+// 				return (false);
+// 		}
+// 		i++;
+// 	}
+// 	return (true);
+// }
+
+
+static bool check_syntax(char **tokens)
+{
+	int i;
+
+	if (!tokens || !tokens[0])
+		return false;
+
+	for (i = 0; tokens[i]; i++)
+	{
+		// Check for leading/trailing pipe
+		if ((i == 0 || tokens[i + 1] == NULL) && ft_strcmp(tokens[i], "|") == 0)
+			return false;
+
+		// Check for consecutive pipes
+		if (ft_strcmp(tokens[i], "|") == 0 && tokens[i + 1] &&
+			ft_strcmp(tokens[i + 1], "|") == 0)
+			return false;
+
+		// Check for empty token between pipes
+		if (ft_strcmp(tokens[i], "|") == 0 && tokens[i + 1] &&
+			ft_strlen(tokens[i + 1]) == 0)
+			return false;
+	}
+	return true;
+}
+
+
+static bool invalidate_tokens(char **tokens)
 {
 	int i;
 	int j;
@@ -108,7 +158,7 @@ void	parse(t_shell *shell)
 	token_count = 0;
 	sub = 7; // the character to replace the separator
 	shell->tokens = parse_line(shell->line, shell->separators[0], sub);
-	if(invalidate_tokens(shell->tokens))
+	if(invalidate_tokens(shell->tokens) || !check_syntax(shell->tokens))
 	{
 		free_tokens(shell->tokens);
 		shell->tokens = NULL;
@@ -125,7 +175,7 @@ void	parse(t_shell *shell)
 		return ;
 	}
 	if (!shell->tokens)
-		return ;
+		return (ft_printf_fd(STDERR_FILENO, "minishell: syntax error\n"), (void)0);
 	build_cmds(shell);
 	if (shell->tokens[0] && shell->tokens[1])
 		shell->is_pipe = true;
@@ -140,5 +190,3 @@ void	parse(t_shell *shell)
 		print_all_commands(shell);
 	}
 }
-
-// ver onde estao os redirections, e para onde e que manda.

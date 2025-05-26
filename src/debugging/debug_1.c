@@ -10,7 +10,7 @@ void	print_env(t_env *env, t_cmd *cmd)
 	while (tmp)
 	{
 		if (tmp->value)
-			ft_printf_fd(STDOUT_FILENO,"%s=%s\n", tmp->key, tmp->value);
+			ft_printf_fd(cmd->fd[1],"%s=%s\n", tmp->key, tmp->value);
 		// if (tmp->value)
 		// 	printf("%s=%s\n", tmp->key, tmp->value);
 		tmp = tmp->next;
@@ -25,7 +25,7 @@ void	print_export(t_env *env, t_cmd *cmd)
 	tmp = env->head;
 	while (tmp)
 	{
-		ft_printf_fd(STDOUT_FILENO, "%s=%s\n", tmp->key, tmp->value);
+		ft_printf_fd(cmd->fd[1], "%s=%s\n", tmp->key, tmp->value);
 		tmp = tmp->next;
 	}
 }
@@ -36,7 +36,7 @@ static void	print_args(t_cmd *cmd)
 	i = 0;
 	while (cmd->args && cmd->args[i])
 	{
-		ft_printf_fd(STDOUT_FILENO, "[%s]", cmd->args[i]);
+		ft_printf_fd(cmd->fd[1], "[%s]", cmd->args[i]);
 		i++;
 	}
 	ft_printf("\n");
