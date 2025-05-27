@@ -1,8 +1,8 @@
 #include "ft_builtins.h"
 
 static char	*get_cd_path(t_cmd *cmd, t_shell *shell);
-static void	change_dir(char *path, t_shell *shell, t_cmd *cmd);
-static void	update_pwd_env_vars(t_env *env, t_env_var *oldpwd, t_env_var *pwd);
+static void	change_dir(char *path, t_shell *shell);
+static void	update_pwd_env_vars(t_shell *shell, t_env_var *pwd);
 
 void	cd_shell(t_cmd *cmd, t_shell *shell)
 {
@@ -14,80 +14,74 @@ void	cd_shell(t_cmd *cmd, t_shell *shell)
 		shell->exit_value = 1;
 		return ;
 	}
-	change_dir(path, shell, cmd);
+	change_dir(path, shell);
+	shell->exit_value = 0;
 }
 
 static char	*get_cd_path(t_cmd *cmd, t_shell *shell)
 {
-	t_env_var	*home;
+	t_env_var	*dest;
 
+	dest = NULL;
 	if (!cmd->args[0])
 	{
-		home = find_env_var(shell->env, "HOME");
-		if (!home || !home->value)
+		dest = find_env_var(shell->env, "HOME");
+		if (!dest || !dest->value)
 		{
-			ft_putstr_fd("minishell: cd: HOME not set\n", STDERR_FILENO);
-			shell->exit_value = 1;
+			ft_printf_fd(STDERR_FILENO, "minishell: cd: HOME not set\n");
 			return (NULL);
 		}
-		return (home->value);
+		return (dest->value);
+	}
+	else if (ft_strcmp(cmd->args[0], "-") == 0)
+	{
+		dest = find_env_var(shell->env, "OLDPWD");
+		if (!dest || !dest->value || dest->value[0] == '\0')
+		{
+			ft_printf_fd(STDERR_FILENO, "minishell: cd: OLDPWD not set\n");
+			return (NULL);
+		}
+		return (dest->value);
 	}
 	return (cmd->args[0]);
 }
 
-static void	change_dir(char *path, t_shell *shell, t_cmd *cmd)
+static void	change_dir(char *path, t_shell *shell)
 {
-	t_env_var	*oldpwd;
-	t_env_var	*pwd;
-	char		*new_path;
-
-	oldpwd = find_env_var(shell->env, "OLDPWD");
-	pwd = find_env_var(shell->env, "PWD");
-	new_path = path;
-	if (ft_strcmp(path, "-") == 0)
+	if (chdir(path))
 	{
-		if (!oldpwd || !oldpwd->value || oldpwd->value[0] == '\0')
-		{
-			ft_printf_fd(STDERR_FILENO, "minishell: cd: OLDPWD not set\n");
-			printf("mcacos\n");
-			shell->exit_value = 1;
-			free_env_var(oldpwd);
-			return;
-		}
-		new_path = oldpwd->value;
-		ft_putstr_fd(new_path, cmd->fd[1]);
-		ft_putstr_fd("\n", cmd->fd[1]);
-		shell->exit_value = 0;
-	}
-	if (chdir(new_path) != 0)
-	{
-		ft_printf_fd(2, "minishell: cd: %s: No such file or directory\n", new_path);
+		ft_printf_fd(STDERR_FILENO, "minishell: cd: %s: No such file or directory\n", path);
 		shell->exit_value = 1;
 		return ;
 	}
-	update_pwd_env_vars(shell->env, oldpwd, pwd);
+	update_pwd_env_vars(shell, find_env_var(shell->env, "PWD"));
 }
 
-static void	update_pwd_env_vars(t_env *env, t_env_var *oldpwd, t_env_var *pwd)
+static void	update_pwd_env_vars(t_shell *shell, t_env_var *pwd)
 {
 	char cwd[PATH_MAX];
 
+	char *pwd_value;
+	char *oldpwd_value;
+
+	oldpwd_value = NULL;
+	pwd_value = NULL;
 	if (getcwd(cwd, sizeof(cwd)))
 	{
-		if (oldpwd)
-		{
-			free(oldpwd->value);
-			if (pwd && pwd->value)
-				oldpwd->value = ft_strdup(pwd->value);
-			else
-				oldpwd->value = ft_strdup("");
-			ft_export("OLDPWD", oldpwd->value, env);
-		}
-		if (pwd)
-		{
-			free(pwd->value);
-			pwd->value = ft_strdup(cwd);
-			ft_export("PWD", pwd->value, env);
-		}
+		if	(pwd)
+			oldpwd_value = ft_strjoin("OLDPWD=", pwd->value);
+		else
+			oldpwd_value = ft_strdup("OLDPWD=");
+		
+		pwd_value = ft_strjoin("PWD=", cwd);
+		ft_export(pwd_value, NULL, shell->env);
+		ft_export(oldpwd_value, NULL, shell->env);
 	}
+	else
+	{
+		ft_printf_fd(STDERR_FILENO, "minishell: cd: getcwd failed\n");
+		shell->exit_value = 1;
+	}
+	free(pwd_value);
+	free(oldpwd_value);
 }

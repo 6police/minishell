@@ -2,6 +2,7 @@
 
 static char	*handle_dollar(char *arg, t_shell *shell);
 static int	check_quotes_type(char *str);
+static char	*ft_strstr(const char *haystack, const char *needle);
 
 void	dollar_sign(t_shell *shell, int n_toks)
 {
@@ -14,7 +15,9 @@ void	dollar_sign(t_shell *shell, int n_toks)
 	has_dollar = false;
 	while (i < n_toks)
 	{
-		if (strstr(shell->tokens[i], "$") != NULL) // mudar para ft_strstr
+		if (shell->tokens[i] == NULL)
+			i++;
+		if (ft_strstr(shell->tokens[i], "$") != NULL)
 		{
 			quote_type = check_quotes_type(shell->tokens[i]);
 			has_dollar = true;
@@ -35,11 +38,15 @@ static char	*handle_dollar(char *arg, t_shell *shell)
 	int			delete;
 	int			start;
 	int			env_key_len;
-	t_env_var	*env_var;
 	char		*tmp;
+	char		*arg2;
+	t_env_var	*env_var;
 
 	i = 0;
+	start = 0;
 	env_key_len = 0;
+	tmp = NULL;
+	arg2 = ft_strdup(arg);
 	while (arg[i])
 	{
 		if (arg[i] == '$' && arg[i + 1])
@@ -112,6 +119,30 @@ static int	check_quotes_type(char *str)
 			return (1);
 		else if (str[i] == '\'')
 			return (2);
+	}
+	return (0);
+}
+
+char	*ft_strstr(const char *haystack, const char *needle)
+{
+	int	i;
+	int	j;
+
+	if (!*needle)
+		return ((char *)haystack);
+	i = 0;
+	while (haystack[i])
+	{
+		j = 0;
+		while (
+			haystack[i + j] &&
+			needle[j] &&
+			haystack[i + j] == needle[j]
+		)
+			j++;
+		if (needle[j] == '\0')
+			return ((char *)&haystack[i]);
+		i++;
 	}
 	return (0);
 }
