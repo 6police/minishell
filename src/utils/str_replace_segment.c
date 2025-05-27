@@ -11,7 +11,7 @@ char	*str_replace_segment(const char *src, const char *replace, int start,
 
 	if (!src || !replace || start < 0 || len_to_delete < 0)
 		return (NULL);
-	new_len = strlen(src) - len_to_delete + strlen(replace);
+	new_len = ft_strlen(src) - len_to_delete + ft_strlen(replace);
 	new_str = malloc(sizeof(char) * (new_len + 1));
 	if (!new_str)
 		return (NULL);

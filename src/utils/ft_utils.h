@@ -25,6 +25,7 @@ char	**ft_removequotes(char **args);
 char	*remove_all_quotes(char *arg);
 
 // removes a segment from a string with a new one
+char	*str_replace_segment(char *src, const char *replace, int start, int len_to_delete);
 char	*str_replace_segment(const char *src, const char *replace, int start,
 			int len_to_delete);
 
