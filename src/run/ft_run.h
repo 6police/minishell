@@ -36,4 +36,7 @@ void processor(t_cmd *cmd, t_shell *shell);
 // function to wait for all commands to finish
 void wait_commands(t_shell *shell);
 
+// function to close all file descriptors
+void close_fds(t_cmd *cmd);
+
 #endif

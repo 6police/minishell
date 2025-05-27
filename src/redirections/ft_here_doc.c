@@ -41,8 +41,6 @@ static char *ft_expand(char *line, t_shell *shell)
 	aux = arg;
 	if (!arg)
 		return (NULL);
-	
-
 	tmp = ft_calloc(sizeof(t_cmd), 1);
 	if (!tmp)
 	{
@@ -50,17 +48,13 @@ static char *ft_expand(char *line, t_shell *shell)
 		return (NULL);
 	}
 	tmp->args = &arg;
-	
 	dollar_sign(tmp, shell);
-		
 	expanded_line = ft_strdup(tmp->args[0]);
-	
 	free(line);
 	tmp->args = NULL;
 	free(aux);
 	free(arg);
 	free(tmp);
-	
 	return (expanded_line);
 }
 
@@ -98,7 +92,7 @@ void	do_heredoc_child(char *limiter, t_shell *shell)
 		free(line);
 	}
 	close(fd);
-	//clean_exit(&shell); // Clean up and exit
+	clean_exit(&shell); // Clean up and exit
 }
 
 
@@ -121,10 +115,7 @@ void	ft_handle_heredoc(t_fd *fd_struct, t_shell *shell)
 		signal(SIGINT, SIG_IGN); // Ignore Ctrl+C in parent during heredoc
 		waitpid(pid, &status, 0);
 		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
-		{
 			shell->exit_value = 130;
-			// Optional: mark cmd as invalid to skip execution
-		}
 		setup_signals(); // Restore signal handling
 	}
 }

@@ -1,12 +1,11 @@
 #include "ft_parsing.h"
 
-
 // function that counts the number of > redirects in the token
 int	forward_redir_count(char *token)
 {
 	int	i;
 	int	count;
-	int quotes;
+	int	quotes;
 
 	i = 0;
 	quotes = 0;
@@ -19,9 +18,17 @@ int	forward_redir_count(char *token)
 			quotes = 0;
 		if (token[i] == '>' && !quotes)
 		{
-			if ((token[i + 1] != '>') && (token[i + 1] != '\0') && (token[i
-					- 1] != '>'))
-				count++;
+			if (i > 0)
+			{
+				if ((token[i + 1] != '>') && (token[i + 1] != '\0') && (token[i
+						- 1] != '>'))
+					count++;
+			}
+			else
+			{
+				if ((token[i + 1] != '>') && (token[i + 1] != '\0'))
+					count++;
+			}
 		}
 		i++;
 	}
@@ -33,7 +40,7 @@ int	dbl_forward_redir_count(char *token)
 {
 	int	i;
 	int	count;
-	int quotes;
+	int	quotes;
 
 	i = 0;
 	quotes = 0;
@@ -46,9 +53,17 @@ int	dbl_forward_redir_count(char *token)
 			quotes = 0;
 		if (token[i] == '>' && !quotes)
 		{
-			if ((token[i + 1] == '>') && (token[i + 2] != '>') && (token[i
-					+ 2] != '\0'))
-				count++;
+			if (i > 0)
+			{
+				if ((token[i + 1] == '>') && (token[i + 2] != '\0')
+					&& (token[i - 1] != '>'))
+					count++;
+			}
+			else
+			{
+				if ((token[i + 1] == '>') && (token[i + 2] != '\0'))
+					count++;
+			}
 		}
 		i++;
 	}
@@ -60,7 +75,7 @@ int	back_redir_count(char *token)
 {
 	int	i;
 	int	count;
-	int quotes;
+	int	quotes;
 
 	i = 0;
 	quotes = 0;
@@ -73,9 +88,17 @@ int	back_redir_count(char *token)
 			quotes = 0;
 		if (token[i] == '<' && !quotes)
 		{
-			if ((token[i + 1] != '<') && (token[i + 1] != '\0') && (token[i
-					- 1] != '<'))
-				count++;
+			if (i > 0)
+			{
+				if ((token[i + 1] != '<') && (token[i + 1] != '\0')
+					&& (token[i - 1] != '<'))
+					count++;
+			}
+			else
+			{
+				if ((token[i + 1] != '<') && (token[i + 1] != '\0'))
+					count++;
+			}
 		}
 		i++;
 	}
@@ -87,7 +110,7 @@ int	here_doc_count(char *token)
 {
 	int	i;
 	int	count;
-	int quotes;
+	int	quotes;
 
 	i = 0;
 	quotes = 0;

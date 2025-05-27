@@ -8,7 +8,6 @@ int	check_for_redirs(char *token)
 	int	hd;
 	int	result;
 
-	// check if the token is NULL
 	if (token == NULL)
 	{
 		ft_printf_fd(STDIN_FILENO, "Error: token is NULL\n");
@@ -22,12 +21,6 @@ int	check_for_redirs(char *token)
 	bwd = back_redir_count(token);
 	dbl_fwd = dbl_forward_redir_count(token);
 	hd = here_doc_count(token);
-	// ft_printf_fd(STDIN_FILENO, "Token: %s\n", token);
-	// ft_printf_fd(STDIN_FILENO, "Forward redirection count: %d\n", fwd);
-	// ft_printf_fd(STDIN_FILENO, "Backward redirection count: %d\n", bwd);
-	// ft_printf_fd(STDIN_FILENO, "Double forward redirection count: %d\n",
-		// dbl_fwd);
-	// ft_printf_fd(STDIN_FILENO, "Here document count: %d\n", hd);
 	result = fwd + bwd + dbl_fwd + hd;
 	if (result > 0)
 		return (result);
@@ -42,7 +35,6 @@ void	check_redir(char *token, int *j)
 
 	c = 0;
 	i = *j;
-	//printf("check_redir\n");
 	while (token[i] != '\0')
 	{
 		if ((token[i] == '"' || token[i] == '\'') && !c)
@@ -89,7 +81,6 @@ char	**split_into_redirs(char *line)
 		while (line[j] == ' ')
 			j++;
 		check_redir(line, &j);
-
 		redirs[k] = ft_substr(line, i, j - i);
 		if (redirs[k] == NULL)
 		{
