@@ -1,6 +1,6 @@
 #include "ft_builtins.h"
 
-static char	*cd(t_cmd *cmd, t_shell *shell);
+static char	*get_cd_path(t_cmd *cmd, t_shell *shell);
 static void	change_dir(char *path, t_shell *shell, t_cmd *cmd);
 static void	update_pwd_env_vars(t_env *env, t_env_var *oldpwd, t_env_var *pwd);
 
@@ -9,26 +9,22 @@ void	cd_shell(t_cmd *cmd, t_shell *shell)
 {
 	char	*path;
 
-	path = cd(cmd, shell);
+	path = get_cd_path(cmd, shell);
 	if (!path)
 	{
 		shell->exit_value = 1;
 		return ;
 	}
 	change_dir(path, shell, cmd);
-	return ;
 }
 
-// cd - Change the current directory
-static char	*cd(t_cmd *cmd, t_shell *shell)
+static char	*get_cd_path(t_cmd *cmd, t_shell *shell)
 {
 	t_env_var	*home;
 
-	home = NULL;
 	if (!cmd->args[0])
 	{
 		home = find_env_var(shell->env, "HOME");
-		ft_printf_fd(cmd->fd[1], "home: %s\n", home->value);
 		if (!home || !home->value)
 		{
 			ft_putstr_fd("minishell: cd: HOME not set\n", STDERR_FILENO);
@@ -53,8 +49,13 @@ static void	change_dir(char *path, t_shell *shell, t_cmd *cmd)
 	if (ft_strcmp(path, "-") == 0)
 	{
 		if (!oldpwd || !oldpwd->value || oldpwd->value[0] == '\0')
-			return (ft_putstr_fd("minishell: cd: OLDPWD not set\n",
-					STDERR_FILENO));
+		{
+			ft_printf_fd(STDERR_FILENO, "minishell: cd: OLDPWD not set\n");
+			printf("mcacos\n");
+			shell->exit_value = 1;
+			free_env_var(oldpwd);
+			return;
+		}
 		new_path = oldpwd->value;
 		ft_putstr_fd(new_path, cmd->fd[1]);
 		ft_putstr_fd("\n", cmd->fd[1]);
