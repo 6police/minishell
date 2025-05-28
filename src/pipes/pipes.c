@@ -27,6 +27,8 @@ static void	close_safe(int fd)
 	if (fd != -1)
 		close(fd);
 }
+
+// function to close all pipes in the command list
 void	close_pipes(t_cmd *cmd)
 {
 	t_cmd	*tmp;
@@ -40,6 +42,7 @@ void	close_pipes(t_cmd *cmd)
 	}
 }
 
+// function to manage pipes
 void manage_pipes(t_cmd *cmd, t_shell *shell)
 {
 	if (!cmd || !shell->is_pipe)
@@ -54,6 +57,7 @@ void manage_pipes(t_cmd *cmd, t_shell *shell)
 		dup2(cmd->fd_pipe[1], STDOUT_FILENO);
 }
 
+// function to close pipes after forking
 void close_pipes_after_fork(t_cmd *cmd)
 {
 	if (cmd->prev)

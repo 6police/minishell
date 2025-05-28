@@ -78,12 +78,11 @@ void	clean_exit(t_shell **shell)
 	status = (*shell)->exit_value;
 	if ((*shell)->debug)
 	{
-		// in red
 		ft_printf(RED "exiting shell with status: %d\n" RESET, status);
 		printf(EMOJI_BRAIN "exiting shell\n\n");
 	}
 	if (!(*shell)->is_child)
-		ft_printf_fd(STDERR_FILENO, "exit\n");
+		ft_printf_fd(STDERR_FILENO, "exit\n - K THX BYE - \n");
 	if (shell && *shell)
 		free_shell(shell);
 	clear_history();

@@ -9,16 +9,15 @@ char	*remove_quotes(char *arg)
 	if (arg[0] == '\"')
 	{
 		new_str = ft_strtrim(arg, "\"");
-		free(arg); // Free the old arg
+		free(arg);
 		return (new_str);
 	}
 	else if (arg[0] == '\'')
 	{
 		new_str = ft_strtrim(arg, "\'");
-		free(arg); // Free the old arg
+		free(arg);
 		return (new_str);
-	} // Duplicate the string if no quotes
-	 // Return the new string
+	}
 	return (arg);
 }
 
@@ -32,7 +31,7 @@ char	*remove_quotes(char *arg)
 // 		return (NULL);
 // 	new_str = ft_strdup(arg);
 // 	temp = new_str;
-	
+
 // 	while (*temp)
 // 	{
 // 		if (*temp == '\"' || *temp == '\'')
@@ -46,24 +45,23 @@ char	*remove_quotes(char *arg)
 // 	return (new_str);
 // }
 
-char *remove_all_quotes(char *arg)
+char	*remove_all_quotes(char *arg)
 {
-	char *new_str;
-	char *temp;
+	char	*new_str;
+	char	*temp;
 
 	if (!arg)
 		return (NULL);
 	new_str = ft_strdup(arg);
 	if (!new_str)
 		return (NULL);
-
 	temp = new_str;
 	while (*temp)
 	{
 		if (*temp == '\'' || *temp == '\"')
 		{
-			ft_memmove(temp, temp + 1, ft_strlen(temp)); // includes null byte
-			continue; // don't decrement, just recheck current temp
+			ft_memmove(temp, temp + 1, ft_strlen(temp));
+			continue ;
 		}
 		temp++;
 	}
@@ -92,7 +90,7 @@ char	**ft_removequotes(char **args)
 		}
 		newargs[i] = ft_calloc(len + 1, sizeof(char));
 		if (!newargs[i])
-			return (NULL); 
+			return (NULL);
 		for (j = 0, k = 0; args[i][j]; j++)
 		{
 			if (args[i][j] != '\'' && args[i][j] != '"')

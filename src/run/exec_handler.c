@@ -1,6 +1,7 @@
 #include "ft_run.h"
 
 
+// function to close file des in a command
 void	close_fds(t_cmd *cmd)
 {
 	t_fd *tmp;
@@ -26,6 +27,7 @@ void	close_fds(t_cmd *cmd)
 	}
 }
 
+// wrapper to handle fd duplication and signal handling
 void	eggxecutor(t_cmd *cmd, t_shell *shell, int flag)
 {
 	if (flag == 1)
@@ -41,6 +43,7 @@ void	eggxecutor(t_cmd *cmd, t_shell *shell, int flag)
 	(void)cmd;
 }
 
+// function to run a command with pipes
 void	run_pipe(t_cmd *cmd, t_shell *shell)
 {
 	if (!cmd || !shell || !shell->is_pipe)
@@ -66,6 +69,7 @@ void	run_pipe(t_cmd *cmd, t_shell *shell)
 		close_pipes_after_fork(cmd);
 }
 
+// function to run a command without pipes
 void	run_no_pipe(t_cmd *cmd, t_shell *shell)
 {
 	if (!cmd || !shell || shell->is_pipe)
@@ -77,8 +81,7 @@ void	run_no_pipe(t_cmd *cmd, t_shell *shell)
 		if (cmd->pid == -1)
 		{
 			ft_putstr_fd("minishell: fork failed\n", STDERR_FILENO);
-			shell->exit_value = 1;
-			return ;
+			return (shell->exit_value = 1, (void)0);
 		}
 		if (cmd->pid == 0)
 		{
@@ -96,6 +99,7 @@ void	run_no_pipe(t_cmd *cmd, t_shell *shell)
 	}
 }
 
+// wrapper function to process a command
 void	processor(t_cmd *cmd, t_shell *shell)
 {
 	t_fd *tmp;

@@ -1,5 +1,6 @@
 #include "ft_parsing.h"
 
+// Function to check for the number of all redirections in a token
 int	check_for_redirs(char *token)
 {
 	int	fwd;
@@ -9,10 +10,7 @@ int	check_for_redirs(char *token)
 	int	result;
 
 	if (token == NULL)
-	{
-		ft_printf_fd(STDIN_FILENO, "Error: token is NULL\n");
 		return (-1);
-	}
 	fwd = 0;
 	bwd = 0;
 	dbl_fwd = 0;
@@ -28,6 +26,7 @@ int	check_for_redirs(char *token)
 		return (0);
 }
 
+// function to check if there is a redirection in the token
 void	check_redir(char *token, int *j)
 {
 	int	i;
@@ -46,51 +45,4 @@ void	check_redir(char *token, int *j)
 		i++;
 	}
 	*j = i;
-}
-
-// function to treat tokens and corresponding redirections
-// it searches for the next redir
-// takes the token and separates it by redirections
-char	**split_into_redirs(char *line)
-{
-	int		total_redirs;
-	char	**redirs;
-	int		i;
-	int		j;
-	int		k;
-
-	total_redirs = (check_for_redirs(line));
-	if (total_redirs == 0)
-		return (NULL);
-	redirs = ft_calloc(total_redirs + 1, sizeof(char *));
-	if (redirs == NULL)
-	{
-		ft_printf_fd(STDIN_FILENO, "Error: malloc failed\n");
-		return (NULL);
-	}
-	k = 0;
-	i = 0;
-	j = 0;
-	while (k < total_redirs)
-	{
-		while (line[i] != '\0' && (line[i] != '>' && line[i] != '<'))
-			i++;
-		j = i + 1;
-		if (line[i] == line[j])
-			j++;
-		while (line[j] == ' ')
-			j++;
-		check_redir(line, &j);
-		redirs[k] = ft_substr(line, i, j - i);
-		if (redirs[k] == NULL)
-		{
-			ft_printf_fd(STDIN_FILENO, "Error: malloc failed\n");
-			free(redirs);
-			return (NULL);
-		}
-		i = j;
-		k++;
-	}
-	redirs[k] = NULL;
-	return (redirs);
 }

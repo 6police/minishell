@@ -98,17 +98,39 @@ void	build_builtin(t_cmd *cmd, char **args);
 void	build_cmd(t_cmd *cmd, char **args, t_shell *shell);
 
 // function to assemble the command if the line is a path
-void assemble_cmd_path(t_cmd *cmd, char **args);
+void	assemble_cmd_path(t_cmd *cmd, char **args);
 
 // function to check for the command path and assemble the command
-void assemble_cmd(t_cmd *cmd, char **args, t_shell *shell);
+void	assemble_cmd(t_cmd *cmd, char **args, t_shell *shell);
 
 // check if the command is a redirection with no arguments
-bool is_redir_noarg(char *str);
+bool	is_redir_noarg(char *str);
 
 // check if the command is a redirection
-bool is_redir(char *str);
+bool	is_redir(char *str);
 
+// function to check if the string is all whitespace
+bool	is_all_whitespace(const char *s);
 
+// function to parse the line according to priority
+char	**parse_line(char *line, int letter, int sub);
+
+// function to print the tokens
+void	print_tokens(t_shell *shell);
+
+// function to check if the redirection is valid
+bool	check_redir_validity(t_shell *shell);
+
+// function to invalidate commands
+void	invalidate_cmds(t_shell *shell);
+
+// function to free the tokens
+bool	check_syntax(char **tokens);
+
+// function to check token validity
+bool	invalidate_tokens(char **tokens);
+
+// function to check if the token is a redirection
+void	check_redir(char *token, int *j);
 
 #endif

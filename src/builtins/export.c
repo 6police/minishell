@@ -1,6 +1,30 @@
 
 #include "ft_builtins.h"
 
+
+static void handle_env_vars(t_env_var *env_var, char *var, t_env *env, char *equal_sign)
+{
+	if (!env_var)
+	{
+		add_env_var(&env);
+		env_var = env->last;
+		if (equal_sign)
+			assign_env_var(env_var, var);
+		else
+		{
+			env_var->key = ft_strdup(var);
+			env_var->value = NULL;
+		}
+		env_var->exported = true;
+	}
+	else
+	{
+		if (equal_sign)
+			assign_env_var(env_var, var);
+		env_var->exported = true;
+	}
+}
+
 void	export_var(char *var, t_env *env)
 {
 	t_env_var	*env_var;
@@ -10,54 +34,19 @@ void	export_var(char *var, t_env *env)
 	if (!var || !env)
 		return;
 	
-	// Find the position of the equals sign
 	equal_sign = ft_strchr(var, '=');
-	
-	// Extract the key (variable name) from the input
 	if (equal_sign)
 		key = ft_substr(var, 0, equal_sign - var);
 	else
 		key = ft_strdup(var);
-	
 	if (!key)
 	{
 		ft_putstr_fd("Error: malloc failed\n", 2);
 		return;
 	}
-	
-	// Find existing variable
 	env_var = find_env_var(env, key);
-	
-	if (!env_var)
-	{
-		// Variable doesn't exist, create new one
-		add_env_var(&env);
-		env_var = env->last;
-		if (equal_sign)
-		{
-			// New variable with value
-			free(key);
-			assign_env_var(env_var, var);
-		}
-		else
-		{
-			// New variable without value
-			env_var->key = key;
-			env_var->value = NULL;
-		}
-		env_var->exported = true;
-	}
-	else
-	{
-		// Variable exists
-		free(key);  // Free the temporary key
-		if (equal_sign)
-		{
-			// Update existing variable with new value
-			assign_env_var(env_var, var);
-		}
-		env_var->exported = true;  // Mark as exported
-	}
+	handle_env_vars(env_var, var, env, equal_sign);
+	free(key);
 }
 
 
@@ -65,7 +54,7 @@ void	export_no_args(t_env *env, t_cmd *cmd)
 {
     t_env_var	*env_var;
 
-    (void)cmd; // to avoid unused parameter warning
+    (void)cmd;
     sort_env_list(env);
 
     env_var = env->head;
@@ -93,7 +82,6 @@ void ft_export(char *var, char  *value, t_env *env)
     var_value = ft_strjoin(var, "=");
     var_value = ft_strjoin(var_value, value);
     export_var(var_value, env);
-    //printf("EXPORTED %s", var);
     free(var_value);
 }
 
@@ -104,7 +92,6 @@ void export_builtin(t_cmd *cmd, t_shell *shell)
 
     i = 0;
     sorted_env = NULL;
-    // add a checker for '*'
     if (cmd->args[0] == NULL)
     {
         sorted_env = copy_env_list(shell->env);

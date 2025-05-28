@@ -1,5 +1,6 @@
 #include "ft_parsing.h"
 
+// function to add a new redirection to the end of the linked list
 void	add_last_redir(t_fd **head, t_fd *new_redir)
 {
 	t_fd	*tmp;
@@ -14,7 +15,7 @@ void	add_last_redir(t_fd **head, t_fd *new_redir)
 		tmp->next = new_redir;
 	}
 }
-
+// function to assign the type of redirection based on the string
 int	assign_redir_type(char *str)
 {
 	if (!str)
@@ -37,43 +38,6 @@ int	assign_redir_type(char *str)
 		return (NONE);
 }
 
-void	assign_redir_file(t_fd *redir)
-{
-	int		i;
-	char	*new_file;
-
-    new_file = NULL;
-	i = 0;
-	if (redir->type == NONE)
-	{
-		free(redir->file);
-		redir->file = NULL;
-		return ;
-	}
-	else
-	{
-		while (redir->file[i] != '\0' && (redir->file[i] == '>'
-				|| redir->file[i] == '<'))
-			i++;
-		while (redir->file[i] == ' ')
-			i++;
-		new_file = ft_substr(redir->file, i, ft_strlen(redir->file) - i);
-	}
-	if (!new_file)
-	{
-		ft_printf_fd(STDIN_FILENO, "Error: malloc failed\n");
-		return ;
-	}
-	free(redir->file);
-	redir->file = new_file;
-	if (redir->file[0] == '\0')
-	{
-		free(redir->file);
-		redir->file = NULL;
-		redir->type = 0;
-	}
-}
-
 // function that creates a redirection structure
 t_fd	*create_redir(char *str)
 {
@@ -94,6 +58,7 @@ t_fd	*create_redir(char *str)
 	return (redir);
 }
 
+// function that assembles the redirections from the array of strings
 t_fd	*assemble_redirs(char **redirs)
 {
 	t_fd	*redir;

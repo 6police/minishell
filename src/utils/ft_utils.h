@@ -3,19 +3,25 @@
 
 # include "../minishell.h"
 
+// handle malloc failure
+void	handle_malloc_failure(void);
+
+// function to handle malloc failure for redirection array
+void	*handle_redir_malloc_error(char **redirs);
+
 // new prompt
 void	new_prompt(void);
 
-// remove quotes, 
-	// frees the old str and returns a new allocated one without quotes
+// remove quotes,
+// frees the old str and returns a new allocated one without quotes
 char	*remove_quotes(char *arg);
 
-// another function to remove quotes, 
-	// frees the old str and returns a new allocated one without quotes
+// another function to remove quotes,
+// frees the old str and returns a new allocated one without quotes
 char	**ft_removequotes(char **args);
 
-// removes all quotes from a string, 
-	// frees the old str and returns a new allocated one without quotes
+// removes all quotes from a string,
+// frees the old str and returns a new allocated one without quotes
 char	*remove_all_quotes(char *arg);
 
 // removes a segment from a string with a new one
