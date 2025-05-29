@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: joamiran <joamiran@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 23:47:26 by nuno              #+#    #+#             */
-/*   Updated: 2025/05/29 18:50:25 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/05/29 19:29:25 by joamiran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ void	export_var(char *var, t_env *env)
 		ft_putstr_fd("Error: malloc failed\n", 2);
 		return ;
 	}
+	if (!ft_isalpha(key[0]) && (key[0] != '_'))
+		return ;
 	env_var = find_env_var(env, key);
 	handle_env_vars(env_var, var, env, equal_sign);
 	free(key);

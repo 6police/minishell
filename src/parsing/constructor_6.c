@@ -56,13 +56,23 @@ static char	**copy_valid_args(char **args, int count)
 // function to process command arguments by removing invalid ones
 void	process_cmd_args(t_cmd *cmd)
 {
+	char	**splitargs;
 	char	**newargs;
 	int		valid_count;
+	int		i;
 
 	if (!cmd || !cmd->args)
 		return ;
+	i = 0;
 	valid_count = count_valid_args(cmd->args);
 	newargs = copy_valid_args(cmd->args, valid_count);
+	splitargs = copy_array(newargs);
 	free_split(cmd->args);
-	cmd->args = ft_removequotes(newargs);
+	while (splitargs[i])
+	{
+		splitargs[i] = remove_quotes_beg_end(splitargs[i]);
+		i++;
+	}
+	cmd->args = splitargs;
+	free_split(newargs);
 }
