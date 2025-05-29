@@ -6,7 +6,7 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 23:47:26 by nuno              #+#    #+#             */
-/*   Updated: 2025/05/29 21:12:30 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/05/29 22:08:36 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ void	export_builtin(t_cmd *cmd, t_shell *shell)
 		sorted_env = copy_env_list(shell->env);
 		export_no_args(sorted_env, cmd);
 		free_env(sorted_env);
+		shell->exit_value = 1;
 		return ;
 	}
 	while (cmd->args[i])
