@@ -13,12 +13,9 @@ char	*str_replace_segment(char *src, const char *replace, int start, int len_to_
 	new_str = malloc(sizeof(char) * (new_len + 1));
 	if (!new_str)
 		return (NULL);
-	i = 0;
-	while (i < start)
-	{
+	i = -1;
+	while (++i < start)
 		new_str[i] = src[i];
-		i++;
-	}
 	j = 0;
 	while (replace[j])
 		new_str[i++] = replace[j++];
@@ -26,5 +23,6 @@ char	*str_replace_segment(char *src, const char *replace, int start, int len_to_
 	while (src[j])
 		new_str[i++] = src[j++];
 	new_str[i] = '\0';
+	free(src);
 	return (new_str);
 }

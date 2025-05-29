@@ -18,4 +18,16 @@ char	*str_replace_segment(char *src, const char *replace, int start, int len_to_
 //get_pid, but ours, since its not permitted to use get_pid();
 int		ft_get_pid(void);
 
+// ft_str_r_cmp.c
+int		ft_str_r_cmp(const char *s1, const char *s2);
+
+// ft_strstr.c
+char	*ft_strstr(const char *haystack, const char *needle);
+
+// ft_strcat.c
+char	*ft_strcat(char *dest, const char *src);
+
+// ft_realloc.c
+void	*ft_realloc(void *ptr, size_t size, size_t old_size);
+
 #endif
