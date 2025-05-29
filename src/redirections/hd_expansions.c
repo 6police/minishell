@@ -57,7 +57,7 @@ char	*ft_expand(char *line, t_shell *shell)
 	if (!tmp)
 		return (free(arg), NULL);
 	tmp->args = &arg;
-	dollar_sign(tmp, shell);
+	dollar_sign_here_doc(tmp, shell);
 	expanded_line = ft_strdup(tmp->args[0]);
 	free(line);
 	tmp->args = NULL;

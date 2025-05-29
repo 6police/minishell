@@ -62,6 +62,7 @@ void	parse(t_shell *shell)
 		ft_printf_fd(STDERR_FILENO, "minishell: syntax error\n");
 		return ;
 	}
+	dollar_sign(shell);
 	build_cmds(shell);
 	set_pipe_flag(shell);
 	if (!check_redir_validity(shell))

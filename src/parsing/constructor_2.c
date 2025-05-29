@@ -36,7 +36,6 @@ static void	cmd_processor_a(t_cmd *cmd, t_shell *shell, int i)
 
 	redir_check = 0;
 	cmd->line = ft_strdup(shell->tokens[i]);
-	dollar_sign(cmd, shell);
 	redir_check = check_for_redirs(cmd->line);
 	if (redir_check > 0)
 	{
@@ -75,6 +74,7 @@ static t_cmd	*parse_cmd(t_shell *shell, int i)
 	add_last_cmd(&shell->cmds, cmd);
 	cmd_processor_a(cmd, shell, i);
 	free_split(args);
+	ft_new_wildcard(cmd, shell);
 	if (cmd->args && cmd->args[0] && cmd->args[0][0] != '\0')
 		process_cmd_args(cmd);
 	return (cmd);

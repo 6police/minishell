@@ -3,7 +3,7 @@
 char	*handle_dollar(char *arg, t_shell *shell);
 static int	check_quotes_type(char *str);
 
-void	dollar_sign(t_shell *shell, int n_toks)
+void	dollar_sign(t_shell *shell)
 {
 	int	i;
 	int		quote_type;
@@ -12,10 +12,8 @@ void	dollar_sign(t_shell *shell, int n_toks)
 	i = 0;
 	quote_type = 0;
 	has_dollar = false;
-	while (i < n_toks)
+	while (shell->tokens[i])
 	{
-		if (shell->tokens[i] == NULL)
-			i++;
 		if (ft_strstr(shell->tokens[i], "$") != NULL)
 		{
 			quote_type = check_quotes_type(shell->tokens[i]);

@@ -4,6 +4,7 @@
 void	wait_commands(t_shell *shell)
 {
 	t_cmd	*tmp;
+	int		status;
 
 	if (!shell->cmds)
 		return ;
@@ -12,7 +13,7 @@ void	wait_commands(t_shell *shell)
 	{
 		if (tmp->pid > 0)
 		{
-			waitpid(tmp->pid, &shell->exit_value, 0);
+			waitpid(tmp->pid, &status, 0);
 			if (WIFSIGNALED(status))
 			{
 				if (WTERMSIG(status) == SIGINT)
