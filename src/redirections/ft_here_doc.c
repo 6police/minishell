@@ -1,26 +1,11 @@
 #include "redirections.h"
 
-static void	close_hd(int sig)
-{
-	(void)sig;
-	write(1, "\n", 1);
-	exit(130);
-}
-
-// function to set up signal handling for heredoc
-static void	heredoc_sig_wrapper(void)
-{
-	signal(SIGINT, close_hd);
-	signal(SIGQUIT, SIG_IGN);
-}
-
 // function to handle heredoc in a child process
 void	do_heredoc_child(char *limiter, t_shell *shell)
 {
 	char	*line;
 	int		fd;
 
-	heredoc_sig_wrapper();
 	fd = open(HERE_DOC, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd < 0)
 		exit(1);
@@ -45,25 +30,39 @@ void	do_heredoc_child(char *limiter, t_shell *shell)
 }
 
 // function to handle heredoc in the main shell process
-void	ft_handle_heredoc(t_fd *fd_struct, t_shell *shell)
+int 	ft_handle_heredoc(t_fd *fd_struct, t_shell *shell)
 {
 	pid_t	pid;
-	int		status;
+	static int	status;
 
 	pid = -1;
 	shell->hd = true;
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, SIG_IGN);	
 	pid = fork();
 	if (pid == 0)
 	{
+		signal(SIGQUIT, SIG_DFL);
+		signal(SIGINT, SIG_DFL);
 		shell->is_child = true;
 		do_heredoc_child(fd_struct->file, shell);
 	}
 	else
 	{
-		signal(SIGINT, SIG_IGN);
-		waitpid(pid, &status, 0);
-		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
-			shell->exit_value = 130;
-		setup_signals(shell);
+			waitpid(pid, &status, 0);
+			if (WIFSIGNALED(status))
+			{
+				if (WTERMSIG(status) == SIGINT)
+					ft_putstr_fd("\n", STDERR_FILENO);
+				else if (WTERMSIG(status) == SIGQUIT)
+					ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
+				shell->exit_value = 128 + WTERMSIG(status);
+			}
+			else if (WIFEXITED(status))
+				shell->exit_value = WEXITSTATUS(status);
 	}
+	if (shell->exit_value)
+		return (-1);	
+	setup_signals(shell);
+	return (0);
 }

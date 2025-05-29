@@ -42,7 +42,8 @@ static int	handle_redir_append(t_fd *redir, t_shell *shell)
 // function to handle heredoc redirection
 static int	handle_heredoc(t_fd *redir, t_shell *shell)
 {
-	ft_handle_heredoc(redir, shell);
+	if (ft_handle_heredoc(redir, shell) == -1)
+		return (130);
 	redir->fd = open(HERE_DOC, O_RDONLY);
 	if (redir->fd == -1)
 	{

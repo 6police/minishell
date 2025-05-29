@@ -46,6 +46,7 @@ static void	handle_invalid_command(t_cmd *cmd, t_shell *shell)
 void	run_commands(t_shell *shell)
 {
 	t_cmd	*tmp;
+	int		i;
 
 	if (!shell || !shell->cmds)
 		return ;
@@ -54,11 +55,9 @@ void	run_commands(t_shell *shell)
 		return ;
 	while (tmp)
 	{
-		if (setup_redirections(tmp, shell) == 1)
-		{
-			shell->exit_value = 1;
-			return ;
-		}
+		i = setup_redirections(tmp, shell);
+		if (i == 1 || i == 130)
+			return(shell->exit_value = i , (void) i);
 		if (tmp->is_valid)
 			processor(tmp, shell);
 		else

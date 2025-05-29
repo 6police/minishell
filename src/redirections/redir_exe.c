@@ -44,6 +44,7 @@ int	setup_redirections(t_cmd *cmd, t_shell *shell)
 	t_fd	*tmp;
 	t_fd	*last_in;
 	t_fd	*last_out;
+	int		i;
 
 	if (!cmd || !cmd->fd_struct)
 		return (0);
@@ -52,8 +53,9 @@ int	setup_redirections(t_cmd *cmd, t_shell *shell)
 	last_out = NULL;
 	while (tmp)
 	{
-		if (handle_redirections(tmp, shell) == 1)
-			return (1);
+		i = handle_redirections(tmp, shell);
+		if (i == 1 || i == 130)
+			return (i);
 		if (tmp->type == REDIR_IN || tmp->type == HERE_DOC_)
 			last_in = tmp;
 		else if (tmp->type == REDIR_OUT || tmp->type == REDIR_APPEND)
