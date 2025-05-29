@@ -51,6 +51,8 @@ static int	count_valid_args(char **args)
 
 	i = 0;
 	count = 0;
+	if (!args || !args[0] || args[0][0] == '\0')
+		return (0);
 	while (args[i] && args[i][0] != '\0')
 	{
 		if (is_redir_noarg(args[i]))

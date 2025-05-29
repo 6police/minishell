@@ -1,5 +1,16 @@
 #include "redirections.h"
 
+// function to close the specific pipes
+static void	close_specific_pipe(t_cmd *cmd)
+{
+	if (cmd->prev)
+	{
+		close_safe(cmd->prev->fd_pipe[0]);
+		close_safe(cmd->prev->fd_pipe[1]);
+	}
+}
+
+
 // function to close all the redirections in a single command
 void	close_cmd_redirs(t_cmd *cmd)
 {
@@ -25,6 +36,7 @@ void	close_cmd_redirs(t_cmd *cmd)
 		}
 		tmp = tmp->next;
 	}
+	close_specific_pipe(cmd);
 }
 
 // function to set up the redirections for a command

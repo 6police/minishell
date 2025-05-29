@@ -21,27 +21,6 @@ int	make_pipes(t_cmd *cmd, t_shell *shell)
 	return (0);
 }
 
-// close pipes
-static void	close_safe(int fd)
-{
-	if (fd != -1)
-		close(fd);
-}
-
-// function to close all pipes in the command list
-void	close_pipes(t_cmd *cmd)
-{
-	t_cmd	*tmp;
-
-	tmp = cmd;
-	while (tmp)
-	{
-		close_safe(tmp->fd_pipe[0]);
-		close_safe(tmp->fd_pipe[1]);
-		tmp = tmp->next;
-	}
-}
-
 // function to manage pipes
 void manage_pipes(t_cmd *cmd, t_shell *shell)
 {
@@ -57,12 +36,4 @@ void manage_pipes(t_cmd *cmd, t_shell *shell)
 		dup2(cmd->fd_pipe[1], STDOUT_FILENO);
 }
 
-// function to close pipes after forking
-void close_pipes_after_fork(t_cmd *cmd)
-{
-	if (cmd->prev)
-		close_safe(cmd->prev->fd_pipe[0]);
-	if (cmd->next)
-		close_safe(cmd->fd_pipe[1]);
-}
 

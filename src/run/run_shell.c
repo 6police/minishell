@@ -30,6 +30,9 @@ void	run_shell_debug(t_shell *shell)
 
 static void	minishellers(t_shell *shell)
 {
+	if (!shell->line || !(*shell->line))
+		return;
+	
 	add_history(shell->line);
 	parse(shell);
 	run_commands(shell);

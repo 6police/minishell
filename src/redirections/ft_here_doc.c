@@ -34,6 +34,8 @@ void	do_heredoc_child(char *limiter, t_shell *shell)
 		free(line);
 	}
 	close(fd);
+	if (shell->is_pipe)
+		close_pipes(shell->cmds);
 	clean_exit(&shell);
 }
 
@@ -43,6 +45,7 @@ void	ft_handle_heredoc(t_fd *fd_struct, t_shell *shell)
 	pid_t	pid;
 	int		status;
 
+	pid = -1;
 	shell->hd = true;
 	pid = fork();
 	if (pid == 0)

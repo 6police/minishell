@@ -26,70 +26,40 @@ bool	has_expansion(char *line)
 	return (expansion);
 }
 
-// // function to expand the line
-// char	*ft_expand(char *line, t_shell *shell)
-// {
-// 	char	*expanded_line;
-// 	t_cmd	*tmp;
-// 	char	*arg;
-// 	char	*aux;
-
-// 	if (!line)
-// 		return (NULL);
-// 	expanded_line = NULL;
-// 	tmp = NULL;
-// 	arg = ft_strdup(line);
-// 	aux = arg;
-// 	if (!arg)
-// 		return (NULL);
-// 	tmp = ft_calloc(sizeof(t_cmd), 1);
-// 	if (!tmp)
-// 	{
-// 		free(arg);
-// 		return (NULL);
-// 	}
-// 	tmp->args = &arg;
-// 	dollar_sign(tmp, shell);
-// 	expanded_line = ft_strdup(tmp->args[0]);
-// 	free(line);
-// 	tmp->args = NULL;
-// 	free(aux);
-// 	free(arg);
-// 	free(tmp);
-// 	return (expanded_line);
-// }
-
-// // function to initialize a temporary command structure for expansion
-static t_cmd	*init_tmp_cmd(char *arg)
+static void free_wrapper(char *line, char *arg, t_cmd *tmp)
 {
-	t_cmd	*tmp;
-
-	tmp = ft_calloc(sizeof(t_cmd), 1);
-	if (!tmp)
-		return (NULL);
-	tmp->args = &arg;
-	return (tmp);
+	if (line)
+		free(line);
+	if (arg)
+		free(arg);
+	if (tmp)
+		free(tmp);
 }
 
-// function to expand the line by replacing dollar signs with their values
+// // function to expand the line
 char	*ft_expand(char *line, t_shell *shell)
 {
 	char	*expanded_line;
-	char	*arg;
 	t_cmd	*tmp;
+	char	*arg;
+	char	*aux;
 
 	if (!line)
 		return (NULL);
+	expanded_line = NULL;
+	tmp = NULL;
 	arg = ft_strdup(line);
+	aux = arg;
 	if (!arg)
 		return (NULL);
-	tmp = init_tmp_cmd(arg);
+	tmp = ft_calloc(sizeof(t_cmd), 1);
 	if (!tmp)
 		return (free(arg), NULL);
+	tmp->args = &arg;
 	dollar_sign(tmp, shell);
 	expanded_line = ft_strdup(tmp->args[0]);
 	free(line);
-	free(arg);
-	free(tmp);
+	tmp->args = NULL;
+	free_wrapper(arg, aux, tmp);
 	return (expanded_line);
 }
