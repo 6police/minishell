@@ -6,7 +6,4 @@
 // Setup signals
 void	setup_signals(t_shell *shell);
 
-
-
-
 #endif

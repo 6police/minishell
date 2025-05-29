@@ -23,6 +23,6 @@ void	swap_env_var(t_env_var *a, t_env_var *b, t_env *env);
 // function to sort the environment variables alphabetically
 void	sort_env_list(t_env *env);
 
-t_env *new_env(void);
+t_env	*new_env(void);
 
 #endif

@@ -1,19 +1,18 @@
 #include "ft_run.h"
 
-void wait_commands(t_shell *shell)
+// function to wait for all commands to finish
+void	wait_commands(t_shell *shell)
 {
-	t_cmd *tmp;
-	int status;
+	t_cmd	*tmp;
 
 	if (!shell->cmds)
 		return ;
-
 	tmp = shell->cmds;
 	while (tmp)
 	{
 		if (tmp->pid > 0)
 		{
-			waitpid(tmp->pid, &status, 0);
+			waitpid(tmp->pid, &shell->exit_value, 0);
 			if (WIFSIGNALED(status))
 			{
 				if (WTERMSIG(status) == SIGINT)
@@ -27,29 +26,42 @@ void wait_commands(t_shell *shell)
 		}
 		tmp = tmp->next;
 	}
-	setup_signals(shell);
 }
 
+// function to handle invalid commands
+static void	handle_invalid_command(t_cmd *cmd, t_shell *shell)
+{
+	if (cmd->fd_struct)
+		close_fds(cmd);
+	else if (cmd->args && cmd->args[0] && cmd->name)
+	{
+		ft_printf_fd(STDERR_FILENO, "%s command: not found\n", cmd->args[0]);
+		shell->exit_value = 127;
+	}
+}
+
+// function to run commands in the shell
 void	run_commands(t_shell *shell)
 {
-	t_cmd *tmp;
+	t_cmd	*tmp;
 
-	if (!shell->cmds)
+	if (!shell || !shell->cmds)
 		return ;
-
 	tmp = shell->cmds;
-	if (shell->is_pipe)
-		if (make_pipes(tmp, shell) == 1)
-			return ;
+	if (shell->is_pipe && make_pipes(tmp, shell) == 1)
+		return ;
 	while (tmp)
 	{
+		if (setup_redirections(tmp, shell) == 1)
+		{
+			shell->exit_value = 1;
+			return ;
+		}
 		if (tmp->is_valid)
 			processor(tmp, shell);
 		else
-		{
-			ft_printf_fd(STDERR_FILENO, "%s command: not found\n", tmp->args[0]);
-			shell->exit_value = 127;
-		}
+			handle_invalid_command(tmp, shell);
+		close_cmd_redirs(tmp);
 		tmp = tmp->next;
 	}
 	if (shell->is_pipe)

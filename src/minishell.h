@@ -3,10 +3,8 @@
 
 # include "includes.h"
 
-
-
 // main.c
 int	main(int argc, char **argv, char **env);
-		// main function to run the minishell program
+// main function to run the minishell program
 
 #endif

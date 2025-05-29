@@ -12,6 +12,12 @@ void	print_export(t_env *env, t_cmd *cmd);
 // print the redirections
 void	print_redirs(char **redirs);
 
+// print the command arguments
+void	print_args(t_cmd *cmd);
+
+// print the command redirections
+void	print_cmd_redirs(t_cmd *cmd);
+
 // Print the command
 void	print_command(t_cmd *cmd);
 

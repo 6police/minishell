@@ -5,6 +5,7 @@
 # include <errno.h>
 # include <fcntl.h>
 # include <limits.h>
+# include <linux/types.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
@@ -15,10 +16,8 @@
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
-# include <unistd.h>
-# include <linux/types.h>
 # include <termios.h>
-
+# include <unistd.h>
 
 // headers from lib_ft directory
 # include "../inc/lib_ft/ft_printf.h"
@@ -31,19 +30,19 @@
 
 // headers from src directory
 # include "builtins/ft_builtins.h"
+# include "cmd_as_regular_user/ft_cmd_as_regular_user.h"
 # include "debugging/ft_debug.h"
+# include "dirent.h"
 # include "env/ft_env.h"
 # include "frees/ft_free.h"
+# include "history/ft_history.h"
 # include "inits/ft_inits.h"
 # include "parsing/ft_parsing.h"
+# include "redirections/redirections.h"
 # include "run/ft_run.h"
 # include "signals/ft_signal.h"
 # include "utils/ft_utils.h"
 # include "validations/ft_validations.h"
-# include "history/ft_history.h"
-# include "dirent.h"
-# include "redirections/redirections.h"
-# include "cmd_as_regular_user/ft_cmd_as_regular_user.h"
 # include "wildcards/ft_wildcard.h"
 
 // headers from src/pipes directory

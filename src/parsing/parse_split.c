@@ -1,4 +1,3 @@
-
 #include "ft_parsing.h"
 
 // function to count the number of quotes
@@ -39,74 +38,44 @@ void	mark_and_replace(char *line, int letter, int sub)
 	}
 }
 
-// function to check for the existence of a pipe in the line.
-// it cant be followed by another |
-void	mark_pipes(char *line)
+// function to check if the token is not empty
+bool	is_all_whitespace(const char *s)
 {
-	int	i;
-	int	c;
-
-	i = -1;
-	c = 0;
-	if (!line)
-		return ;
-	if (line[0] == '|')
-		ft_printf_fd(2, "Error: syntax error near unexpected token `|'\n");
-	while (line[++i])
+	if (!s)
+		return (true);
+	while (*s)
 	{
-		if ((line[i] == '\'' || line[i] == '"') && !c)
-			c = line[i];
-		else if (c && line[i] == c)
-			c = 0;
-		else if (line[i] == '|' && !c && line[i + 1] != '\0')
-		{
-			if (line[i + 1] != '|' && line[i - 1] != '|')
-				line[i] = 7;
-		}
+		if (!ft_isspace(*s))
+			return (false);
+		s++;
 	}
+	return (true);
 }
 
+// function to split the line into tokens
 char	**ft_parse_split(char *line, int letter, int sub)
 {
-	(void)letter;
-	if (!line)
-		return (NULL);
-	if (count_quotes(line) != 0)
-		return (ft_printf_fd(2, "Error: Odd number of quotes\n"), NULL);
-	mark_pipes(line);
-	return (ft_split(line, sub));
-}
-
-static void	add_last(t_token **head, t_token *token)
-{
-	t_token	*tmp;
-
-	tmp = *head;
-	if (!tmp)
-		*head = token;
-	else
-	{
-		while (tmp->next)
-			tmp = tmp->next;
-		tmp->next = token;
-	}
-}
-
-t_token	*init_token(char **tokens)
-{
-	t_token	*token;
-	t_token	*head;
+	char	**tokens;
+	int		nbrpipes;
 	int		i;
 
 	i = 0;
-	head = NULL;
-	while (tokens[i])
-	{
-		token = ft_calloc(sizeof(t_token), 1);
-		token->token = &tokens[i];
-		token->next = NULL;
-		add_last(&head, token);
+	nbrpipes = 0;
+	i = 0;
+	(void)letter;
+	if (!line || !(*line))
+		return (NULL);
+	if (count_quotes(line) != 0)
+		return (ft_printf_fd(2, "Error: Odd number of quotes\n"), NULL);
+	nbrpipes = mark_pipes(line);
+	tokens = ft_split(line, sub);
+	while (tokens && tokens[i] != NULL && token_not_empty(tokens[i]))
 		i++;
+	if (nbrpipes + 1 != i)
+	{
+		free_tokens(tokens);
+		return (ft_printf_fd(2,
+				"Error: syntax error near unexpected token `|'\n"), NULL);
 	}
-	return (head);
+	return (tokens);
 }

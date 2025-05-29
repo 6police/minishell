@@ -27,7 +27,7 @@ void	free_env(t_env *env);
 void	free_tokens(char **tokens);
 
 // free the shell
-void	free_shell(t_shell **shell, int debug);
+void	free_shell(t_shell **shell);
 
 // exit functions
 void	flush_commands(t_shell *shell);

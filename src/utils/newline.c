@@ -1,9 +1,10 @@
 #include "ft_utils.h"
 
+// function to print a newline and reset the prompt
 void	new_prompt(void)
 {
-	write(STDERR_FILENO, "\n", 1); // Use write to ensure atomic operation
+	ft_printf_fd(STDOUT_FILENO, "\n");
 	rl_on_new_line();
-	rl_replace_line("", 0);
+	rl_replace_line("", 14);
 	rl_redisplay();
 }

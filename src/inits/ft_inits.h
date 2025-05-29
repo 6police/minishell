@@ -7,7 +7,4 @@
 t_shell	*init_shell(char **env);
 t_shell	*init_shell_no_env(void);
 
-
-int		disable_echo(int disable);
-
 #endif

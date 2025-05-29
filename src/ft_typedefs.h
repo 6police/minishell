@@ -1,9 +1,10 @@
 #ifndef FT_TYPEDEFS_H
 # define FT_TYPEDEFS_H
 
-# define PROMPT monke " minishell _$ "
+# define PROMPT MONKE " minishell _$ "
 # define PROMPT_SIZE 11
 
+# define GRAY "\033[0;37m"
 # define RED "\033[0;31m"
 # define GREEN "\033[0;32m"
 # define YELLOW "\033[0;33m"
@@ -17,6 +18,8 @@
 # define HISTORY ".minishell_history"
 
 # define REDIR_FAILURE "minishell: syntax error near unexpected token"
+# define NOFILE "No such file or directory"
+# define TOO_LONG_LINE "minishell: Input too long: Maximum length is "
 
 # define MAX_PIPES 100
 # define MAX_LINE_LENGTH 4096
@@ -52,9 +55,9 @@ typedef enum e_exit_code
 // struct to store the here document information
 typedef struct s_wildcard
 {
-	char	**wildcard;
-	int	nbr_of_files;
-}		t_wildcard;
+	char				**wildcard;
+	int					nbr_of_files;
+}						t_wildcard;
 
 // struct to store the redirections
 typedef enum s_type
@@ -78,15 +81,14 @@ typedef struct s_fd
 // struct to store the command information
 struct					cmd
 {
-	
-	char *line; // line of the command
+	char *line;    // line of the command
 	char **redirs; // redirections
 
 	char *name;  // command name
 	char **args; // arguments
 	char *path;  // path to the command,
 	int					fd[3];
-	int		fd_pipe[2]; // file descriptor for the pipe
+	int fd_pipe[2]; // file descriptor for the pipe
 
 	pid_t				pid;
 
@@ -131,16 +133,16 @@ typedef struct token
 // struct to store the shell information
 struct					shell
 {
-	bool			hd;
+	bool				hd;
 
 	t_env *env;         // environment variables
 	char *line;         // line read from the input
 	char *history_file; // file to store the history
 
-	char **tokens;  // tokens from the line after pipe separation
-	bool is_pipe;   // if the command has a pipe
-	bool wait;    // if the command should wait for the child process to finish
-	
+	char **tokens; // tokens from the line after pipe separation
+	bool is_pipe;  // if the command has a pipe
+	bool wait;     // if the command should wait for the child process to finish
+
 	pid_t main_pid; // process id of the command
 	bool is_child;  // if the command is a child process
 
@@ -156,8 +158,7 @@ struct					shell
 
 	int *separators; // separators for the parsing
 
-	struct termios orig_termios;
-
+	struct termios		orig_termios;
 
 	t_cmd *cmds; // commands
 };

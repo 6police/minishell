@@ -1,6 +1,6 @@
 #include "ft_cmd_as_regular_user.h"
 
-static char	*handle_dollar(char *arg, t_shell *shell);
+char	*handle_dollar(char *arg, t_shell *shell);
 static int	check_quotes_type(char *str);
 
 void	dollar_sign(t_cmd *cmd, t_shell *shell)
@@ -28,7 +28,7 @@ void	dollar_sign(t_cmd *cmd, t_shell *shell)
 		i++;
 	}
 }
-static char	*handle_dollar(char *arg, t_shell *shell)
+char	*handle_dollar(char *arg, t_shell *shell)
 {
 	int			i;
 	int			delete;

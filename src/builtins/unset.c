@@ -1,16 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   unset.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/19 20:00:06 by joamiran          #+#    #+#             */
-/*   Updated: 2025/04/24 23:54:57 by nneves-a         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-
 #include "ft_builtins.h"
 
 // function to find the env variable in the list
@@ -68,7 +55,7 @@ void	unset_env_var(t_shell *shell, char *key)
 // function to unset multiple environment variables
 void	unset_vars(t_cmd *cmd, t_shell *shell)
 {
-	int	i;
+	int		i;
 	char	**keys;
 
 	keys = cmd->args;
