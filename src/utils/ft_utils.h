@@ -12,9 +12,8 @@ void	*handle_redir_malloc_error(char **redirs);
 // new prompt
 void	new_prompt(void);
 
-// remove quotes,
-// frees the old str and returns a new allocated one without quotes
-char	*remove_quotes(char *arg);
+// remove quotes from the beggining and end of the str, frees the old str and returns a new allocated one without quotes
+char	*remove_quotes_beg_end(char *arg);
 
 // another function to remove quotes,
 // frees the old str and returns a new allocated one without quotes

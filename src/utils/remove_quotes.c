@@ -1,7 +1,6 @@
 #include "ft_utils.h"
 
-// removes quotes from the beginning and end of a string
-char	*remove_quotes(char *arg)
+char	*remove_quotes_beg_end(char *arg)
 {
 	char	*new_str;
 
