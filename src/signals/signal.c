@@ -24,5 +24,8 @@ static void	siginfo_handler(int sig, siginfo_t *info, void *context)
 	(void)info;
 
 	if (sig == SIGINT)
+	{
 		new_prompt();
+		g_signal = 1;
+	}
 }

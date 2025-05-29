@@ -1,25 +1,23 @@
 #include "ft_cmd_as_regular_user.h"
 
-char	*handle_dollar(char *arg, t_shell *shell);
+static char	*handle_dollar(char *arg, t_shell *shell);
 static int	check_quotes_type(char *str);
 
-void	dollar_sign(t_shell *shell, int n_toks)
+void	dollar_sign_here_doc(t_cmd *cmd, t_shell *shell)
 {
-	int	i;
+	int		i;
 	int		quote_type;
 	bool	has_dollar;
 
 	i = 0;
 	quote_type = 0;
 	has_dollar = false;
-	while (i < n_toks)
+	while (cmd->args[i])
 	{
-		if (shell->tokens[i] == NULL)
-			i++;
-		if (ft_strstr(shell->tokens[i], "$") != NULL)
+		if (ft_strstr(cmd->args[i], "$") != NULL)
 		{
-			quote_type = check_quotes_type(shell->tokens[i]);
 			has_dollar = true;
+			quote_type = check_quotes_type(cmd->args[i]);
 		}
 		if ((quote_type != 2) && has_dollar == true)
 		{
@@ -30,7 +28,8 @@ void	dollar_sign(t_shell *shell, int n_toks)
 		i++;
 	}
 }
-char	*handle_dollar(char *arg, t_shell *shell)
+
+static char	*handle_dollar(char *arg, t_shell *shell)
 {
 	int			i;
 	int			delete;
@@ -71,7 +70,7 @@ char	*handle_dollar(char *arg, t_shell *shell)
 					}
 					else
 					{	
-						arg = str_replace_segment(arg, env_var->value, start, env_key_len);
+						arg = str_replace_segment(arg, env_var->value, start, env_key_len); // ver os leaks do str_replace_segment
 						i += ft_strlen(env_var->value) - 1;
 					}
 					free(tmp);

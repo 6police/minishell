@@ -25,7 +25,6 @@ char	**ft_removequotes(char **args);
 char	*remove_all_quotes(char *arg);
 
 // removes a segment from a string with a new one
-char	*str_replace_segment(char *src, const char *replace, int start, int len_to_delete);
 char	*str_replace_segment(const char *src, const char *replace, int start,
 			int len_to_delete);
 
@@ -37,5 +36,17 @@ bool	ft_isspace(char c);
 
 // function to copy an array of strings
 char	**copy_array(char **array);
+
+// ft_str_r_cmp.c
+int		ft_str_r_cmp(const char *s1, const char *s2);
+
+// ft_strstr.c
+char	*ft_strstr(const char *haystack, const char *needle);
+
+// ft_strcat.c
+char	*ft_strcat(char *dest, const char *src);
+
+// ft_realloc.c
+void	*ft_realloc(void *ptr, size_t size, size_t old_size);
 
 #endif

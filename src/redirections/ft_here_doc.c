@@ -51,7 +51,7 @@ static char *ft_expand(char *line, t_shell *shell)
 	}
 	tmp->args = &arg;
 	(void)shell; // shell is not used in this function, but kept for consistency
-	//dollar_sign(tmp, shell);
+	dollar_sign_here_doc(tmp, shell);
 		
 	expanded_line = ft_strdup(tmp->args[0]);
 	
