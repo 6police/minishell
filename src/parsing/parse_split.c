@@ -1,4 +1,3 @@
-
 #include "ft_parsing.h"
 
 // function to count the number of quotes

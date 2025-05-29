@@ -15,6 +15,7 @@ void	add_last_redir(t_fd **head, t_fd *new_redir)
 		tmp->next = new_redir;
 	}
 }
+
 // function to assign the type of redirection based on the string
 int	assign_redir_type(char *str)
 {

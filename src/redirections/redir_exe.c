@@ -10,7 +10,6 @@ static void	close_specific_pipe(t_cmd *cmd)
 	}
 }
 
-
 // function to close all the redirections in a single command
 void	close_cmd_redirs(t_cmd *cmd)
 {
@@ -42,9 +41,9 @@ void	close_cmd_redirs(t_cmd *cmd)
 // function to set up the redirections for a command
 int	setup_redirections(t_cmd *cmd, t_shell *shell)
 {
-	t_fd *tmp;
-	t_fd *last_in;
-	t_fd *last_out;
+	t_fd	*tmp;
+	t_fd	*last_in;
+	t_fd	*last_out;
 
 	if (!cmd || !cmd->fd_struct)
 		return (0);

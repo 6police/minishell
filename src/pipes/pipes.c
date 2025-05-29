@@ -22,18 +22,14 @@ int	make_pipes(t_cmd *cmd, t_shell *shell)
 }
 
 // function to manage pipes
-void manage_pipes(t_cmd *cmd, t_shell *shell)
+void	manage_pipes(t_cmd *cmd, t_shell *shell)
 {
 	if (!cmd || !shell->is_pipe)
-		return;
-
+		return ;
 	// If input redirection is set, use it
 	if (cmd->prev)
 		dup2(cmd->prev->fd_pipe[0], STDIN_FILENO);
-
 	// If output redirection is set, use it
 	if (cmd->next)
 		dup2(cmd->fd_pipe[1], STDOUT_FILENO);
 }
-
-

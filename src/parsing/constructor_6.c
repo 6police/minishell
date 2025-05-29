@@ -1,49 +1,6 @@
 #include "ft_parsing.h"
 
-// function that normalizes the command->arg array.
-
-// void	process_cmd_args(t_cmd *cmd)
-// {
-// 	char	**newargs;
-// 	int		arg_count;
-// 	int		i;
-
-// 	if (!cmd || !cmd->args)
-// 		return ;
-// 	arg_count = 0;
-// 	i = 0;
-// 	while (cmd->args[i] && cmd->args[i][0] != '\0')
-// 	{
-// 		if (is_redir_noarg(cmd->args[i]))
-// 			i += 2;
-// 		else if (is_redir(cmd->args[i]))
-// 			i++;
-// 		else
-// 		{
-// 			arg_count++;
-// 			i++;
-// 		}
-// 	}
-// 	newargs = ft_calloc(sizeof(char *), arg_count + 1);
-// 	i = 0;
-// 	arg_count = 0;
-// 	while (cmd->args[i] && cmd->args[i][0] != '\0')
-// 	{
-// 		if (is_redir_noarg(cmd->args[i]))
-// 			i += 2;
-// 		else if (is_redir(cmd->args[i]))
-// 			i++;
-// 		else
-// 		{
-// 			newargs[arg_count] = ft_strdup(cmd->args[i]);
-// 			arg_count++;
-// 			i++;
-// 		}
-// 	}
-// 	free_split(cmd->args);
-// 	cmd->args = ft_removequotes(newargs);
-// }
-
+// function to check if the argument is a redirection without an argument
 static int	count_valid_args(char **args)
 {
 	int	i;
@@ -68,6 +25,7 @@ static int	count_valid_args(char **args)
 	return (count);
 }
 
+// function to copy valid arguments from the original args array
 static char	**copy_valid_args(char **args, int count)
 {
 	char	**newargs;
@@ -95,6 +53,7 @@ static char	**copy_valid_args(char **args, int count)
 	return (newargs);
 }
 
+// function to process command arguments by removing invalid ones
 void	process_cmd_args(t_cmd *cmd)
 {
 	char	**newargs;

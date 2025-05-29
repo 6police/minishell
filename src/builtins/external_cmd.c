@@ -1,9 +1,5 @@
 #include "ft_builtins.h"
 
-// we need to somehow convert the linked list of env variables to an array of strings
-// so that we can pass it to the execve function
-// we will use the following function to convert the linked list to an array of strings
-
 static void		free_env_array(char **envp);
 static size_t	count_env_vars(t_env *env);
 static char		**convert_env_to_array(t_env *env);
@@ -21,17 +17,17 @@ void	execute_external(t_cmd *cmd, t_shell *shell)
 	}
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, SIG_IGN);
-
-		if (execve(cmd->path, cmd->args, envp) == -1)
+	if (execve(cmd->path, cmd->args, envp) == -1)
+	{
+		if (errno == ENOENT)
 		{
-			if (errno == ENOENT)
-			{
-				ft_printf_fd(STDERR_FILENO, "minishell: command not found: %s\n", cmd->name);
-				shell->exit_value = 127; // or should i exit(127);?
-			}
-			else
-				shell->exit_value = 126; // or should i exit(126);
+			ft_printf_fd(STDERR_FILENO, "minishell: command not found: %s\n",
+				cmd->name);
+			shell->exit_value = 127;
 		}
+		else
+			shell->exit_value = 126;
+	}
 	free_env_array(envp);
 }
 

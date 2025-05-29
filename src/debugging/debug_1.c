@@ -15,6 +15,7 @@ void	print_env(t_env *env, t_cmd *cmd)
 	}
 }
 
+// Print the exported environment variables
 void	print_export(t_env *env, t_cmd *cmd)
 {
 	t_env_var	*tmp;
@@ -27,6 +28,8 @@ void	print_export(t_env *env, t_cmd *cmd)
 		tmp = tmp->next;
 	}
 }
+
+// Print the arguments of a command
 void	print_args(t_cmd *cmd)
 {
 	int	i;
@@ -40,6 +43,7 @@ void	print_args(t_cmd *cmd)
 	ft_printf("\n");
 }
 
+// Print the redirections
 void	print_redirs(char **redirs)
 {
 	int	i;
@@ -53,6 +57,7 @@ void	print_redirs(char **redirs)
 	ft_printf("\n");
 }
 
+// Print the command redirections
 void	print_cmd_redirs(t_cmd *cmd)
 {
 	t_fd	*tmp;

@@ -7,7 +7,7 @@ void	echo_shell(t_cmd *cmd, t_shell *shell)
 	bool	will_remove_nl;
 
 	will_remove_nl = false;
-	(void) shell;
+	(void)shell;
 	if (!cmd || !cmd->args)
 	{
 		ft_putchar_fd('\n', cmd->fd[1]);
@@ -30,7 +30,6 @@ static void	echoing(t_cmd *cmd, bool will_remove_nl)
 	while (cmd->args[++i])
 	{
 		ft_printf_fd(cmd->fd[1], "%s", cmd->args[i]);
-		// check if there is more so we can put wc_type space ' '
 		if (cmd->args[i + 1])
 			ft_putchar_fd(' ', cmd->fd[1]);
 	}

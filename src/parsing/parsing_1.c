@@ -55,3 +55,4 @@ bool	check_redir_validity(t_shell *shell)
 	}
 	return (true);
 }
+

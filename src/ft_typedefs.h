@@ -1,7 +1,7 @@
 #ifndef FT_TYPEDEFS_H
 # define FT_TYPEDEFS_H
 
-# define PROMPT monke " minishell _$ "
+# define PROMPT MONKE " minishell _$ "
 # define PROMPT_SIZE 11
 
 # define GRAY "\033[0;37m"

@@ -1,6 +1,6 @@
-
 #include "ft_validations.h"
 
+// function to check if a file exists and is accessible
 int	file_access_check(char *file)
 {
 	if (access(file, F_OK) == -1)
@@ -8,6 +8,7 @@ int	file_access_check(char *file)
 	return (0);
 }
 
+// function to join two strings with a '/' in between
 char	*ft_strjoin2(char *paths, char *cmd)
 {
 	char	*path1;
@@ -19,6 +20,7 @@ char	*ft_strjoin2(char *paths, char *cmd)
 	return (path2);
 }
 
+// function to check if a command is in the PATH environment variable
 char	*checkforpath(char *cmd, t_env *env)
 {
 	t_env_var	*tmp;

@@ -85,9 +85,6 @@ void	process_cmd_args(t_cmd *cmd);
 // function to add a command to the linked list
 void	add_last_cmd(t_cmd **head, t_cmd *new_cmd);
 
-// function to copy an array of strings
-char	**copy_array(char **array);
-
 // function to check if the command is a built-in command
 void	check_builtin(t_cmd *cmd);
 

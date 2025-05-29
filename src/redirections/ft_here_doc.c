@@ -5,7 +5,14 @@ static void	close_hd(int sig)
 {
 	(void)sig;
 	write(1, "\n", 1);
-	exit(130); // Signal exit status for SIGINT
+	exit(130);
+}
+
+// function to set up signal handling for heredoc
+static void	heredoc_sig_wrapper(void)
+{
+	signal(SIGINT, close_hd);
+	signal(SIGQUIT, SIG_IGN);
 }
 
 // function to handle heredoc in a child process
@@ -14,8 +21,7 @@ void	do_heredoc_child(char *limiter, t_shell *shell)
 	char	*line;
 	int		fd;
 
-	signal(SIGINT, close_hd);
-	signal(SIGQUIT, SIG_IGN);
+	heredoc_sig_wrapper();
 	fd = open(HERE_DOC, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd < 0)
 		exit(1);

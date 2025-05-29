@@ -29,7 +29,7 @@ t_env	*copy_env(char **env)
 		ft_putstr_fd("Error: invalid environment\n", 2);
 		exit(1);
 	}
-	env_cpy = ft_calloc(1, sizeof(t_env)); // Allocate for the environment list
+	env_cpy = ft_calloc(1, sizeof(t_env));
 	if (!env_cpy)
 	{
 		ft_putstr_fd("Error: malloc failed\n", 2);

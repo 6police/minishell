@@ -1,5 +1,6 @@
 #include "ft_parsing.h"
 
+// function to assemble a command with a valid path
 void	assemble_cmd_path(t_cmd *cmd, char **args)
 {
 	cmd->path = ft_strdup(cmd->name);
@@ -8,6 +9,7 @@ void	assemble_cmd_path(t_cmd *cmd, char **args)
 	cmd->builtin_func = execute_external;
 }
 
+// function to check if the command is a valid external command
 void	assemble_cmd(t_cmd *cmd, char **args, t_shell *shell)
 {
 	char	*path;

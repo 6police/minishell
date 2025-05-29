@@ -1,5 +1,6 @@
 #include "ft_utils.h"
 
+// function to get the process ID of the current process
 int	ft_get_pid(void)
 {
 	int		fd;

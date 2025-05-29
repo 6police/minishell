@@ -1,19 +1,7 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   unicodes.h                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: joamiran <joamiran@student.42lisboa.com>   +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/10 17:51:09 by joamiran          #+#    #+#             */
-/*   Updated: 2025/02/10 17:53:22 by joamiran         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef UNICODES_H
 # define UNICODES_H
 
-# define monke "\U0001F648"
+# define MONKE "\U0001F648"
 # define EMOJI_SMILE "\U0001F600"       // 😀
 # define EMOJI_GRIN "\U0001F601"        // 😁
 # define EMOJI_LAUGH "\U0001F602"       // 😂

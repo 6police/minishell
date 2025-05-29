@@ -1,7 +1,6 @@
-// exit status of the last executed function/program/command
-
 #include "ft_builtins.h"
 
+// function to print the exit code
 void	exit_code_printer(t_cmd *cmd, t_shell *shell)
 {
 	if (shell->is_pipe)

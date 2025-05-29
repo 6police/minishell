@@ -1,49 +1,5 @@
 #include "ft_parsing.h"
 
-// parse the line according to priority
-// void	parse(t_shell *shell)
-// {
-// 	int	sub;
-// 	int token_count;
-
-// 	token_count = 0;
-// 	sub = 7; // the character to replace the separator
-// 	shell->tokens = parse_line(shell->line, shell->separators[0], sub);
-// 	if(invalidate_tokens(shell->tokens) || !check_syntax(shell->tokens))
-//     {
-// 		if (!shell->tokens)
-// 			return ;
-// 		free_tokens(shell->tokens);
-// 		shell->tokens = NULL;
-// 		ft_printf_fd(STDERR_FILENO, "minishell: syntax error\n");
-// 		return ;
-// 	}
-// 	while( shell->tokens && shell->tokens[token_count])
-// 		token_count++;
-// 	if (token_count >= MAX_PIPES)
-// 	{
-// 		ft_printf_fd(STDERR_FILENO, "minishell: too many pipes (max %d)\n", MAX_PIPES);
-// 		free_tokens(shell->tokens);
-// 		shell->tokens = NULL;
-// 		return ;
-// 	}
-// 	if (!shell->tokens)
-// 		return (ft_printf_fd(STDERR_FILENO, "minishell: syntax error\n"), (void)0);
-// 	build_cmds(shell);
-// 	if (shell->tokens[0] && shell->tokens[1])
-// 		shell->is_pipe = true;
-// 	else
-// 		shell->is_pipe = false;
-// 	if (!check_redir_validity(shell))
-// 		invalidate_cmds(shell);
-// 	if (shell->debug)
-// 	{
-// 		print_tokens(shell);
-// 		ft_printf("pipe: %d\n", shell->is_pipe);
-// 		print_all_commands(shell);
-// 	}
-// }
-
 // function to check if the tokens are invalid or if the syntax is incorrect
 static bool	is_invalid_token_syntax(t_shell *shell)
 {
@@ -70,7 +26,8 @@ static bool	exceeds_pipe_limit(t_shell *shell)
 		count++;
 	if (count >= MAX_PIPES)
 	{
-		ft_printf_fd(STDERR_FILENO, "minishell: too many pipes (max %d)\n", MAX_PIPES);
+		ft_printf_fd(STDERR_FILENO, "minishell: too many pipes (max %d)\n",
+			MAX_PIPES);
 		free_tokens(shell->tokens);
 		shell->tokens = NULL;
 		return (true);

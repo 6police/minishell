@@ -34,4 +34,7 @@ int		ft_get_pid(void);
 // function to check if a character is a space
 bool	ft_isspace(char c);
 
+// function to copy an array of strings
+char	**copy_array(char **array);
+
 #endif

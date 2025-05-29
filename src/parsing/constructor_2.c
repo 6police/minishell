@@ -29,6 +29,7 @@ t_cmd	*init_cmd(char *name, char **args)
 	return (cmd);
 }
 
+// function to process the command arguments
 static void	cmd_processor_a(t_cmd *cmd, t_shell *shell, int i)
 {
 	int	redir_check;
@@ -51,6 +52,7 @@ static void	cmd_processor_a(t_cmd *cmd, t_shell *shell, int i)
 	}
 }
 
+// function to parse and populate a command from the tokens
 static t_cmd	*parse_cmd(t_shell *shell, int i)
 {
 	t_cmd	*cmd;
@@ -78,6 +80,7 @@ static t_cmd	*parse_cmd(t_shell *shell, int i)
 	return (cmd);
 }
 
+// function to find the head of the command linked list
 static t_cmd	*find_head(t_shell *shell)
 {
 	t_cmd	*head_cmd;

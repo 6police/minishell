@@ -1,5 +1,6 @@
 #include "ft_utils.h"
 
+// removes quotes from the beginning and end of a string
 char	*remove_quotes(char *arg)
 {
 	char	*new_str;
@@ -21,30 +22,7 @@ char	*remove_quotes(char *arg)
 	return (arg);
 }
 
-// // remove all occurences of quotes from a string
-// char *remove_all_quotes(char *arg)
-// {
-// 	char	*new_str;
-// 	char	*temp;
-
-// 	if (!arg)
-// 		return (NULL);
-// 	new_str = ft_strdup(arg);
-// 	temp = new_str;
-
-// 	while (*temp)
-// 	{
-// 		if (*temp == '\"' || *temp == '\'')
-// 		{
-// 			ft_memmove(temp, temp + 1, ft_strlen(temp));
-// 			temp--;
-// 		}
-// 		temp++;
-// 	}
-// 	free(arg); // Free the old arg
-// 	return (new_str);
-// }
-
+// removes all quotes from a string
 char	*remove_all_quotes(char *arg)
 {
 	char	*new_str;
@@ -69,34 +47,101 @@ char	*remove_all_quotes(char *arg)
 	return (new_str);
 }
 
-char	**ft_removequotes(char **args)
+// removes quotes from each argument in an array of strings
+// char	**ft_removequotes(char **args)
+// {
+// 	char	**newargs;
+// 	int		len;
+
+// 	int i, j, k;
+// 	for (i = 0; args[i]; i++)
+// 		;
+// 	newargs = ft_calloc(i + 1, sizeof(char *));
+// 	if (!newargs)
+// 		return (NULL);
+// 	for (i = 0; args[i]; i++)
+// 	{
+// 		len = 0;
+// 		for (j = 0; args[i][j]; j++)
+// 		{
+// 			if (args[i][j] != '\'' && args[i][j] != '"')
+// 				len++;
+// 		}
+// 		newargs[i] = ft_calloc(len + 1, sizeof(char));
+// 		if (!newargs[i])
+// 			return (NULL);
+// 		for (j = 0, k = 0; args[i][j]; j++)
+// 		{
+// 			if (args[i][j] != '\'' && args[i][j] != '"')
+// 				newargs[i][k++] = args[i][j];
+// 		}
+// 		newargs[i][k] = '\0';
+// 	}
+// 	newargs[i] = NULL;
+// 	free_split(args);
+// 	return (newargs);
+// }
+
+// counts the number of characters in a string excluding quotes
+static int	count_unquoted_chars(const char *str)
 {
-	char	**newargs;
+	int	count;
+	int	i;
+
+	count = 0;
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] != '\'' && str[i] != '"')
+			count++;
+		i++;
+	}
+	return (count);
+}
+
+// removes quotes from a single argument
+static char	*remove_quotes_from_arg(const char *str)
+{
+	int		i;
+	int		j;
+	char	*res;
 	int		len;
 
-	int i, j, k;
-	for (i = 0; args[i]; i++)
-		;
+	len = count_unquoted_chars(str);
+	res = ft_calloc(len + 1, sizeof(char));
+	if (!res)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (str[i])
+	{
+		if (str[i] != '\'' && str[i] != '"')
+			res[j++] = str[i];
+		i++;
+	}
+	res[j] = '\0';
+	return (res);
+}
+
+// removes quotes from each argument in an array of strings
+char	**ft_removequotes(char **args)
+{
+	int		i;
+	char	**newargs;
+
+	i = 0;
+	while (args[i])
+		i++;
 	newargs = ft_calloc(i + 1, sizeof(char *));
 	if (!newargs)
 		return (NULL);
-	for (i = 0; args[i]; i++)
+	i = 0;
+	while (args[i])
 	{
-		len = 0;
-		for (j = 0; args[i][j]; j++)
-		{
-			if (args[i][j] != '\'' && args[i][j] != '"')
-				len++;
-		}
-		newargs[i] = ft_calloc(len + 1, sizeof(char));
+		newargs[i] = remove_quotes_from_arg(args[i]);
 		if (!newargs[i])
 			return (NULL);
-		for (j = 0, k = 0; args[i][j]; j++)
-		{
-			if (args[i][j] != '\'' && args[i][j] != '"')
-				newargs[i][k++] = args[i][j];
-		}
-		newargs[i][k] = '\0';
+		i++;
 	}
 	newargs[i] = NULL;
 	free_split(args);

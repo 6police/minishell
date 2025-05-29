@@ -1,6 +1,8 @@
 #include "ft_utils.h"
 
-char	*str_replace_segment(const char *src, const char *replace, int start, int len_to_delete)
+// function to replace a segment of a string with another string
+char	*str_replace_segment(const char *src, const char *replace, int start,
+		int len_to_delete)
 {
 	int		new_len;
 	char	*new_str;

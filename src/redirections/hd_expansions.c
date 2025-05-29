@@ -26,7 +26,8 @@ bool	has_expansion(char *line)
 	return (expansion);
 }
 
-static void free_wrapper(char *line, char *arg, t_cmd *tmp)
+// function to free the allocated memory for the line, arg, and tmp
+static void	free_wrapper(char *line, char *arg, t_cmd *tmp)
 {
 	if (line)
 		free(line);

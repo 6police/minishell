@@ -25,7 +25,7 @@ t_shell	*init_shell(char **env)
 {
 	t_shell	*shell;
 
-	shell = ft_calloc(1, sizeof(t_shell)); // allocate memory for the shell
+	shell = ft_calloc(1, sizeof(t_shell));
 	if (!shell)
 	{
 		ft_putstr_fd("Error: malloc failed\n", 2);
@@ -44,7 +44,7 @@ t_shell	*init_shell(char **env)
 
 t_shell	*init_shell_no_env(void)
 {
-	t_shell *shell;
+	t_shell	*shell;
 
 	shell = ft_calloc(1, sizeof(t_shell));
 	if (!shell)

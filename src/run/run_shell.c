@@ -1,6 +1,6 @@
-
 #include "ft_run.h"
 
+// function to run the shell in debug mode
 void	run_shell_debug(t_shell *shell)
 {
 	while (1)
@@ -28,11 +28,11 @@ void	run_shell_debug(t_shell *shell)
 	}
 }
 
+// wrapper for running the shell commands
 static void	minishellers(t_shell *shell)
 {
 	if (!shell->line || !(*shell->line))
-		return;
-	
+		return ;
 	add_history(shell->line);
 	parse(shell);
 	run_commands(shell);
@@ -46,6 +46,7 @@ static void	minishellers(t_shell *shell)
 	shell->is_pipe = false;
 }
 
+// function to run the shell
 void	run_shell(t_shell *shell)
 {
 	char	*pwd;
@@ -75,6 +76,7 @@ void	run_shell(t_shell *shell)
 	}
 }
 
+// function to set up signal handling
 void	shelling(t_shell *shell)
 {
 	setup_signals();

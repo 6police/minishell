@@ -17,25 +17,7 @@ void	add_last_cmd(t_cmd **head, t_cmd *new_cmd)
 	}
 }
 
-char	**copy_array(char **array)
-{
-	int		i;
-	char	**new_array;
-
-	i = 0;
-	while (array[i])
-		i++;
-	new_array = ft_calloc(sizeof(char *), i + 1);
-	i = 0;
-	while (array[i])
-	{
-		new_array[i] = ft_strdup(array[i]);
-		i++;
-	}
-	new_array[i] = NULL;
-	return (new_array);
-}
-
+// function to create a new command structure
 void	check_builtin(t_cmd *cmd)
 {
 	if (!cmd)

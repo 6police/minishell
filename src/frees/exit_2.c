@@ -32,7 +32,6 @@ void	free_redir_structs(t_fd *redirs)
 		free(tmp);
 		tmp = next;
 	}
-	// ft_printf("redirs freed\n");
 }
 
 // free ONE cmd

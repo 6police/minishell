@@ -44,9 +44,9 @@ bool	token_not_empty(const char *token)
 // it cant be followed by another |
 int	mark_pipes(char *line)
 {
-	int i;
-	int c;
-	int nbr;
+	int	i;
+	int	c;
+	int	nbr;
 
 	i = 0;
 	c = 0;

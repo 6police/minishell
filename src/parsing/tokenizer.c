@@ -19,9 +19,9 @@ static void	add_last(t_token **head, t_token *token)
 // function to initialize a linked list of tokens from an array of strings
 t_token	*init_token(char **tokens)
 {
-	t_token *token;
-	t_token *head;
-	int i;
+	t_token	*token;
+	t_token	*head;
+	int		i;
 
 	i = 0;
 	head = NULL;

@@ -55,7 +55,7 @@ void	unset_env_var(t_shell *shell, char *key)
 // function to unset multiple environment variables
 void	unset_vars(t_cmd *cmd, t_shell *shell)
 {
-	int	i;
+	int		i;
 	char	**keys;
 
 	keys = cmd->args;

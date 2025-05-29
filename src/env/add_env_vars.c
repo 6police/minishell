@@ -54,7 +54,7 @@ void	add_env_var(t_env **env)
 		ft_putstr_fd("Error: malloc failed\n", 2);
 		exit(1);
 	}
-	if (!(*env)->head) // If the list is empty
+	if (!(*env)->head)
 	{
 		(*env)->head = new_var;
 		(*env)->last = new_var;

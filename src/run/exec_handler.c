@@ -110,5 +110,5 @@ void	processor(t_cmd *cmd, t_shell *shell)
 	if (shell->is_pipe)
 		run_pipe(cmd, shell);
 	else
-		run_no_pipe(cmd, shell); // look after
+		run_no_pipe(cmd, shell);
 }

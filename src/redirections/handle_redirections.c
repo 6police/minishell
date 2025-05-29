@@ -1,9 +1,9 @@
 #include "redirections.h"
 
+// function to handle redir out
 static int	handle_redir_out(t_fd *redir, t_shell *shell)
 {
 	redir->fd = open(redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	// print_hex(redir->file, 3);
 	if (redir->fd == -1)
 	{
 		ft_printf_fd(STDERR_FILENO, "minishell: %s: " NOFILE "\n", redir->file);
@@ -13,6 +13,7 @@ static int	handle_redir_out(t_fd *redir, t_shell *shell)
 	return (0);
 }
 
+// function to handle redir in
 static int	handle_redir_in(t_fd *redir, t_shell *shell)
 {
 	redir->fd = open(redir->file, O_RDONLY);
@@ -25,6 +26,7 @@ static int	handle_redir_in(t_fd *redir, t_shell *shell)
 	return (0);
 }
 
+// function to handle redir append
 static int	handle_redir_append(t_fd *redir, t_shell *shell)
 {
 	redir->fd = open(redir->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
@@ -37,6 +39,7 @@ static int	handle_redir_append(t_fd *redir, t_shell *shell)
 	return (0);
 }
 
+// function to handle heredoc redirection
 static int	handle_heredoc(t_fd *redir, t_shell *shell)
 {
 	ft_handle_heredoc(redir, shell);
@@ -50,6 +53,7 @@ static int	handle_heredoc(t_fd *redir, t_shell *shell)
 	return (0);
 }
 
+// function to handle all types of redirections
 int	handle_redirections(t_fd *fd_struct, t_shell *shell)
 {
 	t_fd	*tmp;
@@ -71,4 +75,3 @@ int	handle_redirections(t_fd *fd_struct, t_shell *shell)
 		return (1);
 	}
 }
-
