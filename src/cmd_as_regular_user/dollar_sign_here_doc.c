@@ -22,7 +22,7 @@ void	dollar_sign_here_doc(t_cmd *cmd, t_shell *shell)
 		if ((quote_type != 2) && has_dollar == true)
 		{
 			if (quote_type == 1)
-				shell->tokens[i] = remove_quotes(shell->tokens[i]);
+				shell->tokens[i] = remove_quotes_beg_end(shell->tokens[i]);
 			shell->tokens[i] = handle_dollar(shell->tokens[i], shell);
 		}
 		i++;

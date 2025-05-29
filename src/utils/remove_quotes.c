@@ -1,6 +1,6 @@
 #include "ft_utils.h"
 
-char	*remove_quotes(char *arg)
+char	*remove_quotes_beg_end(char *arg)
 {
 	char	*new_str;
 
