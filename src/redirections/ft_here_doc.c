@@ -37,8 +37,8 @@ int 	ft_handle_heredoc(t_fd *fd_struct, t_shell *shell)
 
 	pid = -1;
 	shell->hd = true;
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, SIG_IGN);	
+	setup_signals(shell);
+	shell->exit_value = 0;
 	pid = fork();
 	if (pid == 0)
 	{
@@ -61,8 +61,7 @@ int 	ft_handle_heredoc(t_fd *fd_struct, t_shell *shell)
 			else if (WIFEXITED(status))
 				shell->exit_value = WEXITSTATUS(status);
 	}
-	if (shell->exit_value)
-		return (-1);	
 	setup_signals(shell);
-	return (0);
+	printf("shell->exit_value:%d @@@@@\n", shell->exit_value);
+	return (shell->exit_value);
 }

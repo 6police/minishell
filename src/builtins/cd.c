@@ -16,7 +16,6 @@ void	cd_shell(t_cmd *cmd, t_shell *shell)
 		return ;
 	}
 	change_dir(path, shell);
-	shell->exit_value = 0;
 }
 
 static char	*get_cd_path(t_cmd *cmd, t_shell *shell)
@@ -55,6 +54,7 @@ static void	change_dir(char *path, t_shell *shell)
 		shell->exit_value = 1;
 		return ;
 	}
+	shell->exit_value = 0;
 	update_pwd_env_vars(shell, find_env_var(shell->env, "PWD"));
 }
 

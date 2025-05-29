@@ -16,6 +16,7 @@ void	run_shell_debug(t_shell *shell)
 			add_history(shell->line);
 			parse(shell);
 			run_commands(shell);
+			//setup_signals(shell);
 			if (shell->tokens)
 			{
 				free_tokens(shell->tokens);
@@ -49,20 +50,24 @@ static void	minishellers(t_shell *shell)
 // function to run the shell
 void	run_shell(t_shell *shell)
 {
-	char	*pwd;
+	/*char	*pwd;
 	char	*aux;
 	char	*cwd;
 
-	pwd = NULL;
+	pwd = NULL;*/
+	char *pwd;
 	while (1)
 	{
-		cwd = getcwd(NULL, 0);
+		/*cwd = getcwd(NULL, 0);
 		aux = ft_strjoin(BLUE, cwd);
 		pwd = ft_strjoin(aux, GREEN "\n" PROMPT RESET);
 		free(aux);
 		free(cwd);
+		*///shell->line = readline(pwd);
+		//free(pwd);
+
+		pwd = GREEN "\n" PROMPT RESET;
 		shell->line = readline(pwd);
-		free(pwd);
 		if (t_pid()->status == 130)
 		{
 			shell->exit_value = 130;

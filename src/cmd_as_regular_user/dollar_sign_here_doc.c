@@ -25,7 +25,7 @@ void	dollar_sign_here_doc(t_cmd *cmd, t_shell *shell)
 	}
 }
 
-static char	*handle_dollar(char *arg, t_shell *shell)
+char	*handle_dollar(char *arg, t_shell *shell)
 {
 	int			i;
 	int			delete;
@@ -66,7 +66,7 @@ static char	*handle_dollar(char *arg, t_shell *shell)
 					}
 					else
 					{	
-						arg = str_replace_segment(arg, env_var->value, start, env_key_len); // ver os leaks do str_replace_segment
+						arg = str_replace_segment(arg, env_var->value, start, env_key_len);
 						i += ft_strlen(env_var->value) - 1;
 					}
 					free(tmp);
@@ -88,13 +88,17 @@ static char	*handle_dollar(char *arg, t_shell *shell)
 			}
 			else if (arg[i + 1] == '?')
 			{
-				arg = str_replace_segment(arg, ft_itoa(shell->exit_value), i, 2);
-				i = i + ft_strlen(ft_itoa(shell->exit_value)) - 2;
+				aux = ft_itoa(shell->exit_value);
+				arg = str_replace_segment(arg, aux, i, 2);
+				i = i + ft_strlen(aux) - 2;
+				free(aux);
 			}
 			else if (arg[i + 1] == '$')
-			{	
-				arg = str_replace_segment(arg, ft_itoa(shell->main_pid), i, 2);
-				i = i + ft_strlen(ft_itoa(shell->main_pid)) - 2;
+			{
+				aux = ft_itoa(shell->main_pid);
+				arg = str_replace_segment(arg, aux, i, 2);
+				i = i + ft_strlen(aux) - 2;
+				free(aux);
 			}
 		}
 		i++;
