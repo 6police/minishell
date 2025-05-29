@@ -15,8 +15,6 @@ void	execute_external(t_cmd *cmd, t_shell *shell)
 		ft_printf_fd(STDERR_FILENO, "minishell: malloc failed\n");
 		return ;
 	}
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, SIG_IGN);
 	if (execve(cmd->path, cmd->args, envp) == -1)
 	{
 		if (errno == ENOENT)
@@ -24,9 +22,13 @@ void	execute_external(t_cmd *cmd, t_shell *shell)
 			ft_printf_fd(STDERR_FILENO, "minishell: command not found: %s\n",
 				cmd->name);
 			shell->exit_value = 127;
+			exit(127);
 		}
 		else
+		{
 			shell->exit_value = 126;
+			exit(126);
+		}
 	}
 	free_env_array(envp);
 }

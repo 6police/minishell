@@ -12,5 +12,8 @@ void	pwd_shell(t_cmd *cmd, t_shell *shell)
 		shell->exit_value = 0;
 	}
 	else
+	{
 		perror("getcwd() error");
+		shell->exit_value = 1;
+	}
 }

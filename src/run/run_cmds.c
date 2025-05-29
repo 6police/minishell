@@ -27,6 +27,7 @@ void	wait_commands(t_shell *shell)
 		}
 		tmp = tmp->next;
 	}
+	setup_signals(shell);
 }
 
 // function to handle invalid commands

@@ -32,9 +32,9 @@ void	eggxecutor(t_cmd *cmd, t_shell *shell, int flag)
 {
 	if (flag == 1)
 	{
-		shell->is_child = true;
 		signal(SIGQUIT, SIG_DFL);
 		signal(SIGINT, SIG_DFL);
+		shell->is_child = true;
 		if (cmd->fd[0] != -1)
 			dup2(cmd->fd[0], STDIN_FILENO);
 		if (cmd->fd[1] != -1)
@@ -49,6 +49,8 @@ void	run_pipe(t_cmd *cmd, t_shell *shell)
 	if (!cmd || !shell || !shell->is_pipe)
 		return ;
 	shell->wait = true;
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, SIG_IGN);
 	cmd->pid = fork();
 	if (cmd->pid == -1)
 	{
@@ -76,6 +78,8 @@ void	run_no_pipe(t_cmd *cmd, t_shell *shell)
 		return ;
 	if (!cmd->is_builtin)
 	{
+		signal(SIGQUIT, SIG_IGN);
+		signal(SIGINT, SIG_IGN);
 		shell->wait = true;
 		cmd->pid = fork();
 		if (cmd->pid == -1)
