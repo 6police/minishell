@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/30 01:57:15 by nuno              #+#    #+#             */
+/*   Updated: 2025/05/30 02:17:21 by nuno             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_builtins.h"
 
 static char	*get_cd_path(t_cmd *cmd, t_shell *shell);
@@ -50,7 +62,8 @@ static void	change_dir(char *path, t_shell *shell)
 {
 	if (chdir(path))
 	{
-		ft_printf_fd(STDERR_FILENO, "minishell: cd: %s: No such file or directory\n", path);
+		ft_printf_fd(STDERR_FILENO, "minishell: \
+			cd: %s: No such file or directory\n", path);
 		shell->exit_value = 1;
 		return ;
 	}
@@ -60,20 +73,18 @@ static void	change_dir(char *path, t_shell *shell)
 
 static void	update_pwd_env_vars(t_shell *shell, t_env_var *pwd)
 {
-	char cwd[PATH_MAX];
-
-	char *pwd_value;
-	char *oldpwd_value;
+	char	cwd[PATH_MAX];
+	char	*pwd_value;
+	char	*oldpwd_value;
 
 	oldpwd_value = NULL;
 	pwd_value = NULL;
 	if (getcwd(cwd, sizeof(cwd)))
 	{
-		if	(pwd)
+		if (pwd)
 			oldpwd_value = ft_strjoin("OLDPWD=", pwd->value);
 		else
 			oldpwd_value = ft_strdup("OLDPWD=");
-		
 		pwd_value = ft_strjoin("PWD=", cwd);
 		ft_export(pwd_value, NULL, shell->env);
 		ft_export(oldpwd_value, NULL, shell->env);

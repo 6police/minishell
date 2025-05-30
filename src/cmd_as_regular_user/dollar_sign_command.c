@@ -1,19 +1,17 @@
 #include "ft_cmd_as_regular_user.h"
 
-char	*handle_dollar(char *arg, t_shell *shell);
+static char	*handle_dollar(char *arg, t_shell *shell);
 static int	check_quotes_type(char *str);
 
 void	dollar_sign(t_shell *shell)
 {
-	int	i;
+	int		i;
 	int		quote_type;
 	bool	has_dollar;
-	char *s;
 
 	i = 0;
 	quote_type = 0;
 	has_dollar = false;
-	s = NULL;
 	while (shell->tokens[i])
 	{
 		if (ft_strstr(shell->tokens[i], "$") != NULL)
@@ -26,7 +24,7 @@ void	dollar_sign(t_shell *shell)
 		i++;
 	}
 }
-char	*handle_dollar(char *arg, t_shell *shell)
+static char	*handle_dollar(char *arg, t_shell *shell)
 {
 	int			i;
 	int			delete;

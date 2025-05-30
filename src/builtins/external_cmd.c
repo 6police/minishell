@@ -1,8 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   external_cmd.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/30 01:59:08 by nuno              #+#    #+#             */
+/*   Updated: 2025/05/30 02:13:13 by nuno             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_builtins.h"
 
 static void		free_env_array(char **envp);
 static size_t	count_env_vars(t_env *env);
 static char		**convert_env_to_array(t_env *env);
+static void		free_envp(char **envp, int i);
 
 // function to execute the command
 void	execute_external(t_cmd *cmd, t_shell *shell)
@@ -66,34 +79,32 @@ static char	**convert_env_to_array(t_env *env)
 	{
 		temp = ft_strjoin(current->key, "=");
 		if (!temp)
-		{
-			while (i > 0)
-				free(envp[i--]);
-			free(envp);
-			return (NULL);
-		}
+			return (free_envp(envp, i), NULL);
 		envp[i] = ft_strjoin(temp, current->value);
 		free(temp);
 		if (!envp[i])
-		{
-			while (i > 0)
-				free(envp[i--]);
-			free(envp);
-			return (NULL);
-		}
+			return (free_envp(envp, i), NULL);
 		current = current->next;
 		i++;
 	}
-	envp[i] = NULL;
-	return (envp);
+	return (envp[i] = NULL, envp);
+}
+
+static void	free_envp(char **envp, int i)
+{
+	while (i > 0)
+		free(envp[i--]);
+	free(envp);
+	return ;
 }
 
 static void	free_env_array(char **envp)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	if (!envp)
 		return ;
-
 	while (envp[i])
 		free(envp[i++]);
 	free(envp);

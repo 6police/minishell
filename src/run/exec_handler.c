@@ -106,9 +106,6 @@ void	run_no_pipe(t_cmd *cmd, t_shell *shell)
 // wrapper function to process a command
 void	processor(t_cmd *cmd, t_shell *shell)
 {
-	t_fd *tmp;
-
-	tmp = NULL;
 	if (!cmd || !shell)
 		return ;
 	if (shell->is_pipe)
