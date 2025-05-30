@@ -48,15 +48,6 @@ char	*checkforpath(char *cmd, t_env *env)
 	return (NULL);
 }
 
-static bool check_file(char *cmd)
-{
-	struct stat st;
-	if (stat(cmd, &st) != 0)
-		return (false);
-	if (S_ISREG(st.st_mode) != 0)
-		return (true) ;
-	return (false);
-}
 
 // check if command sent is in path format
 // ex: /bin/ls

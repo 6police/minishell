@@ -39,7 +39,8 @@ int 	ft_handle_heredoc(t_fd *fd_struct, t_shell *shell)
 
 	pid = -1;
 	shell->hd = true;
-	setup_signals(shell);
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	shell->exit_value = 0;
 	pid = fork();
 	if (pid == 0)

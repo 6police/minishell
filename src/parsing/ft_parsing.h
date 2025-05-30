@@ -130,4 +130,7 @@ bool	invalidate_tokens(char **tokens);
 // function to check if the token is a redirection
 void	check_redir(char *token, int *j);
 
+// check file
+bool	check_file(char *cmd);
+
 #endif

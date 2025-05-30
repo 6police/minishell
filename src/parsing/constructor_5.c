@@ -24,10 +24,12 @@ char	*set_name(char **args)
 	if (!args || !args[0])
 		return (NULL);
 	redir_flag = check_for_redirs(args[0]);
+	printf("redir_flag: %d\n", redir_flag);
 	if (redir_flag > 0)
 		str = get_redir_name(args);
 	else
 		str = ft_strdup(args[0]);
+	printf("set_name: %s\n", str);
 	if (!str)
 		return (NULL);
 	name = remove_all_quotes(str);

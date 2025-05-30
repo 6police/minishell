@@ -51,15 +51,26 @@ static void	cmd_processor_a(t_cmd *cmd, t_shell *shell, int i)
 	}
 }
 
-static t_cmd	*invalid_exit(t_cmd *cmd, t_shell *shell, char **args)
+static t_cmd	*invalid_exit(t_cmd *cmd, t_shell *shell)
 {
 	shell->exit_value = 1;
 	ft_printf_fd(STDERR_FILENO, "minishell: invalid command: %s\n", cmd->name);
-	free_cmd(cmd);
-	free_split(args);
-	return (NULL);
+	///cmd->is_valid = false;
+	// free_split(args);
+	return (cmd);
 }
-	
+
+// function to check if a file exists and is a regular file 
+bool check_file(char *cmd)
+{
+	struct stat st;
+	if (stat(cmd, &st) != 0)
+		return (false);
+	if (S_ISREG(st.st_mode) != 0)
+		return (true) ;
+	return (false);
+}
+
 // function to parse and populate a command from the tokens
 static t_cmd	*parse_cmd(t_shell *shell, int i)
 {
@@ -80,11 +91,11 @@ static t_cmd	*parse_cmd(t_shell *shell, int i)
 	cmd = init_cmd(name, args);
 	free(name);
 	built_in_handle(cmd, shell, args);
-	if (!cmd->is_valid)
-	 	return(invalid_exit(cmd, shell, args));	
 	add_last_cmd(&shell->cmds, cmd);
 	cmd_processor_a(cmd, shell, i);
 	free_split(args);
+	if (!cmd->is_valid)
+	 	return(invalid_exit(cmd, shell));	
 	ft_new_wildcard(cmd, shell);
 	if (cmd->args && cmd->args[0] && cmd->args[0][0] != '\0')
 		process_cmd_args(cmd);
