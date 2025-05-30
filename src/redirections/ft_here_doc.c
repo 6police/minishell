@@ -7,8 +7,10 @@ void	do_heredoc_child(char *limiter, t_shell *shell)
 	int		fd;
 
 	fd = open(HERE_DOC, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	shell->status = fd;
 	if (fd < 0)
 		exit(1);
+	t_pid()->shull = shell;
 	while (1)
 	{
 		line = readline("> ");
@@ -42,8 +44,7 @@ int 	ft_handle_heredoc(t_fd *fd_struct, t_shell *shell)
 	pid = fork();
 	if (pid == 0)
 	{
-		signal(SIGQUIT, SIG_DFL);
-		signal(SIGINT, SIG_DFL);
+		setup_signals_heredoc(shell);
 		shell->is_child = true;
 		do_heredoc_child(fd_struct->file, shell);
 	}
@@ -62,6 +63,5 @@ int 	ft_handle_heredoc(t_fd *fd_struct, t_shell *shell)
 				shell->exit_value = WEXITSTATUS(status);
 	}
 	setup_signals(shell);
-	printf("shell->exit_value:%d @@@@@\n", shell->exit_value);
 	return (shell->exit_value);
 }

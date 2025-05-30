@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joamiran <joamiran@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 17:33:58 by joamiran          #+#    #+#             */
-/*   Updated: 2024/04/18 19:15:12 by joamiran         ###   ########.fr       */
+/*   Updated: 2025/05/30 18:23:52 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,11 +154,11 @@ static char	**ft_free_malloc(char **ptr, int d)
 
 char	**ft_split(char const *s, char c)
 {
-	int i;
-	int words;
-	int pos;
-	int d;
-	char **ptr;
+	int		i;
+	int		words;
+	int		pos;
+	int		d;
+	char	**ptr;
 
 	if (!s)
 		return (NULL);

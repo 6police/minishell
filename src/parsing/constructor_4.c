@@ -26,7 +26,7 @@ void	assemble_cmd(t_cmd *cmd, char **args, t_shell *shell)
 	{
 		cmd->path = NULL;
 		cmd->is_valid = false;
-		cmd->args = copy_array(args);
+		cmd->args = NULL;
 		cmd->builtin_func = NULL;
 	}
 }

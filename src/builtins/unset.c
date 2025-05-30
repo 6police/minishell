@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 01:59:00 by nuno              #+#    #+#             */
-/*   Updated: 2025/05/30 02:13:46 by nuno             ###   ########.fr       */
+/*   Updated: 2025/05/30 18:54:27 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,17 @@ void	unset_env_var(t_shell *shell, char *key)
 	t_env_var	*env_var;
 
 	env_var = find_env_var(shell->env, key);
-	if (env_var)
+	if (!env_var)
+	{
+		ft_printf_fd(2, "minishell: unset: `%s': variable not found\n", key);
+		shell->exit_value = 1; // variable not found
+		return ;
+	}
+	else
+	{
 		remove_env_var(shell->env, key);
-	shell->exit_value = 0;
+		shell->exit_value = 0;
+	}
 }
 
 // function to unset multiple environment variables

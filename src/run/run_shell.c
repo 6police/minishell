@@ -50,29 +50,25 @@ static void	minishellers(t_shell *shell)
 // function to run the shell
 void	run_shell(t_shell *shell)
 {
-	/*char	*pwd;
+	char	*pwd;
 	char	*aux;
 	char	*cwd;
 
-	pwd = NULL;*/
-	char *pwd;
+	pwd = NULL;
 	while (1)
 	{
-		/*cwd = getcwd(NULL, 0);
+		cwd = getcwd(NULL, 0);
 		aux = ft_strjoin(BLUE, cwd);
-		pwd = ft_strjoin(aux, GREEN "\n" PROMPT RESET);
+		pwd = ft_strjoin(aux, RESET "\n" PROMPT);
 		free(aux);
 		free(cwd);
-		*///shell->line = readline(pwd);
-		//free(pwd);
-
-		pwd = GREEN "\n" PROMPT RESET;
 		shell->line = readline(pwd);
+		free(pwd);
 		if (t_pid()->status == 130)
 		{
 			shell->exit_value = 130;
 			t_pid()->status = 0;
-		}	
+		}
 		if (shell->line && ft_strlen(shell->line) > MAX_LINE_LENGTH)
 		{
 			ft_printf_fd(STDERR_FILENO, TOO_LONG_LINE "%d\n", MAX_LINE_LENGTH);

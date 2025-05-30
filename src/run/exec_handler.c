@@ -81,6 +81,9 @@ void	run_no_pipe(t_cmd *cmd, t_shell *shell)
 		signal(SIGQUIT, SIG_IGN);
 		signal(SIGINT, SIG_IGN);
 		shell->wait = true;
+		if (cmd->is_valid == false)
+			return (ft_printf_fd(STDERR_FILENO, "%s command: not found\n", cmd->name),
+				shell->exit_value = 127, (void)0);
 		cmd->pid = fork();
 		if (cmd->pid == -1)
 		{

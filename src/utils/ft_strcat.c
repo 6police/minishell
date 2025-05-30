@@ -2,8 +2,8 @@
 
 char	*ft_strcat(char *dest, const char *src)
 {
-	char *d;
-	const char *s;
+	char		*d;
+	const char	*s;
 
 	if (!dest || !src)
 		return (NULL);

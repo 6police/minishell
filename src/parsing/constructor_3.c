@@ -36,8 +36,6 @@ void	check_builtin(t_cmd *cmd)
 		cmd->is_builtin = true;
 	if (ft_strcmp(cmd->name, "echo") == 0)
 		cmd->is_builtin = true;
-	if (ft_strcmp(cmd->name, "$?") == 0)
-		cmd->is_builtin = true;
 }
 
 void	build_cmd(t_cmd *cmd, char **args, t_shell *shell)

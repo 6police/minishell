@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 01:57:15 by nuno              #+#    #+#             */
-/*   Updated: 2025/05/30 02:17:21 by nuno             ###   ########.fr       */
+/*   Updated: 2025/05/30 17:27:39 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ static char	*get_cd_path(t_cmd *cmd, t_shell *shell)
 	}
 	else if (ft_strcmp(cmd->args[0], "-") == 0)
 	{
+		printf("%s\n", cmd->args[0]);
 		dest = find_env_var(shell->env, "OLDPWD");
 		if (!dest || !dest->value || dest->value[0] == '\0')
 		{

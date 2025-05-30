@@ -26,25 +26,25 @@
 
 typedef struct env		t_env;
 typedef struct shell	t_shell;
-typedef struct cmd t_cmd; // Define a type for the function pointer
+typedef struct cmd		t_cmd; // Define a type for the function pointer
 
 typedef enum e_exit_code
 {
-	EXIT_CODE_SUCCESS = 0,        // No error,command executed successfully
-	EXIT_CODE_GENERAL_ERROR = 1,  // General error occurred
-	EXIT_CODE_MALLOC_FAILURE = 2, // Memory allocation failure
+	EXIT_CODE_SUCCESS = 0,	// No error,command executed successfully
+	EXIT_CODE_GENERAL_ERROR = 1,	// General error occurred
+	EXIT_CODE_MALLOC_FAILURE = 2,	// Memory allocation failure
 	EXIT_CODE_PERMISSION_DENIED = 126,
 	// Permission denied (common for exec errors)
-	EXIT_CODE_CMD_NOT_FOUND = 127,    // Command not found
-	EXIT_CODE_INVALID_ARGUMENT = 128, // Invalid argument passed to a command
-	EXIT_CODE_SYNTAX_ERROR = 129,     // Syntax error in the command line
+	EXIT_CODE_CMD_NOT_FOUND = 127,	// Command not found
+	EXIT_CODE_INVALID_ARGUMENT = 128,	// Invalid argument passed to a command
+	EXIT_CODE_SYNTAX_ERROR = 129,	// Syntax error in the command line
 	EXIT_CODE_ENV_FAILURE = 130,
 	// Error with environment variable manipulation
-	EXIT_CODE_BUILTIN_FAILURE = 131,    // Builtin command failure
-	EXIT_CODE_REDIRECTION_ERROR = 132,  // Error during redirection processing
-	EXIT_CODE_PIPE_FAILURE = 133,       // Failure in creating or handling pipes
-	EXIT_CODE_FORK_FAILURE = 134,       // Failure in forking a new process
-	EXIT_CODE_SIGNAL_TERMINATION = 135, // Process terminated due to a signal
+	EXIT_CODE_BUILTIN_FAILURE = 131,	// Builtin command failure
+	EXIT_CODE_REDIRECTION_ERROR = 132,	// Error during redirection processing
+	EXIT_CODE_PIPE_FAILURE = 133,	// Failure in creating or handling pipes
+	EXIT_CODE_FORK_FAILURE = 134,	// Failure in forking a new process
+	EXIT_CODE_SIGNAL_TERMINATION = 135,	// Process terminated due to a signal
 	EXIT_CODE_NOT_A_DIRECTORY = 136,
 	// Path provided is not a directory when expected
 	EXIT_CODE_FILE_NOT_FOUND = 137 // Specified file does not exist
@@ -122,6 +122,18 @@ struct					env
 	t_env_var *last; // last of the environment variables
 };
 
+// struct to store the dollar sign information
+typedef struct s_dollar
+{
+	int			i;
+	int			delete;
+	int			start;
+	int			env_key_len;
+	char		*tmp;
+	char		*aux;
+	t_env_var	*env_var;
+}	t_dollar;
+
 typedef struct token
 {
 	char				**token;
@@ -156,7 +168,6 @@ struct					shell
 
 	int *separators; // separators for the parsing
 
-	struct termios		orig_termios;
 
 	t_cmd *cmds; // commands
 };

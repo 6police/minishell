@@ -51,6 +51,15 @@ static void	cmd_processor_a(t_cmd *cmd, t_shell *shell, int i)
 	}
 }
 
+static t_cmd	*invalid_exit(t_cmd *cmd, t_shell *shell, char **args)
+{
+	shell->exit_value = 1;
+	ft_printf_fd(STDERR_FILENO, "minishell: invalid command: %s\n", cmd->name);
+	free_cmd(cmd);
+	free_split(args);
+	return (NULL);
+}
+	
 // function to parse and populate a command from the tokens
 static t_cmd	*parse_cmd(t_shell *shell, int i)
 {
@@ -71,6 +80,8 @@ static t_cmd	*parse_cmd(t_shell *shell, int i)
 	cmd = init_cmd(name, args);
 	free(name);
 	built_in_handle(cmd, shell, args);
+	if (!cmd->is_valid)
+	 	return(invalid_exit(cmd, shell, args));	
 	add_last_cmd(&shell->cmds, cmd);
 	cmd_processor_a(cmd, shell, i);
 	free_split(args);
