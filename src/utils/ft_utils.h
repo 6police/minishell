@@ -47,6 +47,6 @@ char	*ft_strstr(const char *haystack, const char *needle);
 char	*ft_strcat(char *dest, const char *src);
 
 // ft_realloc.c
-void	*ft_realloc(void *ptr, size_t size, size_t old_size);
+char	**ft_realloc_arr(char **ptr, size_t size, size_t old_size);
 
 #endif

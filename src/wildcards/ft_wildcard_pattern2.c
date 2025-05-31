@@ -1,33 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_signal.h                                        :+:      :+:    :+:   */
+/*   ft_wildcard_pattern2.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/30 17:36:58 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/05/30 22:13:35 by nneves-a         ###   ########.fr       */
+/*   Created: 2025/05/31 01:29:40 by nneves-a          #+#    #+#             */
+/*   Updated: 2025/05/31 01:29:50 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_SIGNAL_H
-# define FT_SIGNAL_H
+#include "ft_wildcard.h"
 
-# include "../minishell.h"
-# include <signal.h>
-# include <sys/types.h>
-# include <sys/signal.h>
-
-typedef struct s_sig
+void	restore_literal_pattern(t_cmd *cmd, int i, char *arg)
 {
-	int		status;
-	t_shell	*shull;
-}	t_sig;
+	char	*literal;
 
-t_sig	*t_pid(void);
+	literal = ft_strdup(arg);
+	free(cmd->args[i]);
+	cmd->args[i] = literal;
+}
 
-void	setup_signals(t_shell *shell);
+int	count_chunks(char **chunks)
+{
+	int	count;
 
-void	setup_signals_heredoc(t_shell *shell);
-
-#endif
+	count = 0;
+	while (chunks[count])
+		count++;
+	return (count);
+}

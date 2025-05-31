@@ -6,7 +6,7 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 17:40:46 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/05/30 17:54:16 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/05/31 01:41:03 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ typedef struct s_collect
 }	t_collect;
 
 // Wildcard function
-void	ft_new_wildcard(t_cmd *cmd, t_shell *shell);
+void	ft_wildcard(t_cmd *cmd, t_shell *shell);
 
 //— Helpers —------------------------------------------------------------
 bool	has_wildcard(const char *s);
@@ -39,10 +39,11 @@ void	free_strarr(char **a);
 int		tolower_ci(int c);
 int		strcmp_ci(const char *a, const char *b);
 void	sort_strs(char **arr, int n);
-bool	match_pat(const char *name, const char *pat);
+bool	match_pat(const char *name, const char *pat, int nch);
 char	*join_path(const char *a, const char *b);
-
-//— Collector functions —-----------------------------------------------
 void	collect_init(t_collect *c);
-
+void	expand_recursive(char **comps, int lvl,
+			const char *base, t_collect *out);
+void	restore_literal_pattern(t_cmd *cmd, int i, char *arg);
+int		count_chunks(char **chunks);
 #endif

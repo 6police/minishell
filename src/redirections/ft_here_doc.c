@@ -10,7 +10,6 @@ void	do_heredoc_child(char *limiter, t_shell *shell)
 	shell->status = fd;
 	if (fd < 0)
 		exit(1);
-	t_pid()->shull = shell;
 	while (1)
 	{
 		line = readline("> ");
@@ -39,7 +38,8 @@ int 	ft_handle_heredoc(t_fd *fd_struct, t_shell *shell)
 
 	pid = -1;
 	shell->hd = true;
-	setup_signals(shell);
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	shell->exit_value = 0;
 	pid = fork();
 	if (pid == 0)
@@ -62,6 +62,6 @@ int 	ft_handle_heredoc(t_fd *fd_struct, t_shell *shell)
 			else if (WIFEXITED(status))
 				shell->exit_value = WEXITSTATUS(status);
 	}
-	setup_signals(shell);
+	printf("Exit value parent process, depois do wait pid: %d\n", shell->exit_value);
 	return (shell->exit_value);
 }

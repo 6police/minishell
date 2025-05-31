@@ -43,10 +43,11 @@ static int	handle_redir_append(t_fd *redir, t_shell *shell)
 static int	handle_heredoc(t_fd *redir, t_shell *shell)
 {
 	if (ft_handle_heredoc(redir, shell) == 130)
-	{	
+	{
 		setup_signals(shell);
 		return (130);
 	}
+	setup_signals(shell);
 	redir->fd = open(HERE_DOC, O_RDONLY);
 	if (redir->fd == -1)
 	{
@@ -75,6 +76,7 @@ int	handle_redirections(t_fd *fd_struct, t_shell *shell)
 		return (handle_redir_append(tmp, shell));
 	else
 	{
+		printf("Unknown redirection type\n");
 		shell->exit_value = 1;
 		return (1);
 	}
