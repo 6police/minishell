@@ -1,37 +1,59 @@
 #include "ft_parsing.h"
 
 // function to set the name of the command from the arguments
-
-// function to check if the argument is a redirection without an argument
-static char	*get_redir_name(char **args)
+static int is_redirection(const char *str)
 {
-	if (!args[1])
-		return (NULL);
-	if (ft_strlen(args[0]) > 2)
-		return (ft_strdup(args[1]));
-	if (!args[2])
-		return (NULL);
-	return (ft_strdup(args[2]));
+    if (!str)
+        return (0);
+    if (ft_strcmp(str, ">") == 0 || ft_strcmp(str, ">>") == 0 ||
+        ft_strcmp(str, "<") == 0 || ft_strcmp(str, "<<") == 0)
+        return (1);
+    if (str[0] == '>' || str[0] == '<')
+        return (1); 
+    return (0);
 }
 
-// function to assign the name of the command from the arguments
-char	*set_name(char **args)
+// Function to check if a string starts with redirection but has filename attached
+static int is_combined_redirection(const char *str)
 {
-	char	*str;
-	char	*name;
-	int		redir_flag;
+    if (!str || ft_strlen(str) <= 1)
+        return (0);
+    if ((str[0] == '>' && str[1] != '\0' && str[1] != '>') ||
+        (str[0] == '<' && str[1] != '\0' && str[1] != '<'))
+        return (1);
+    if (str[0] == '>' && str[1] == '>' && str[2] != '\0')
+        return (1);
+    if (str[0] == '<' && str[1] == '<' && str[2] != '\0')
+        return (1);
+    return (0);
+}
 
-	if (!args || !args[0])
-		return (NULL);
-	redir_flag = check_for_redirs(args[0]);
-	printf("redir_flag: %d\n", redir_flag);
-	if (redir_flag > 0)
-		str = get_redir_name(args);
-	else
-		str = ft_strdup(args[0]);
-	printf("set_name: %s\n", str);
-	if (!str)
-		return (NULL);
-	name = remove_all_quotes(str);
-	return (name);
+// Main function to extract command name from arguments array
+char *set_name(char **args)
+{
+    int i = 0;
+    char *name;
+	char *aux;
+    
+    if (!args || !args[0])
+        return (NULL);
+    while (args[i])
+    {
+        if (is_redirection(args[i]) && !is_combined_redirection(args[i]))
+        {
+            i++;
+            if (args[i])
+                i++;
+            continue;
+        }
+        if (is_combined_redirection(args[i]))
+        {
+            i++;
+            continue;
+        }
+        aux = ft_strdup(args[i]);
+        name = remove_all_quotes(aux);
+        return (name);
+    }
+    return (NULL);
 }

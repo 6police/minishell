@@ -39,6 +39,7 @@ t_shell	*init_shell(char **env)
 	shell->exit_value = 0;
 	shell->main_pid = ft_get_pid();
 	shell->wait = false;
+	shell->current_heredoc_file = NULL;
 	return (shell);
 }
 

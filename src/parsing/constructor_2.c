@@ -55,8 +55,6 @@ static t_cmd	*invalid_exit(t_cmd *cmd, t_shell *shell)
 {
 	shell->exit_value = 1;
 	ft_printf_fd(STDERR_FILENO, "minishell: invalid command: %s\n", cmd->name);
-	///cmd->is_valid = false;
-	// free_split(args);
 	return (cmd);
 }
 

@@ -15,11 +15,13 @@ void	close_cmd_redirs(t_cmd *cmd)
 {
 	t_fd	*tmp;
 
+
 	if (!cmd->fd_struct)
 		return ;
 	tmp = cmd->fd_struct;
 	if (!tmp)
 		return ;
+	
 	while (tmp)
 	{
 		if (tmp->fd != -1)

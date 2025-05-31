@@ -22,6 +22,7 @@
 # define TOO_LONG_LINE "minishell: Input too long: Maximum length is "
 
 # define MAX_PIPES 100
+# define MAX_HEREDOCS 100
 # define MAX_LINE_LENGTH 4096
 
 typedef struct env		t_env;
@@ -168,6 +169,7 @@ struct					shell
 
 	int *separators; // separators for the parsing
 
+	char *current_heredoc_file; // file for the current heredoc
 
 	t_cmd *cmds; // commands
 };

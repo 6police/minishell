@@ -49,6 +49,8 @@ void	free_shell(t_shell **shell)
 		free_tokens((*shell)->tokens);
 	if ((*shell)->separators && *(*shell)->separators)
 		free((*shell)->separators);
+	if ((*shell)->current_heredoc_file)
+		free((*shell)->current_heredoc_file);
 	free(*shell);
 }
 

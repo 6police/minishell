@@ -7,6 +7,8 @@ char	**copy_array(char **array)
 	char	**new_array;
 
 	i = 0;
+	if (!array || !(*array))
+		return (NULL);
 	while (array[i])
 		i++;
 	new_array = ft_calloc(sizeof(char *), i + 1);

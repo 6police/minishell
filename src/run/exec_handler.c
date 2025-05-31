@@ -39,6 +39,7 @@ void	eggxecutor(t_cmd *cmd, t_shell *shell, int flag)
 			dup2(cmd->fd[0], STDIN_FILENO);
 		if (cmd->fd[1] != -1)
 			dup2(cmd->fd[1], STDOUT_FILENO);
+		close_fds(cmd);
 	}
 	(void)cmd;
 }
