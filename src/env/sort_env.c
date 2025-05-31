@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   sort_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 17:32:07 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/05/30 17:32:08 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/05/31 17:16:45 by joao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_env.h"
 
+// Function to swap the position of two environment variables
 static void	swap_env_vars(t_env_var *a, t_env_var *b)
 {
 	char	*temp_key;
@@ -29,6 +30,7 @@ static void	swap_env_vars(t_env_var *a, t_env_var *b)
 	b->exported = temp_exported;
 }
 
+// Function to sort the environment variables alphabetically
 void	sort_env_list(t_env *env)
 {
 	t_env_var	*i;

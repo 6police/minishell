@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   debug_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 17:31:35 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/05/30 17:31:36 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/05/31 17:50:17 by joao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_debug.h"
 
+// function to print the redirections of a command
 static void	print_fds(t_cmd *cmd)
 {
 	int	i;
@@ -28,6 +29,7 @@ static void	print_fds(t_cmd *cmd)
 	ft_printf("\n");
 }
 
+// function to print the redirections of a command
 void	print_command(t_cmd *cmd)
 {
 	ft_printf(RED " --- NEW COMMAND ---\n" RESET);

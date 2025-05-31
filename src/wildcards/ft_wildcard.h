@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_wildcard.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 17:40:46 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/05/31 01:41:03 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/05/31 17:28:51 by joao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,7 @@
 # define FT_WILDCARD_H
 
 # include "../minishell.h"
-# include <dirent.h>
-# include <stdlib.h>
-# include <string.h>
-# include <ctype.h>
-# include <stdbool.h>
+
 
 //— Collector struct —---------
 typedef struct s_collect

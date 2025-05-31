@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_parsing.h                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/31 17:20:13 by joao              #+#    #+#             */
+/*   Updated: 2025/05/31 17:36:47 by joao             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FT_PARSING_H
 # define FT_PARSING_H
 
@@ -132,5 +144,15 @@ void	check_redir(char *token, int *j);
 
 // check file
 bool	check_file(char *cmd);
+
+// function to copy only valid arguments from the original args array
+char	**copy_valid_args(char **args, int count);
+
+// count the number of valid arguments in the args array
+int		count_valid_args(char **args);
+
+// function to process the command arguments
+void	cmd_processor_a(t_cmd *cmd, t_shell *shell, int i);
+
 
 #endif

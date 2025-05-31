@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   constructor_6.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/31 17:19:57 by joao              #+#    #+#             */
+/*   Updated: 2025/05/31 17:35:15 by joao             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_parsing.h"
 
 // function to check if the argument is a redirection without an argument
-static int	count_valid_args(char **args)
+int	count_valid_args(char **args)
 {
 	int	i;
 	int	count;
@@ -26,7 +38,7 @@ static int	count_valid_args(char **args)
 }
 
 // function to copy valid arguments from the original args array
-static char	**copy_valid_args(char **args, int count)
+char	**copy_valid_args(char **args, int count)
 {
 	char	**newargs;
 	int		i;
@@ -51,28 +63,4 @@ static char	**copy_valid_args(char **args, int count)
 		}
 	}
 	return (newargs);
-}
-
-// function to process command arguments by removing invalid ones
-void	process_cmd_args(t_cmd *cmd)
-{
-	char	**splitargs;
-	char	**newargs;
-	int		valid_count;
-	int		i;
-
-	if (!cmd || !cmd->args)
-		return ;
-	i = 0;
-	valid_count = count_valid_args(cmd->args);
-	newargs = copy_valid_args(cmd->args, valid_count);
-	splitargs = copy_array(newargs);
-	free_split(cmd->args);
-	while (splitargs[i])
-	{
-		splitargs[i] = remove_quotes_beg_end(splitargs[i]);
-		i++;
-	}
-	cmd->args = splitargs;
-	free_split(newargs);
 }

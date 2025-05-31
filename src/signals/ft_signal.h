@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_signal.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 17:36:58 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/05/30 22:13:35 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/05/31 17:27:54 by joao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,7 @@
 # define FT_SIGNAL_H
 
 # include "../minishell.h"
-# include <signal.h>
-# include <sys/types.h>
-# include <sys/signal.h>
+
 
 typedef struct s_sig
 {

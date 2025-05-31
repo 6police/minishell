@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   constructor_3.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/31 17:19:31 by joao              #+#    #+#             */
+/*   Updated: 2025/05/31 17:19:42 by joao             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_parsing.h"
 
 // function to add a t_cmd to the t_cmd linked list
@@ -38,6 +50,7 @@ void	check_builtin(t_cmd *cmd)
 		cmd->is_builtin = true;
 }
 
+// function to build a command structure
 void	build_cmd(t_cmd *cmd, char **args, t_shell *shell)
 {
 	if (is_command_path(cmd->name))
@@ -46,6 +59,7 @@ void	build_cmd(t_cmd *cmd, char **args, t_shell *shell)
 		return (assemble_cmd(cmd, args, shell));
 }
 
+// function to build a builtin command
 void	build_builtin(t_cmd *cmd, char **args)
 {
 	cmd->is_valid = true;

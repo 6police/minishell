@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   copy_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 17:32:38 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/05/30 17:32:38 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/05/31 17:16:27 by joao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_env.h"
 
+// function to handle the shell level variable
 static void	handle_shell_value(t_env *env_cpy)
 {
 	char		*shlvl_value;
@@ -57,6 +58,7 @@ t_env	*copy_env(char **env)
 	return (env_cpy);
 }
 
+// Function to populate the environment with default values
 static void	populate_env(t_env *env)
 {
 	add_env_var(&env);
@@ -84,6 +86,7 @@ static void	populate_env(t_env *env)
 	assign_env_var(env->last, "LC_ALL=en_US.UTF-8");
 }
 
+// Function to create a new environment
 t_env	*new_env(void)
 {
 	t_env	*new_env;

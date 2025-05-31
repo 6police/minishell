@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   add_env_vars.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 17:32:10 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/05/30 17:32:12 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/05/31 17:50:33 by joao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_env.h"
 
+// Function to change the environment variable key and value
 static void	chng_env_var(t_env_var *env_var, char *env, char *equal_sign)
 {
 	if (equal_sign)
@@ -21,7 +22,7 @@ static void	chng_env_var(t_env_var *env_var, char *env, char *equal_sign)
 		if (env_var->value)
 			free(env_var->value);
 		env_var->key = ft_substr(env, 0, equal_sign - env);
-		env_var->value = ft_strdup(equal_sign + 1);
+		env_var->value = remove_quotes_beg_end(ft_strdup(equal_sign + 1));
 		if (!env_var->key || !env_var->value)
 		{
 			ft_putstr_fd("Error: malloc failed\n", 2);

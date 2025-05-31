@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   copy_env_2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 17:32:09 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/05/30 17:32:10 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/05/31 17:50:41 by joao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_env.h"
 
+// Function to copy an environment variable from the original list to the new list
 static void	copy_env_var(t_env *copy, t_env_var *curr)
 {
 	t_env_var	*new_var;
@@ -30,6 +31,7 @@ static void	copy_env_var(t_env *copy, t_env_var *curr)
 	new_var->exported = curr->exported;
 }
 
+// Function to create a copy of the environment list
 t_env	*copy_env_list(t_env *env)
 {
 	t_env		*copy;

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_2.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/31 17:20:48 by joao              #+#    #+#             */
+/*   Updated: 2025/05/31 17:21:31 by joao             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_parsing.h"
 
 // function to check if the tokens are invalid or if the syntax is incorrect
@@ -58,10 +70,7 @@ void	parse(t_shell *shell)
 	if (exceeds_pipe_limit(shell))
 		return ;
 	if (!shell->tokens)
-	{
-		ft_printf_fd(STDERR_FILENO, "minishell: syntax error\n");
-		return ;
-	}
+		return (ft_printf_fd(STDERR_FILENO, "minishell: syntax error\n"), (void)0);
 	dollar_sign(shell);
 	build_cmds(shell);
 	set_pipe_flag(shell);

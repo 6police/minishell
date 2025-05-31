@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   marking_pipes.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/31 17:20:29 by joao              #+#    #+#             */
+/*   Updated: 2025/05/31 17:20:32 by joao             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_parsing.h"
 
 int	count_pipers(char *line)
@@ -8,17 +20,17 @@ int	count_pipers(char *line)
 
 	count = 0;
 	i = 0;
-	c = 0; // Track whether we are inside quotes
+	c = 0;
 	if (!line)
 		return (0);
 	while (line[i] != '\0')
 	{
 		if ((line[i] == '\'' || line[i] == '"') && !c)
-			c = line[i]; // Toggle in_quotes state
+			c = line[i];
 		else if (c && line[i] == c)
 			c = 0;
 		else if (line[i] == '|' && !c)
-			count++; // Count only if not inside quotes
+			count++;
 		i++;
 	}
 	return (count);

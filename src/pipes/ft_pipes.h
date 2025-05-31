@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_pipes.h                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/31 17:51:49 by joao              #+#    #+#             */
+/*   Updated: 2025/05/31 19:30:11 by joao             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FT_PIPES_H
 # define FT_PIPES_H
 
@@ -20,8 +32,6 @@ void	manage_pipes(t_cmd *cmd, t_shell *shell);
 void	close_safe(int fd);
 
 void	close_parent_redirections(t_cmd *cmd);
-
-void	close_pipes(t_cmd *cmd);
 
 void	close_pipe(t_cmd *cmd);
 

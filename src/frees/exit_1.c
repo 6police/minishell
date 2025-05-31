@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exit_1.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/31 17:16:49 by joao              #+#    #+#             */
+/*   Updated: 2025/05/31 17:26:05 by joao             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_free.h"
 
 // free the whole env
@@ -54,6 +66,7 @@ void	free_shell(t_shell **shell)
 	free(*shell);
 }
 
+// flush all commands in the shell
 void	flush_commands(t_shell *shell)
 {
 	t_cmd	*tmp;

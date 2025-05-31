@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipes.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/31 17:51:52 by joao              #+#    #+#             */
+/*   Updated: 2025/05/31 19:29:56 by joao             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_pipes.h"
 
 // function to create pipes for the commands
@@ -26,10 +38,8 @@ void	manage_pipes(t_cmd *cmd, t_shell *shell)
 {
 	if (!cmd || !shell->is_pipe)
 		return ;
-	// If input redirection is set, use it
 	if (cmd->prev)
 		dup2(cmd->prev->fd_pipe[0], STDIN_FILENO);
-	// If output redirection is set, use it
 	if (cmd->next)
 		dup2(cmd->fd_pipe[1], STDOUT_FILENO);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 23:47:26 by nuno              #+#    #+#             */
-/*   Updated: 2025/05/29 22:08:36 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/05/31 19:35:32 by joao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,10 @@ void	export_no_args(t_env *env, t_cmd *cmd)
 	while (env_var)
 	{
 		if (!env_var->value)
-			ft_printf_fd(cmd->fd[1], "declare -x " RED "%s" RESET "=\n",
+			ft_printf_fd(STDOUT_FILENO, "declare -x " RED "%s" RESET "\n",
 				env_var->key);
 		else
-			ft_printf_fd(cmd->fd[1], "declare -x  " RED "%s" RESET "=\"%s\"\n",
+			ft_printf_fd(STDOUT_FILENO, "declare -x " RED "%s" RESET "=\"%s\"\n",
 				env_var->key, env_var->value);
 		env_var = env_var->next;
 	}
@@ -109,7 +109,7 @@ void	export_builtin(t_cmd *cmd, t_shell *shell)
 
 	i = 0;
 	sorted_env = NULL;
-	if (cmd->args[0] == NULL)
+	if (!(cmd->args) || !(*cmd->args) || (cmd->args[0] == NULL))
 	{
 		sorted_env = copy_env_list(shell->env);
 		export_no_args(sorted_env, cmd);
