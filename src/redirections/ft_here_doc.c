@@ -76,7 +76,6 @@ void	do_heredoc_child(char *limiter, t_shell *shell)
 	shell->status = fd;
 	if (fd < 0)
 		exit(1);
-	t_pid()->shull = shell;
 	while (1)
 	{
 		line = readline("> ");

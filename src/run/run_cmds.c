@@ -57,7 +57,7 @@ void	run_commands(t_shell *shell)
 	{
 		i = setup_redirections(tmp, shell);
 		if (i == 1 || i == 130)
-			return(shell->exit_value = i , (void) i);
+			return(shell->exit_value = i, (void) i);
 		if (tmp->is_valid)
 			processor(tmp, shell);
 		// else

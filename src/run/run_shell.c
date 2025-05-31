@@ -16,7 +16,6 @@ void	run_shell_debug(t_shell *shell)
 			add_history(shell->line);
 			parse(shell);
 			run_commands(shell);
-			//setup_signals(shell);
 			if (shell->tokens)
 			{
 				free_tokens(shell->tokens);
@@ -79,7 +78,6 @@ void	run_shell(t_shell *shell)
 			exit_shell(&(t_cmd){0}, shell);
 		else
 			minishellers(shell);
-
 	}
 }
 

@@ -53,7 +53,7 @@ static void	cmd_processor_a(t_cmd *cmd, t_shell *shell, int i)
 
 static t_cmd	*invalid_exit(t_cmd *cmd, t_shell *shell)
 {
-	shell->exit_value = 1;
+	shell->exit_value = 127;
 	if (ft_strcmp(cmd->name, "kekers") != 0)
 		ft_printf_fd(STDERR_FILENO, "minishell: invalid command: %s\n", cmd->name);
 	return (cmd);
@@ -83,7 +83,6 @@ static t_cmd	*parse_cmd(t_shell *shell, int i)
 	name = NULL;
 	mark_and_replace(shell->tokens[i], ' ', 2);
 	args = ft_split(shell->tokens[i], 2);
-	// lol
 	mark_and_replace(shell->tokens[i], 2, ' ');
 	if (args && args[0])
 		name = set_name(args);
@@ -95,7 +94,7 @@ static t_cmd	*parse_cmd(t_shell *shell, int i)
 	free_split(args);
 	if (!cmd->is_valid)
 	 	return(invalid_exit(cmd, shell));	
-	ft_new_wildcard(cmd, shell);
+	ft_wildcard(cmd, shell);
 	if (cmd->args && cmd->args[0] && cmd->args[0][0] != '\0')
 		process_cmd_args(cmd);
 	return (cmd);
