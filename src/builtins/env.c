@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/30 01:59:19 by nuno              #+#    #+#             */
+/*   Updated: 2025/05/30 01:59:20 by nuno             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_builtins.h"
 
-void env(t_cmd *cmd, t_shell *shell)
+void	env(t_cmd *cmd, t_shell *shell)
 {
-	(void)cmd;
+	cmd->is_builtin = true;
 	print_env(shell->env, cmd);
 	shell->exit_value = 0;
 }

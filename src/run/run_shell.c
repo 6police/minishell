@@ -1,12 +1,10 @@
-
 #include "ft_run.h"
 
+// function to run the shell in debug mode
 void	run_shell_debug(t_shell *shell)
 {
-	// for now it just starts the shell
 	while (1)
 	{
-		// read the input
 		shell->line = readline(PROMPT RED "DEBUG" RESET EMOJI_HAMMER);
 		if (!shell->line)
 		{
@@ -16,8 +14,9 @@ void	run_shell_debug(t_shell *shell)
 		else
 		{
 			add_history(shell->line);
-			parse(shell); // parse the line and tokens
+			parse(shell);
 			run_commands(shell);
+			//setup_signals(shell);
 			if (shell->tokens)
 			{
 				free_tokens(shell->tokens);
@@ -30,49 +29,64 @@ void	run_shell_debug(t_shell *shell)
 	}
 }
 
+// wrapper for running the shell commands
+static void	minishellers(t_shell *shell)
+{
+	if (!shell->line || !(*shell->line))
+		return ;
+	add_history(shell->line);
+	parse(shell);
+	run_commands(shell);
+	if (shell->tokens)
+	{
+		free_tokens(shell->tokens);
+		shell->tokens = NULL;
+	}
+	flush_commands(shell);
+	free(shell->line);
+	shell->is_pipe = false;
+}
+
+// function to run the shell
 void	run_shell(t_shell *shell)
 {
-	// for now it just starts the shell
+	char	*pwd;
+	char	*aux;
+	char	*cwd;
+
+	pwd = NULL;
 	while (1)
 	{
-		// read the input
-		shell->line = readline(PROMPT);
+		cwd = getcwd(NULL, 0);
+		aux = ft_strjoin(BLUE, cwd);
+		pwd = ft_strjoin(aux, RESET "\n" PROMPT);
+		free(aux);
+		free(cwd);
+		shell->line = readline(pwd);
+		free(pwd);
+		if (t_pid()->status == 130)
+		{
+			shell->exit_value = 130;
+			t_pid()->status = 0;
+		}
+		if (shell->line && ft_strlen(shell->line) > MAX_LINE_LENGTH)
+		{
+			ft_printf_fd(STDERR_FILENO, TOO_LONG_LINE "%d\n", MAX_LINE_LENGTH);
+			free(shell->line);
+			continue ;
+		}
 		if (!shell->line)
 			exit_shell(&(t_cmd){0}, shell);
 		else
-		{
-			add_history(shell->line);
-			static t_cmd test;
+			minishellers(shell);
 
-			shell->cmds = &test;
-			test.is_valid = true;
-			test.is_builtin = false;
-
-
-			test.name = "cat";
-			static char *args[] = {"cat", "Makefile", NULL};
-			test.args = args;
-			test.path = "/bin/cat";
-			test.FD[0] = open("Makefile", O_RDONLY);
-			test.FD[1] = open("ola.c", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			test.builtin_func = execute_external; // Assign the function pointer
-			run_commands(shell);
-			/*add_history(shell->line);
-			parse(shell); // parse the line and tokens
-			if (shell->tokens)
-				printf(EMOJI_COOL "PLACEHOLDER \n something will happen here\n");
-			if (shell->cmds)
-				run_commands(shell);
-			free_cmds(shell->cmds);
-			free(shell->line);*/
-		}
-		//free_tokens(shell->tokens); // free the tokens
 	}
 }
 
+// function to set up signal handling
 void	shelling(t_shell *shell)
 {
-	setup_signals();
+	setup_signals(shell);
 	if (shell->debug)
 		run_shell_debug(shell);
 	else

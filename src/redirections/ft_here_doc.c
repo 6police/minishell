@@ -1,96 +1,102 @@
-//#include "redirections.h"
+#include "redirections.h"
 
-///**
-// *  serve para gerar um nome único para ficheiros temporários do heredoc
-// * 
-// *  Usamos um contador estático para garantir nomes únicos!!
-// *  mesmo quando há múltiplos heredocs na mesma sessão!
-// */
+// function to handle heredoc in a child process
+// void	do_heredoc_child(char *limiter, t_shell *shell)
+// {
+// 	char	*line;
+// 	int		fd;
 
-//static char	*generate_heredoc_filename(void)
-//{
-//	static int	counter;
-//	char		*num_str;
-//	char		*filename;
+// 	fd = open(HERE_DOC, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+// 	shell->status = fd;
+// 	if (fd < 0)
+// 		exit(1);
+// 	t_pid()->shull = shell;
+// 	while (1)
+// 	{
+// 		line = readline("> ");
+// 		if (!line || (ft_strcmp(line, limiter) == 0))
+// 		{
+// 			free(line);
+// 			break ;
+// 		}
+// 		if (has_expansion(line))
+// 			line = ft_expand(line, shell);
+// 		write(fd, line, ft_strlen(line));
+// 		write(fd, "\n", 1);
+// 		free(line);
+// 	}
+// 	close(fd);
+// 	if (shell->is_pipe)
+// 		close_pipes(shell->cmds);
+// 	clean_exit(&shell);
+// }
 
-//	num_str = ft_itoa(counter++); // static int nao preciso de inicializar counter?? confirmar mais tarde
-//	filename = ft_strjoin("/tmp/minishell_heredoc_", num_str);
-//	free(num_str);
-//	return (filename);
-//}
+// // function to handle heredoc in the main shell process
+// int 	ft_handle_heredoc(t_fd *fd_struct, t_shell *shell)
+// {
+// 	pid_t	pid;
+// 	static int	status;
 
-///**
-// * Criamos e preenchemos um ficheiro temporário par o heredoc
-// * 
-// * 1. Geramos um nome único (recorremos a funcao generate_heredoc_filename();)
-// * 2. Lê input do utilizador até encontrar o delimitador
-// * 3. Armazena tudo no ficheiro temporário
-// */
+// 	pid = -1;
+// 	shell->hd = true;
+// 	signal(SIGINT, SIG_IGN);
+// 	signal(SIGQUIT, SIG_IGN);
+// 	shell->exit_value = 0;
+// 	pid = fork();
+// 	if (pid == 0)
+// 	{
+// 		setup_signals_heredoc(shell);
+// 		shell->is_child = true;
+// 		do_heredoc_child(fd_struct->file, shell);
+// 	}
+// 	else
+// 	{
+// 			waitpid(pid, &status, 0);
+// 			if (WIFSIGNALED(status))
+// 			{
+// 				if (WTERMSIG(status) == SIGINT)
+// 					ft_putstr_fd("\n", STDERR_FILENO);
+// 				else if (WTERMSIG(status) == SIGQUIT)
+// 					ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
+// 				shell->exit_value = 128 + WTERMSIG(status);
+// 			}
+// 			else if (WIFEXITED(status))
+// 				shell->exit_value = WEXITSTATUS(status);
+// 	}
+// 	setup_signals(shell);
+// 	return (shell->exit_value);
+// }
 
-//static int	create_heredoc(t_redir *redir)
-//{
-//	char	*line;
-//	char	*filename;
-//	int		fd;
+void	do_heredoc_child(char *limiter, t_shell *shell)
+{
+	char	*line;
+	int		fd;
 
-//	filename = generate_heredoc_filename();
-//	// - 0600: permissões (nos/donos lê+escreve, resto nada) ver chmod 777
-//	fd = open(filename, O_WRONLY | O_CREAT | O_EXCL, 0600);
-//	if (fd == -1)
-//	{
-//		free(filename);
-//		return (-1);
-//	}
-//	// Loop para ler input até encontrar delimitador
-//	while (1)
-//	{
-//		line = readline("> "); // para mostra prompt especial para o heredoc
-//		if (!line || ft_strcmp(line, redir->heredoc->delim) == 0)
-//		{
-//			free(line);
-//			break ;
-//		}
-//		// Escreve a linha no ficheiro temporário
-//		ft_putstr_fd(line, fd); // escreve o conteudo
-//		ft_putchar_fd('\n', fd); //adicona a linha
-//		free(line);
-//	}
-//	close(fd);
-//	redir->heredoc->file = filename;
-//	return (open(filename, O_RDONLY));
-//}
+	fd = open(HERE_DOC, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	shell->status = fd;
+	if (fd < 0)
+		exit(1);
+	t_pid()->shull = shell;
+	while (1)
+	{
+		line = readline("> ");
+		if (!line || (ft_strcmp(line, limiter) == 0))
+		{
+			free(line);
+			break ;
+		}
+		if (has_expansion(line))
+			line = ft_expand(line, shell);
+		write(fd, line, ft_strlen(line));
+		write(fd, "\n", 1);
+		free(line);
+	}
+	close(fd);
+}
 
-///**
-// * Função principal para lidar com os heredocs (<<)
-// * 
-// * Para cada redirecionamento do tipo heredoc no comando:
-// * 1. Cria ficheiro temporário
-// * 2. Redireciona STDIN para ler desse ficheiro
-// */
 
-//void	ft_redir_heredoc(t_cmd *cmd, t_shell *shell)
-//{
-//	int i;
-//	int fd;
-//	t_redir *redir;
-
-//	i = -1;
-//	while (cmd->redirs[++i])
-//	{
-//		redir = cmd->redirs[i];
-//		// Verificamos se é um heredoc com o delimitador definido
-//		if (redir->heredoc && redir->heredoc->delim)
-//		{
-//			fd = create_heredoc(redir);
-//			if (fd == -1)
-//			{
-//				ft_putstr_fd("minishell: heredoc failed\n", STDERR_FILENO);
-//				shell->exit_value = EXIT_FAILURE;
-//				break ;
-//			}
-//			// Redirecionar o STDIN para ler do ficheiro
-//			dup2(fd, STDIN_FILENO);
-//			close(fd);
-//		}
-//	}
-//}
+int ft_handle_heredoc(t_fd *fd_struct, t_shell *shell)
+{
+    do_heredoc_child(fd_struct->file, shell);
+    return(shell->exit_value);
+}

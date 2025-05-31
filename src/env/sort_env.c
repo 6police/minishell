@@ -1,60 +1,56 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sort_env.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/30 17:32:07 by nneves-a          #+#    #+#             */
+/*   Updated: 2025/05/30 17:32:08 by nneves-a         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_env.h"
 
-void swap_env_var(t_env_var *a, t_env_var *b, t_env *env)
+static void	swap_env_vars(t_env_var *a, t_env_var *b)
 {
-    if (!a || !b || !env || a->next != b)
-        return;
+	char	*temp_key;
+	char	*temp_value;
+	bool	temp_exported;
 
-    // Handle the case where 'a' is the head of the list
-    if (a->prev)
-        a->prev->next = b;
-    else
-        env->head = b;  // Update head if 'a' was the head
-
-    // Update the next of 'b' to point to the correct node after swap
-    if (b->next)
-        b->next->prev = a;
-
-    // Swap the nodes by adjusting their 'prev' and 'next' pointers
-    a->next = b->next;
-    b->prev = a->prev;
-
-    b->next = a;
-    a->prev = b;
-
-    // Handle the case where 'a' was the last node
-    if (!a->next)
-        env->last = a;
+	temp_key = a->key;
+	temp_value = a->value;
+	temp_exported = a->exported;
+	a->key = b->key;
+	a->value = b->value;
+	a->exported = b->exported;
+	b->key = temp_key;
+	b->value = temp_value;
+	b->exported = temp_exported;
 }
 
-void sort_env_list(t_env *env)
+void	sort_env_list(t_env *env)
 {
-    int swapped;
-    t_env_var *tmp;
+	t_env_var	*i;
+	t_env_var	*j;
+	int			swapped;
 
-    if (!env || !env->head)
-        return;
-
-    do
-    {
-        swapped = 0;
-        tmp = env->head;
-
-        while (tmp->next)
-        {
-            // Compare keys of adjacent nodes
-            if (ft_strcmp(tmp->key, tmp->next->key) > 0)
-            {
-                // Swap if they are out of order
-                swap_env_var(tmp, tmp->next, env);
-                swapped = 1;
-            }
-            else
-            {
-                // Only move forward if no swap occurred
-                tmp = tmp->next;
-            }
-        }
-    } while (swapped);  // Continue until no more swaps are made
+	if (!env || !env->head || !env->head->next)
+		return ;
+	swapped = 1;
+	while (swapped)
+	{
+		swapped = 0;
+		i = env->head;
+		while (i && i->next)
+		{
+			j = i->next;
+			if (ft_strcmp(i->key, j->key) > 0)
+			{
+				swap_env_vars(i, j);
+				swapped = 1;
+			}
+			i = i->next;
+		}
+	}
 }
-

@@ -1,115 +1,90 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   dollar_sign_command.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/30 17:05:55 by nneves-a          #+#    #+#             */
+/*   Updated: 2025/05/30 17:30:37 by nneves-a         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_cmd_as_regular_user.h"
 
 static char	*handle_dollar(char *arg, t_shell *shell);
-static int	check_quotes_type(char *str);
+static char	*expanding_exit_value(char *arg, t_dollar *d, t_shell *shell);
+static char	*expanding_shell_main_pid(char *arg, t_dollar *d, t_shell *shell);
 
-void	dollar_sign(t_cmd *cmd, t_shell *shell)
+// Receives a shell structure and processes each token to handle dollar signs.
+void	dollar_sign(t_shell *shell)
 {
-	int	i;
+	int		i;
 	int		quote_type;
 	bool	has_dollar;
 
-	i = -1;
+	i = 0;
 	quote_type = 0;
 	has_dollar = false;
-	while (cmd->args[++i])
+	while (shell->tokens[i])
 	{
-		if (strstr(cmd->args[i], "$") != NULL) // mudar para ft_strstr
+		if (ft_strstr(shell->tokens[i], "$") != NULL)
 		{
-			quote_type = check_quotes_type(cmd->args[i]);
+			quote_type = check_quotes_type(shell->tokens[i]);
 			has_dollar = true;
 		}
 		if ((quote_type != 2) && has_dollar == true)
-		{
-			if (quote_type == 1)
-				cmd->args[i] = remove_quotes(cmd->args[i]);
-			cmd->args[i] = handle_dollar(cmd->args[i], shell);
-		}
+			shell->tokens[i] = handle_dollar(shell->tokens[i], shell);
+		i++;
 	}
 }
+
+// Processes the argument to replace dollar signs with their 
+//corresponding environment variable values or special values.
 static char	*handle_dollar(char *arg, t_shell *shell)
 {
-	int				i;
-	int			delete;
-	int			start;
-	int			env_key_len;
-	t_env_var	*env_var;
-	char		*tmp;
+	t_dollar	d;
 
-	i = 0;
-	env_key_len = 0;
-	while (arg[i])
+	ft_initiate_dollar(&d);
+	while (arg[d.i])
 	{
-		if (arg[i] == '$' && arg[i + 1])
+		if (arg[d.i] == '$' && arg[d.i + 1])
 		{
-			if (ft_isalpha(arg[i + 1]) == 1 || (arg[i + 1] == '_'))
+			if (ft_isalpha(arg[d.i + 1]) == 1 || (arg[d.i + 1] == '_'))
 			{
-				if ((env_var = find_env_var(shell->env, (arg + (i + 1)))) != NULL)
-				{
-					start = i;
-					env_key_len = ft_strlen(env_var->key) + 1; // +1 to catch the $
-					tmp = str_replace_segment(arg, env_var->value, i, env_key_len);
-					if (tmp[i + ft_strlen(env_var->value)] != '\0' && (ft_isalnum(tmp[i + ft_strlen(env_var->value)]) == 1 || tmp[i + ft_strlen(env_var->value)] == '_')) // we want to check 
-					{
-						i += ft_strlen(env_var->value);
-						delete = 0;
-						while ((ft_isalnum(tmp[i]) == 1 || tmp[i] == '_'))
-						{	
-							i++;
-							delete++;
-						}
-						arg = str_replace_segment(arg, "", start, env_key_len + delete);
-						i = start - 1;
-					}
-					else
-					{	
-						arg = str_replace_segment(arg, env_var->value, start, env_key_len); // ver os leaks do str_replace_segment
-						i += ft_strlen(env_var->value) - 1;
-					}
-					free(tmp);
-				}
-				else // env not found, env == NULL
-				{
-					start = i;
-					i += 1; // we want to skip the $
-					while (arg[i])
-					{
-						if (ft_isalnum(arg[i]) == 1 || arg[i] == '_')
-							i++;
-						else
-							break ;
-					}
-					arg = str_replace_segment(arg, "", start, i - start);
-					i = start - 1;
-				}
+				d.env_var = find_env_var(shell->env, (arg + (d.i + 1)));
+				if (d.env_var != NULL)
+					arg = found_env_var(&d, arg);
+				else
+					arg = no_env_var_found(&d, arg);
 			}
-			else if (arg[i + 1] == '?')
-			{
-				arg = str_replace_segment(arg, ft_itoa(shell->exit_value), i, 2);
-				i = i + ft_strlen(ft_itoa(shell->exit_value)) - 2;
-			}
-			else if (arg[i + 1] == '$')
-			{	
-				arg = str_replace_segment(arg, ft_itoa(shell->main_pid), i, 2);
-				i = i + ft_strlen(ft_itoa(shell->main_pid)) - 2;
-			}
+			else if (arg[d.i + 1] == '?')
+				arg = expanding_exit_value(arg, &d, shell);
+			else if (arg[d.i + 1] == '$')
+				arg = expanding_shell_main_pid(arg, &d, shell);
 		}
-		i++;
+		d.i++;
 	}
 	return (arg);
 }
 
-static int	check_quotes_type(char *str)
+// Expands the exit value of the shell and replaces it in the argument string.
+static char	*expanding_exit_value(char *arg, t_dollar *d, t_shell *shell)
 {
-	int		i;
+	d->aux = ft_itoa(shell->exit_value);
+	arg = str_rplc_sgmt(arg, d->aux, d->i, 2);
+	d->i += ft_strlen(d->aux) - 2;
+	free(d->aux);
+	return (arg);
+}
 
-	i = -1;
-	while (str[++i])
-	{
- 		if (str[i] == '\"')
-			return (1);
-		else if (str[i] == '\'')
-			return (2);
-	}
-	return (0);
+// Expands the main process ID of the shell
+//and replaces it in the argument string.
+static char	*expanding_shell_main_pid(char *arg, t_dollar *d, t_shell *shell)
+{
+	d->aux = ft_itoa(shell->main_pid);
+	arg = str_rplc_sgmt(arg, d->aux, d->i, 2);
+	d->i += ft_strlen(d->aux) - 2;
+	free(d->aux);
+	return (arg);
 }

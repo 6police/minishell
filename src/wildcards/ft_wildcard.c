@@ -1,360 +1,133 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_wildcard.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/30 17:40:15 by nneves-a          #+#    #+#             */
+/*   Updated: 2025/05/30 18:22:28 by nneves-a         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+// src/wildcards/ft_new_wildcard.c
 #include "ft_wildcard.h"
 
-static bool	has_wildcard(char *arg);
-static void	do_wildcard(char *arg_str, t_cmd *cmd);
-static bool	is_there_quotes(char *str);
-static int	check_wildcard_type(char *str);
-static void	wilding(char *arg, int wc_type, t_cmd *cmd);
-static void	organize_wildcard(t_wildcard *wc);
-static int		ft_strcasecmp(const char *s1, const char *s2);
+static void	collect_add(t_collect *c, char *s);
+static void	expand_recursive(char **comps, int lvl,
+				const char *base, t_collect *out);
 
-void	ft_wildcard(t_cmd *cmd, t_shell *shell)
+void	ft_new_wildcard(t_cmd *cmd, t_shell *shell)
 {
-	int		i;
-	bool	wildcard;
-	bool	quotes;
-
-	i = -1;
-	(void)shell;
-	wildcard = false;
-	while (cmd->args[++i])
-	{
-		wildcard = has_wildcard(cmd->args[i]);
-		quotes = is_there_quotes(cmd->args[i]);
-		cmd->args[i] = remove_quotes(cmd->args[i]);
-		if (wildcard == true && quotes == false)
-			do_wildcard(cmd->args[i], cmd);
-	}
-}
-
-static bool	has_wildcard(char *arg)
-{
-	int	i;
-
-	i = -1;
-	while (arg[++i])
-	{
-		if (arg[i] == '*')
-			return (true);
-	}
-	return (false);
-}
-
-static void	do_wildcard(char *arg_str, t_cmd *cmd)
-{
-	int	wild_card_type;
-	
-	wild_card_type = 0;
-	wild_card_type = check_wildcard_type(arg_str);
-	wilding(arg_str, wild_card_type, cmd);
-}
-
-static bool	is_there_quotes(char *str)
-{
-	int		i;
-
-	i = -1;
-	while (str[++i])
-	{
-		if (str[i] == '\"' || str[i] == '\'')
-			return (true);
-	}
-	return (false);
-}
-
-static int	check_wildcard_type(char *str)
-{
-	int	wild_card_type;
-
-	wild_card_type = 0;
-	if (str[0] == '*' && str[1] == '\0') // *
-		wild_card_type = 1;
-	else if (str[0] != '*' && str[ft_strlen(str - 1)] != '*' && ft_strchr(str, '*')) // .*.
-		wild_card_type = 5;
-	else if (str[0] == '*' && str[ft_strlen(str) - 1] == '*') // *.*
-		wild_card_type = 4;
-	else if (str[0] == '*' && str[1] != '\0') // *.
-		wild_card_type = 2;
-	else if ((str[0] != '\0' && str[0] != '*') && str[ft_strlen(str) - 1] == '*') // .*
-		wild_card_type = 3;
-	printf(GREEN"Wildcardtype: %d\n"RESET, wild_card_type);
-	return (wild_card_type);
-}
-
-static void wilding(char *arg, int wc_type, t_cmd *cmd)
-{
-	DIR *dir;
-	struct dirent *entry;
-	bool first;
-	t_wildcard wc;
-	int i;
-
-	first = true;
-	if (wc_type == 0) // No wildcard
-	{
-		ft_printf_fd(cmd->FD[1], "%s", arg);
-		return ;
-	}
-	dir = opendir(".");
-	if (!dir)
-		return ;
-	if (wc_type == 1)
-	{
-		wc.nbr_of_files = 0;
-		while ((entry = readdir(dir)))
-		{
-			if (entry->d_name[0] != '.')
-			wc.nbr_of_files++;
-		}
-		ft_printf_fd(cmd->FD[1], "%d\n", wc.nbr_of_files);
-		closedir(dir);
-		if (wc.nbr_of_files == 0)
-		{
-			ft_printf_fd(cmd->FD[1], "%s", arg);
-			return ;
-		}
-		dir = opendir(".");
-		wc.wildcard = malloc(sizeof(char *) * (wc.nbr_of_files));
-		if (!wc.wildcard)
-		{
-			closedir(dir);
-			ft_printf_fd(cmd->FD[2], "Error: Memory allocation failed\n");
-			return;
-		}
-		i = 0;
-		while ((entry = readdir(dir)))
-		{
-			if (entry->d_name[0] != '.')
-				wc.wildcard[i++] = ft_strdup(entry->d_name);
-		}
-		organize_wildcard(&wc);
-		for (i = 0; i < wc.nbr_of_files; i++)
-		{
-			if (!first)
-				ft_putchar_fd(' ', cmd->FD[1]);
-			first = false;
-			ft_printf_fd(cmd->FD[1], "%s", wc.wildcard[i]);
-			free(wc.wildcard[i]);
-		}
-		free(wc.wildcard);
-		closedir(dir);
-	}
-	else if (wc_type == 2) // Caso 2: *.ext (extensão específica)
-	{
-		wc.nbr_of_files = 0;
-		while ((entry = readdir(dir)))
-		{
-			if ((ft_str_r_cmp((strrchr(arg, '*') +1), entry->d_name) == 0) && entry->d_name[0] != '.')
-				wc.nbr_of_files++;
-		}
-		ft_printf_fd(cmd->FD[1], "%d\n", wc.nbr_of_files);
-		closedir(dir);
-		if (wc.nbr_of_files == 0)
-		{
-			ft_printf_fd(cmd->FD[1], "%s", arg);
-			return ;
-		}
-		dir = opendir(".");
-		wc.wildcard = malloc(sizeof(char *) * (wc.nbr_of_files));
-		if (!wc.wildcard)
-		{
-			closedir(dir);
-			ft_printf_fd(cmd->FD[2], "Error: Memory allocation failed\n");
-			return;
-		}
-		i = 0;
-		while ((entry = readdir(dir)))
-		{
-			if ((ft_str_r_cmp((strrchr(arg, '*') +1), entry->d_name) == 0) && entry->d_name[0] != '.')
-				wc.wildcard[i++] = ft_strdup(entry->d_name);
-		}
-		organize_wildcard(&wc);
-		for (i = 0; i < wc.nbr_of_files; i++)
-		{
-			if (!first)
-				ft_putchar_fd(' ', cmd->FD[1]);
-			first = false;
-			ft_printf_fd(cmd->FD[1], "%s", wc.wildcard[i]);
-			free(wc.wildcard[i]);
-		}
-		free(wc.wildcard);
-		closedir(dir);
-	}
-	if (wc_type == 3)
-	{// Caso 3: .*
-		wc.nbr_of_files = 0;
-		while ((entry = readdir(dir)))
-		{
-			if ((ft_strncmp(arg, entry->d_name, (ft_strlen(arg) - 1)) == 0) && (entry->d_name[0] == '.' && entry->d_name[1] != '.' && entry->d_name[1] != '\0'))
-				wc.nbr_of_files++;
-		}
-		ft_printf_fd(cmd->FD[1], "Number of files:%d\n"RESET, wc.nbr_of_files);
-		closedir(dir);
-		if (wc.nbr_of_files == 0)
-		{
-			ft_printf_fd(cmd->FD[1], "%s", arg);
-			return ;
-		}
-		dir = opendir(".");
-		wc.wildcard = malloc(sizeof(char *) * (wc.nbr_of_files));
-		if (!wc.wildcard)
-		{
-			closedir(dir);
-			ft_printf_fd(cmd->FD[2], "Error: Memory allocation failed\n");
-			return;
-		}
-		i = 0;
-		while ((entry = readdir(dir)))
-		{
-			if ((ft_strncmp(arg, entry->d_name, (ft_strlen(arg) - 1)) == 0) && (entry->d_name[0] == '.' && entry->d_name[1] != '.' && entry->d_name[1] != '\0'))
-				wc.wildcard[i++] = ft_strdup(entry->d_name);
-		}
-		organize_wildcard(&wc);
-		for (i = 0; i < wc.nbr_of_files; i++)
-		{
-			if (!first)
-				ft_putchar_fd(' ', cmd->FD[1]);
-			first = false;
-			ft_printf_fd(cmd->FD[1], "%s", wc.wildcard[i]);
-			free(wc.wildcard[i]);
-		}
-		free(wc.wildcard);
-		closedir(dir);
-	}
-	if (wc_type == 4)
-	{// Caso 4: *.*
-		wc.nbr_of_files = 0;
-		char *tmp;
-		tmp = ft_strtrim(arg, "*");
-		while ((entry = readdir(dir)))
-		{
-			if (ft_strnstr(entry->d_name, tmp, ft_strlen(entry->d_name)) && entry->d_name[0] != '.')
-				wc.nbr_of_files++;
-		}
-		ft_printf_fd(cmd->FD[1], "Number of files:%d\n"RESET, wc.nbr_of_files);
-		closedir(dir);
-		if (wc.nbr_of_files == 0)
-		{
-			ft_printf_fd(cmd->FD[1], "%s", arg);
-			return ;
-		}
-		dir = opendir(".");
-		wc.wildcard = malloc(sizeof(char *) * (wc.nbr_of_files));
-		if (!wc.wildcard)
-		{
-			closedir(dir);
-			ft_printf_fd(cmd->FD[2], "Error: Memory allocation failed\n");
-			return;
-		}
-		i = 0;
-		while ((entry = readdir(dir)))
-		{
-			if (ft_strnstr(entry->d_name, tmp, ft_strlen(entry->d_name)) && entry->d_name[0] != '.')
-				wc.wildcard[i++] = ft_strdup(entry->d_name);
-		}
-		organize_wildcard(&wc);
-		for (i = 0; i < wc.nbr_of_files; i++)
-		{
-			if (!first)
-				ft_putchar_fd(' ', cmd->FD[1]);
-			first = false;
-			ft_printf_fd(cmd->FD[1], "%s", wc.wildcard[i]);
-			free(wc.wildcard[i]);
-		}
-		free(wc.wildcard);
-		closedir(dir);
-	}
-	/* if (wc_type == 5)
-	{// Caso 5: .*.
-		wc.nbr_of_files = 0;
-		while ((entry = readdir(dir)))
-		{
-			if (ft_strnstr(entry->d_name, tmp, ft_strlen(entry->d_name)))
-				wc.nbr_of_files++;
-		}
-		ft_printf_fd(cmd->FD[1], "Number of files:%d\n"RESET, wc.nbr_of_files);
-		closedir(dir);
-		if (wc.nbr_of_files == 0)
-		{
-			ft_printf_fd(cmd->FD[1], "%s", arg);
-			return ;
-		}
-		dir = opendir(".");
-		wc.wildcard = malloc(sizeof(char *) * (wc.nbr_of_files));
-		if (!wc.wildcard)
-		{
-			closedir(dir);
-			ft_printf_fd(cmd->FD[2], "Error: Memory allocation failed\n");
-			return;
-		}
-		i = 0;
-		while ((entry = readdir(dir)))
-		{
-			if (ft_strnstr(entry->d_name, tmp, ft_strlen(entry->d_name)))
-				wc.wildcard[i++] = ft_strdup(entry->d_name);
-		}
-		organize_wildcard(&wc);
-		for (i = 0; i < wc.nbr_of_files; i++)
-		{
-			if (!first)
-				ft_putchar_fd(' ', cmd->FD[1]);
-			first = false;
-			ft_printf_fd(cmd->FD[1], "%s", wc.wildcard[i]);
-			free(wc.wildcard[i]);
-		}
-		free(wc.wildcard);
-		closedir(dir);
-	} */
-}
-// use strtrim and free old arg, replace with new one.
-
-
-static void organize_wildcard(t_wildcard *wc)
-{
-	int		i, k;
-	char	*tmp;
+	int			i;
+	int			j;
+	int			total;
+	char		*arg;
+	char		*out;
+	char		**comps;
+	t_collect	coll;
 
 	i = 0;
-	while (i < wc->nbr_of_files - 1)
+	(void)shell;
+	while (cmd->args[i])
 	{
-		k = i + 1;
-		while (k < wc->nbr_of_files)
+		arg = cmd->args[i];
+		if (!has_wildcard(arg) || is_quoted(arg))
 		{
-			if (ft_strcasecmp(wc->wildcard[i], wc->wildcard[k]) > 0)
-			{
-				tmp = wc->wildcard[i];
-				wc->wildcard[i] = wc->wildcard[k];
-				wc->wildcard[k] = tmp;
-			}
-			k++;
+			i++;
+			continue ;
 		}
+		collect_init(&coll);
+		comps = split_path(arg);
+		expand_recursive(comps, 0, "", &coll);
+		free_strarr(comps);
+		if (coll.len > 1)
+			sort_strs(coll.arr, coll.len);
+		total = 1;
+		j = 0;
+		while (j < coll.len)
+		{
+			total += ft_strlen(coll.arr[j]) + 1;
+			j++;
+		}
+		out = malloc(total);
+		out[0] = '\0';
+		j = 0;
+		while (j < coll.len)
+		{
+			ft_strcat(out, coll.arr[j]);
+			if (j + 1 < coll.len)
+				ft_strcat(out, " ");
+			free(coll.arr[j]);
+			j++;
+		}
+		free(coll.arr);
+		free(cmd->args[i]);
+		cmd->args[i] = out;
 		i++;
 	}
 }
 
-#include <ctype.h> // For tolower()
-
-static int ft_strcasecmp(const char *s1, const char *s2) // add to libft!!
+static void	collect_add(t_collect *c, char *s)
 {
-	while (*s1 && *s2)
+	if (c->len + 1 >= c->cap)
 	{
-		char c1 = ft_tolower(*s1);
-		char c2 = ft_tolower(*s2);
-
-		// if characters are different
-		if (c1 != c2)
-		{
-			// manually adjust '.' to be higher than letters
-			if (c1 == '.')
-				return 1; // treat '.' as greater
-			if (c2 == '.')
-				return -1;
-			return (c1 - c2);
-		}
-		s1++;
-		s2++;
+		c->cap *= 2;
+		c->arr = realloc(c->arr, sizeof(char *) * c->cap); // LIBFTTT!!
 	}
+	c->arr[c->len++] = s;
+}
 
-	// If strings are identical up to this point, shorter one comes first
-	return ft_tolower(*s1) - ft_tolower(*s2);
+//— Recursive traversal —------------------------------------------------------
+static void	expand_recursive(char **comps, int lvl, const char *base,
+				t_collect *out)
+{
+	char			*next;
+	struct dirent	*e;
+	DIR				*d;
+	bool			last;
+
+	if (comps[lvl] && !has_wildcard(comps[lvl]))
+	{
+		next = join_path(base, comps[lvl]);
+		expand_recursive(comps, lvl + 1, next, out);
+		free(next);
+		return ;
+	}
+	if (!comps[lvl])
+	{
+		collect_add(out, ft_strdup(base));
+		return ;
+	}
+	if (base[0])
+		d = opendir(base);
+	else
+		d = opendir(".");
+	if (!d)
+		return ;
+	last = comps[lvl + 1] == NULL;
+	e = readdir(d);
+	while (e)
+	{
+		if (e->d_name[0] == '.')
+		{
+			e = readdir(d);
+			continue ;
+		}
+		if (!match_pat(e->d_name, comps[lvl]))
+		{
+			e = readdir(d);
+			continue ;
+		}
+		next = join_path(base, e->d_name);
+		if (last)
+			collect_add(out, next);
+		else
+		{
+			expand_recursive(comps, lvl + 1, next, out);
+			free(next);
+		}
+		e = readdir(d);
+	}
+	closedir(d);
 }

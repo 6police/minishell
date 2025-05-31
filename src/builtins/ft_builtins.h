@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_builtins.h                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/30 02:15:13 by nuno              #+#    #+#             */
+/*   Updated: 2025/05/30 02:15:14 by nuno             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FT_BUILTINS_H
 # define FT_BUILTINS_H
 
@@ -20,7 +32,7 @@ void		pwd_shell(t_cmd *cmd, t_shell *shell);
 void		export_var(char *var, t_env *env);
 
 // export env var without arguments
-void		export_no_args(t_env *env);
+void		export_no_args(t_env *env, t_cmd *cmd);
 
 // export env var with arguments
 void		ft_export(char *var, char *value, t_env *env);
@@ -52,11 +64,4 @@ void		exit_shell(t_cmd *cmd, t_shell *shell);
 // execve.c
 // exeternal_cmd.c
 void		execute_external(t_cmd *cmd, t_shell *shell);
-
-// ft_exit_code_printer.c
-// print the exit code
-void	exit_code_printer(t_cmd *cmd, t_shell *shell);
-
-// ft_str_r_cmp.c
-int	ft_str_r_cmp(const char *s1, const char *s2);
 #endif
