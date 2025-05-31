@@ -9,7 +9,7 @@ t_cmd	*init_cmd(char *name, char **args)
 	if (name)
 		cmd->name = ft_strdup(name);
 	else
-		cmd->name = ft_strdup("KEKW");
+		cmd->name = ft_strdup("kekers");
 	cmd->args = args;
 	cmd->path = NULL;
 	cmd->is_builtin = false;
@@ -54,7 +54,8 @@ static void	cmd_processor_a(t_cmd *cmd, t_shell *shell, int i)
 static t_cmd	*invalid_exit(t_cmd *cmd, t_shell *shell)
 {
 	shell->exit_value = 1;
-	ft_printf_fd(STDERR_FILENO, "minishell: invalid command: %s\n", cmd->name);
+	if (ft_strcmp(cmd->name, "kekers") != 0)
+		ft_printf_fd(STDERR_FILENO, "minishell: invalid command: %s\n", cmd->name);
 	return (cmd);
 }
 
