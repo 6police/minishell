@@ -6,7 +6,7 @@
 /*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:18:46 by joao              #+#    #+#             */
-/*   Updated: 2025/05/31 17:20:11 by joao             ###   ########.fr       */
+/*   Updated: 2025/05/31 21:31:12 by joao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ void	process_cmd_args(t_cmd *cmd)
 	free_split(cmd->args);
 	while (splitargs[i] )
 	{
-		splitargs[i] = remove_quotes_beg_end(splitargs[i]);
+		if (ft_strlen(splitargs[i]) >= 3)
+			splitargs[i] = remove_quotes_beg_end(splitargs[i]);
 		i++;
 	}
 	free_split(newargs);
@@ -102,6 +103,8 @@ t_cmd	*build_cmds(t_shell *shell)
 		return (NULL);
 	while (shell->tokens[i])
 	{
+		if (is_all_quotes(shell->tokens[i]))
+			return (ft_printf_fd(2, REDIR_FAILURE"\n"), NULL);
 		cmd = parse_cmd(shell, i);
 		if (cmd == NULL)
 			return (NULL);

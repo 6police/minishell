@@ -6,7 +6,7 @@
 /*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 18:18:16 by joao              #+#    #+#             */
-/*   Updated: 2025/05/31 18:18:17 by joao             ###   ########.fr       */
+/*   Updated: 2025/05/31 20:54:01 by joao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,15 @@ char	*remove_quotes_beg_end(char *arg)
 
 	if (!arg)
 		return (NULL);
-	if (arg[0] == '\"')
+	// Check for empty quoted strings
+	if ((ft_strlen(arg) == 2 && arg[0] == '\"' && arg[1] == '\"') ||
+		(ft_strlen(arg) == 2 && arg[0] == '\'' && arg[1] == '\''))
+	{
+		new_str = ft_strdup("");
+		free(arg);
+		return (new_str);
+	}
+	else if (arg[0] == '\"')
 	{
 		new_str = ft_strtrim(arg, "\"");
 		free(arg);

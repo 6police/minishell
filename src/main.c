@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 20:56:36 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/05/30 20:56:37 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/05/31 21:08:39 by joao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,5 +47,6 @@ int	main(int argc, char **argv, char **env)
 	else
 		shell->debug = 0;
 	shelling(shell);
+	clean_exit(&shell);
 	return (0);
 }

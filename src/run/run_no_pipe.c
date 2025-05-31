@@ -6,7 +6,7 @@
 /*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 18:13:54 by joao              #+#    #+#             */
-/*   Updated: 2025/05/31 19:53:49 by joao             ###   ########.fr       */
+/*   Updated: 2025/05/31 21:24:02 by joao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ static void	handle_invalid_cmd(t_cmd *cmd, t_shell *shell)
 static void	child_process_exec(t_cmd *cmd, t_shell *shell)
 {
 	eggxecutor(cmd, shell, 1);
-	cmd->builtin_func(cmd, shell);
+	if (cmd->is_valid)
+		cmd->builtin_func(cmd, shell);
 	clean_exit(&shell);
 }
 
@@ -55,8 +56,8 @@ static void	run_builtin_cmd(t_cmd *cmd, t_shell *shell)
 	int saved_stdin;
 	t_fd *redir;
 
-	saved_stdout = (STDOUT_FILENO);
-	saved_stdin = (STDIN_FILENO);
+	saved_stdout = dup(STDOUT_FILENO);
+	saved_stdin = dup(STDIN_FILENO);
 	redir = cmd->fd_struct;
 	while (redir)
 	{

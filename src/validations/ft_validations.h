@@ -6,7 +6,7 @@
 /*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 18:18:29 by joao              #+#    #+#             */
-/*   Updated: 2025/05/31 18:18:31 by joao             ###   ########.fr       */
+/*   Updated: 2025/05/31 21:28:38 by joao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,11 @@ char	*checkforpath(char *cmd, t_env *env);
 
 // check if command sent is in path format
 bool	is_command_path(char *cmd);
+
+// check if the command is valid
+// bool    ft_validation(t_cmd *cmd, t_shell *shell);
+
+// check if the command is all quotes
+bool	is_all_quotes(char *cmd);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:20:45 by joao              #+#    #+#             */
-/*   Updated: 2025/05/31 17:20:46 by joao             ###   ########.fr       */
+/*   Updated: 2025/05/31 20:48:40 by joao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	**parse_line(char *line, int letter, int sub)
 	if (!line)
 		return (NULL);
 	tokens = ft_parse_split(line, letter, sub);
-	if (!tokens)
+	if (!tokens || !tokens[0]) 
 		return (NULL);
 	return (tokens);
 }
