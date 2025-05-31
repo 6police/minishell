@@ -6,7 +6,7 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 17:40:15 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/05/31 01:27:57 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/05/31 02:12:55 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void	ft_wildcard(t_cmd *cmd, t_shell *shell)
 
 	(void)shell;
 	i = 0;
+	if (!cmd || !cmd->args)
+		return ;
 	while (cmd->args[i])
 	{
 		arg = cmd->args[i];
