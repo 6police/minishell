@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 18:09:24 by joao              #+#    #+#             */
-/*   Updated: 2025/06/01 18:09:58 by joao             ###   ########.fr       */
+/*   Updated: 2025/06/02 00:01:19 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,4 +26,6 @@ int		ft_handle_heredoc(t_fd *fd_struct, t_shell *shell);
 bool	has_expansion(char *line);
 char	*ft_expand(char *line, t_shell *shell);
 void	restore_std_fds(int saved_stdout, int saved_stdin);
+int		rl_hook(void);
+
 #endif

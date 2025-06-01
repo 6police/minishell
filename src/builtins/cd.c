@@ -6,7 +6,7 @@
 /*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 01:57:15 by nuno              #+#    #+#             */
-/*   Updated: 2025/06/01 22:02:59 by nuno             ###   ########.fr       */
+/*   Updated: 2025/06/02 00:01:35 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static char	*get_cd_path(t_cmd *cmd, t_shell *shell)
 
 static void	change_dir(char *path, t_shell *shell)
 {
-	char *str;
+	char	*str;
 
 	str = "No such file or directory";
 	if (chdir(path))
