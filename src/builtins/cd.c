@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 01:57:15 by nuno              #+#    #+#             */
-/*   Updated: 2025/05/31 17:40:44 by joao             ###   ########.fr       */
+/*   Updated: 2025/06/01 22:02:59 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,12 @@ static char	*get_cd_path(t_cmd *cmd, t_shell *shell)
 
 static void	change_dir(char *path, t_shell *shell)
 {
+	char *str;
+
+	str = "No such file or directory";
 	if (chdir(path))
 	{
-		ft_printf_fd(STDERR_FILENO, "minishell: \
-			cd: %s: No such file or directory\n", path);
+		ft_printf_fd(STDERR_FILENO, "minishell: cd: %s: %s\n", path, str);
 		shell->exit_value = 1;
 		return ;
 	}

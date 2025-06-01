@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   run_shell_2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 17:21:02 by joao              #+#    #+#             */
-/*   Updated: 2025/06/01 17:21:11 by joao             ###   ########.fr       */
+/*   Updated: 2025/06/01 21:57:46 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ static char	*build_prompt(void)
 
 static void	handle_status(t_shell *shell)
 {
-	if (t_pid()->status == 130)
+	if (t_pid()->exit_value == 130)
 	{
 		shell->exit_value = 130;
-		t_pid()->status = 0;
+		t_pid()->exit_value = 0;
 	}
 }
 
