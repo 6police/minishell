@@ -6,13 +6,11 @@
 /*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 18:13:54 by joao              #+#    #+#             */
-/*   Updated: 2025/05/31 21:24:02 by joao             ###   ########.fr       */
+/*   Updated: 2025/06/01 17:19:47 by joao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_run.h"
-
-// function to run a command without pipes
 
 // function to handle invalid commands
 static void	handle_invalid_cmd(t_cmd *cmd, t_shell *shell)
@@ -47,35 +45,6 @@ static void	run_external_cmd(t_cmd *cmd, t_shell *shell)
 	}
 	if (cmd->pid == 0)
 		child_process_exec(cmd, shell);
-}
-
-// function to run a built-in command
-static void	run_builtin_cmd(t_cmd *cmd, t_shell *shell)
-{
-	int saved_stdout;
-	int saved_stdin;
-	t_fd *redir;
-
-	saved_stdout = dup(STDOUT_FILENO);
-	saved_stdin = dup(STDIN_FILENO);
-	redir = cmd->fd_struct;
-	while (redir)
-	{
-		if (redir->fd != -1)
-		{
-			if (redir->type == REDIR_OUT || redir->type == REDIR_APPEND)
-				dup2(redir->fd, STDOUT_FILENO);
-			else if (redir->type == REDIR_IN || redir->type == HERE_DOC_)
-				dup2(redir->fd, STDIN_FILENO);
-		}
-		redir = redir->next;
-	}
-	shell->wait = false;
-	cmd->builtin_func(cmd, shell);
-	dup2(saved_stdout, STDOUT_FILENO);
-	dup2(saved_stdin, STDIN_FILENO);
-	close(saved_stdout);
-	close(saved_stdin);
 }
 
 // function to run a command without pipes

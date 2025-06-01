@@ -6,7 +6,7 @@
 /*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 18:18:34 by joao              #+#    #+#             */
-/*   Updated: 2025/05/31 21:28:29 by joao             ###   ########.fr       */
+/*   Updated: 2025/06/01 18:13:38 by joao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,33 +47,10 @@ bool	validate_command(char *command)
 	return (true);
 }
 
-// bool ft_validation(t_cmd *cmd, t_shell *shell)
-// {
-// 	char *path;
-
-// 	path = NULL;
-// 	if (!cmd || !cmd->name)
-// 		return (false);
-// 	if (cmd->is_builtin)
-// 		return (true);
-// 	if (is_empty(cmd->name))
-// 	{
-// 		ft_printf_fd(STDERR_FILENO, "minishell: command not found\n");
-// 		return (false);
-// 	}
-// 	path = checkforpath(cmd->name, shell->env);
-// 	if (!path)
-// 	{
-// 		ft_printf_fd(STDERR_FILENO, "minishell: command not found: %s\n", cmd->name);
-// 		return (false);
-// 	}
-// 	free(path);
-// 	return (true);
-// }
-
-bool is_all_quotes(char *str)
+// Check if the string contains only quotes
+bool	is_all_quotes(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i])

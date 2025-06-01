@@ -6,7 +6,7 @@
 /*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:20:48 by joao              #+#    #+#             */
-/*   Updated: 2025/05/31 17:21:31 by joao             ###   ########.fr       */
+/*   Updated: 2025/06/01 17:59:14 by joao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,8 @@ void	parse(t_shell *shell)
 	if (exceeds_pipe_limit(shell))
 		return ;
 	if (!shell->tokens)
-		return (ft_printf_fd(STDERR_FILENO, "minishell: syntax error\n"), (void)0);
+		return (ft_printf_fd(STDERR_FILENO, "minishell: syntax error\n"),
+			(void)0);
 	dollar_sign(shell);
 	build_cmds(shell);
 	set_pipe_flag(shell);

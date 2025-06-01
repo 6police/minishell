@@ -6,7 +6,7 @@
 /*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 18:18:26 by joao              #+#    #+#             */
-/*   Updated: 2025/05/31 18:18:28 by joao             ###   ########.fr       */
+/*   Updated: 2025/06/01 18:13:41 by joao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ char	*checkforpath(char *cmd, t_env *env)
 	free_split(paths);
 	return (NULL);
 }
-
 
 // check if command sent is in path format
 // ex: /bin/ls

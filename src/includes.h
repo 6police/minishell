@@ -6,7 +6,7 @@
 /*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 18:24:01 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/05/31 17:32:04 by joao             ###   ########.fr       */
+/*   Updated: 2025/06/01 17:24:59 by joao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define INCLUDES_H
 
 // headers from system libraries
+# include <ctype.h>
+# include <dirent.h>
 # include <errno.h>
 # include <fcntl.h>
 # include <limits.h>
@@ -25,15 +27,12 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+# include <sys/signal.h>
 # include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <termios.h>
 # include <unistd.h>
-# include <sys/signal.h>
-# include <ctype.h>
-# include <dirent.h>
-
 
 // headers from lib_ft directory
 # include "../inc/lib_ft/ft_printf.h"

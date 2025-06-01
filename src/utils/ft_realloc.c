@@ -6,7 +6,7 @@
 /*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 18:17:29 by joao              #+#    #+#             */
-/*   Updated: 2025/05/31 18:17:49 by joao             ###   ########.fr       */
+/*   Updated: 2025/06/01 18:13:08 by joao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ char	**ft_realloc_arr(char **ptr, size_t size, size_t old_size)
 	if (size == 0)
 		return (NULL);
 	new_size = size_copy(size, old_size);
-	new_arr = malloc(sizeof(char *) * (new_size + 1)); 
+	new_arr = malloc(sizeof(char *) * (new_size + 1));
 	if (!new_arr)
 		return (NULL);
 	i = 0;
@@ -42,7 +42,5 @@ char	**ft_realloc_arr(char **ptr, size_t size, size_t old_size)
 		new_arr[i++] = NULL;
 	if (ptr)
 		free(ptr);
-
 	return (new_arr);
 }
-

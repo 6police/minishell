@@ -6,10 +6,9 @@
 /*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:20:45 by joao              #+#    #+#             */
-/*   Updated: 2025/05/31 20:48:40 by joao             ###   ########.fr       */
+/*   Updated: 2025/06/01 18:00:27 by joao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "ft_parsing.h"
 
@@ -21,7 +20,7 @@ char	**parse_line(char *line, int letter, int sub)
 	if (!line)
 		return (NULL);
 	tokens = ft_parse_split(line, letter, sub);
-	if (!tokens || !tokens[0]) 
+	if (!tokens || !tokens[0])
 		return (NULL);
 	return (tokens);
 }

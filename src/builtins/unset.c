@@ -6,7 +6,7 @@
 /*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 01:59:00 by nuno              #+#    #+#             */
-/*   Updated: 2025/05/31 17:15:23 by joao             ###   ########.fr       */
+/*   Updated: 2025/06/01 17:52:02 by joao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	unset_env_var(t_shell *shell, char *key)
 	if (!env_var)
 	{
 		ft_printf_fd(2, "minishell: unset: `%s': variable not found\n", key);
-		shell->exit_value = 1; // variable not found
+		shell->exit_value = 1;
 		return ;
 	}
 	else

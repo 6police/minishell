@@ -6,7 +6,7 @@
 /*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:20:13 by joao              #+#    #+#             */
-/*   Updated: 2025/05/31 17:36:47 by joao             ###   ########.fr       */
+/*   Updated: 2025/06/01 17:57:12 by joao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,5 +154,10 @@ int		count_valid_args(char **args);
 // function to process the command arguments
 void	cmd_processor_a(t_cmd *cmd, t_shell *shell, int i);
 
+// invalid exit function
+t_cmd	*invalid_exit(t_cmd *cmd, t_shell *shell);
+
+// parse the command
+t_cmd	*parse_cmd(t_shell *shell, int i);
 
 #endif

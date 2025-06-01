@@ -6,7 +6,7 @@
 /*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 23:47:26 by nuno              #+#    #+#             */
-/*   Updated: 2025/05/31 19:35:32 by joao             ###   ########.fr       */
+/*   Updated: 2025/06/01 17:58:35 by joao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,11 @@ void	export_no_args(t_env *env, t_cmd *cmd)
 			ft_printf_fd(STDOUT_FILENO, "declare -x " RED "%s" RESET "\n",
 				env_var->key);
 		else
-			ft_printf_fd(STDOUT_FILENO, "declare -x " RED "%s" RESET "=\"%s\"\n",
-				env_var->key, env_var->value);
+		{
+			ft_printf_fd(STDOUT_FILENO, "declare -x " RED "%s" RESET);
+			ft_printf_fd(STDOUT_FILENO, "=\"%s\"\n", env_var->key,
+				env_var->value);
+		}
 		env_var = env_var->next;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:19:21 by joao              #+#    #+#             */
-/*   Updated: 2025/05/31 19:36:10 by joao             ###   ########.fr       */
+/*   Updated: 2025/06/01 18:00:01 by joao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +63,14 @@ void	cmd_processor_a(t_cmd *cmd, t_shell *shell, int i)
 	}
 }
 
-// function to check if a file exists and is a regular file 
-bool check_file(char *cmd)
+// function to check if a file exists and is a regular file
+bool	check_file(char *cmd)
 {
-	struct stat st;
+	struct stat	st;
+
 	if (stat(cmd, &st) != 0)
 		return (false);
 	if (S_ISREG(st.st_mode) != 0)
-		return (true) ;
+		return (true);
 	return (false);
 }

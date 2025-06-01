@@ -6,7 +6,7 @@
 /*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 18:17:12 by joao              #+#    #+#             */
-/*   Updated: 2025/05/31 18:17:14 by joao             ###   ########.fr       */
+/*   Updated: 2025/06/01 17:21:49 by joao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,11 @@ void	wait_commands(t_shell *shell);
 
 // function to close all file descriptors
 void	close_fds(t_cmd *cmd);
+
+// function to run a builtin command
+void	run_builtin_cmd(t_cmd *cmd, t_shell *shell);
+
+// wrapper for running the shell commands
+void	minishellers(t_shell *shell);
 
 #endif

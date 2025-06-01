@@ -6,7 +6,7 @@
 /*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:52:15 by joao              #+#    #+#             */
-/*   Updated: 2025/05/31 17:52:18 by joao             ###   ########.fr       */
+/*   Updated: 2025/06/01 18:10:12 by joao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ void	do_heredoc_child(char *limiter, t_shell *shell)
 }
 
 // function to handle heredoc in the main process
-int ft_handle_heredoc(t_fd *fd_struct, t_shell *shell)
+int	ft_handle_heredoc(t_fd *fd_struct, t_shell *shell)
 {
-    do_heredoc_child(fd_struct->file, shell);
-    return(shell->exit_value);
+	do_heredoc_child(fd_struct->file, shell);
+	return (shell->exit_value);
 }

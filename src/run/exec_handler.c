@@ -1,14 +1,24 @@
-#include "ft_run.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_handler.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/01 18:11:36 by joao              #+#    #+#             */
+/*   Updated: 2025/06/01 18:11:36 by joao             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+#include "ft_run.h"
 
 // function to close file des in a command
 void	close_fds(t_cmd *cmd)
 {
-	t_fd *tmp;
+	t_fd	*tmp;
 
 	if (!cmd || !cmd->fd_struct)
 		return ;
-
 	tmp = cmd->fd_struct;
 	while (tmp)
 	{

@@ -6,7 +6,7 @@
 /*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 18:17:09 by joao              #+#    #+#             */
-/*   Updated: 2025/05/31 21:11:02 by joao             ###   ########.fr       */
+/*   Updated: 2025/06/01 18:11:50 by joao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,18 +42,6 @@ void	wait_commands(t_shell *shell)
 	setup_signals(shell);
 }
 
-// function to handle invalid commands
-// static void	handle_invalid_command(t_cmd *cmd, t_shell *shell)
-// {
-// 	if (cmd->fd_struct)
-// 		close_fds(cmd);
-// 	else if (cmd->args && cmd->args[0] && cmd->name)
-// 	{
-// 		ft_printf_fd(STDERR_FILENO, "%s command: not found\n", cmd->args[0]);
-// 		shell->exit_value = 127;
-// 	}
-// }
-
 // function to run commands in the shell
 void	run_commands(t_shell *shell)
 {
@@ -69,11 +57,9 @@ void	run_commands(t_shell *shell)
 	{
 		i = setup_redirections(tmp, shell);
 		if (i == 1 || i == 130)
-			return(shell->exit_value = i, (void) i);
+			return (shell->exit_value = i, (void)i);
 		if (tmp->is_valid)
 			processor(tmp, shell);
-		// else
-		// 	handle_invalid_command(tmp, shell);
 		close_cmd_redirs(tmp);
 		tmp = tmp->next;
 	}

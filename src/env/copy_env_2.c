@@ -6,13 +6,13 @@
 /*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 17:32:09 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/05/31 17:50:41 by joao             ###   ########.fr       */
+/*   Updated: 2025/06/01 17:53:14 by joao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_env.h"
 
-// Function to copy an environment variable from the original list to the new list
+// Function to copy an env var from the original list to the new list
 static void	copy_env_var(t_env *copy, t_env_var *curr)
 {
 	t_env_var	*new_var;

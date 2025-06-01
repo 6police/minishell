@@ -1,36 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
+/*   close_redirs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/30 02:15:08 by nuno              #+#    #+#             */
-/*   Updated: 2025/06/01 17:52:14 by joao             ###   ########.fr       */
+/*   Created: 2025/06/01 17:13:50 by joao              #+#    #+#             */
+/*   Updated: 2025/06/01 18:10:10 by joao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_builtins.h"
+#include "redirections.h"
 
-// function to close all extra file descriptors
-static void	close_extra_fds(void)
+// function to restore standard file descriptors after redirection
+void	restore_std_fds(int saved_stdout, int saved_stdin)
 {
-	int	i;
-
-	i = 3;
-	while (i < 1024)
-	{
-		close(i);
-		i++;
-	}
-}
-
-// function to clean up and exit the shell
-void	exit_shell(t_cmd *cmd, t_shell *shell)
-{
-	(void)cmd;
-	if (!shell->is_child)
-		shell->exit_value = 0;
-	close_extra_fds();
-	clean_exit(&shell);
+	dup2(saved_stdout, STDOUT_FILENO);
+	dup2(saved_stdin, STDIN_FILENO);
+	close(saved_stdout);
+	close(saved_stdin);
 }

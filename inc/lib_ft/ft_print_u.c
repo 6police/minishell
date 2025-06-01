@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_print_u.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joamiran <joamiran@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 03:03:04 by joamiran          #+#    #+#             */
-/*   Updated: 2024/05/08 18:01:11 by joamiran         ###   ########.fr       */
+/*   Updated: 2025/06/01 18:15:34 by joao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ static int	ft_write_nbr_u(unsigned int n)
 	return (chars_printed);
 }
 
-static int	handle_padding_u(t_data *data, unsigned int n, \
-	int padding, int prec_padding)
+static int	handle_padding_u(t_data *data, unsigned int n, int padding,
+		int prec_padding)
 {
 	if (data->format.minus_sign)
 	{

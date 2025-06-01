@@ -6,7 +6,7 @@
 /*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:17:07 by joao              #+#    #+#             */
-/*   Updated: 2025/05/31 17:17:16 by joao             ###   ########.fr       */
+/*   Updated: 2025/06/01 18:06:47 by joao             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	free_cmds(t_cmd *cmds)
 	if (!cmds)
 		return ;
 	tmp = cmds;
-	while (tmp)
+	while (tmp != NULL)
 	{
 		next = tmp->next;
 		free_cmd(tmp);
