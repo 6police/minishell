@@ -6,13 +6,13 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 17:21:02 by joao              #+#    #+#             */
-/*   Updated: 2025/06/02 18:32:21 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/06/02 19:19:52 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_run.h"
 
-static char	*build_prompt(void)
+/*static char	*build_prompt(void)
 {
 	char	*cwd;
 	char	*aux;
@@ -28,7 +28,7 @@ static char	*build_prompt(void)
 	prompt = ft_strjoin(aux, RESET "\n" PROMPT);
 	free(aux);
 	return (prompt);
-}
+}*/
 
 static void	handle_status(t_shell *shell)
 {
@@ -56,7 +56,7 @@ void	run_shell(t_shell *shell)
 
 	while (1)
 	{
-		prompt = build_prompt();
+		prompt = ft_strdup(PROMPT);
 		if (!prompt)
 			exit_shell(&(t_cmd){0}, shell);
 		if (isatty(STDIN_FILENO))
