@@ -6,7 +6,7 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 01:11:47 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/05/31 01:12:56 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/06/02 16:21:12 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ char	*join_path(const char *a, const char *b)
 	return (r);
 }
 
+/*Allocates initial space for matches.
+Sets initial capacity and length to 0.*/
 void	collect_init(t_collect *c)
 {
 	c->cap = 16;

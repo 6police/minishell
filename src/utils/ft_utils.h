@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_utils.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 18:18:00 by joao              #+#    #+#             */
-/*   Updated: 2025/05/31 18:18:02 by joao             ###   ########.fr       */
+/*   Updated: 2025/06/02 16:44:41 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,6 @@ char	*ft_strstr(const char *haystack, const char *needle);
 char	*ft_strcat(char *dest, const char *src);
 
 // ft_realloc.c
-char	**ft_realloc_arr(char **ptr, size_t size, size_t old_size);
+char	**ft_realloc_arr(char **ptr, size_t new_cap);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 17:40:44 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/05/31 01:25:14 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/06/02 16:50:52 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ bool	is_quoted(const char *s)
 	return (false);
 }
 
+//Splits the pattern argument by /, e.g. "src/*.c" becomes:
+//comps = {"src", "*.c", NULL};
 char	**split_path(const char *path)
 {
 	return (ft_split(path, '/'));
