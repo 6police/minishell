@@ -6,7 +6,7 @@
 /*   By: joamiran <joamiran@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:19:57 by joao              #+#    #+#             */
-/*   Updated: 2025/06/02 20:57:48 by joamiran         ###   ########.fr       */
+/*   Updated: 2025/06/02 21:10:02 by joamiran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,6 @@ char	**copy_valid_args(char **args, int count)
 			stripped = strip_quotes(args[i]);
 			if (!stripped)
 			{
-				// Clean up previously allocated strings
 				while (j > 0)
 					free(newargs[--j]);
 				free(newargs);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_assign.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: joamiran <joamiran@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:51:03 by joao              #+#    #+#             */
-/*   Updated: 2025/05/31 17:51:05 by joao             ###   ########.fr       */
+/*   Updated: 2025/06/02 21:15:36 by joamiran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void	assign_redir_file(t_fd *redir)
 		ft_printf_fd(STDERR_FILENO, "Error: malloc failed\n");
 		return ;
 	}
+	new_file = strip_quotes(new_file);
 	free(redir->file);
 	redir->file = new_file;
 	if (redir->file[0] == '\0')
