@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_here_doc.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: joamiran <joamiran@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:52:15 by joao              #+#    #+#             */
-/*   Updated: 2025/06/01 18:10:12 by joao             ###   ########.fr       */
+/*   Updated: 2025/06/02 17:21:56 by joamiran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void	do_heredoc_child(char *limiter, t_shell *shell)
 	int		fd;
 
 	fd = open(HERE_DOC, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-	shell->status = fd;
 	if (fd < 0)
 		exit(1);
 	while (1)
