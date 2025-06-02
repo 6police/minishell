@@ -6,7 +6,7 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 17:40:15 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/05/31 02:12:55 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/06/02 16:29:10 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,12 @@ static void	join_matches_to_string(t_collect *coll, char *out);
 static void	handle_successful_matches(t_cmd *cmd, int i, t_collect *coll);
 static void	process_wildcard_arg(t_cmd *cmd, int i, char *arg);
 
+/* This is the entry point of the wildcard logic.
+It loops over cmd->args, which are the arguments passed 
+to a command (e.g. ls, echo, cat, etc.). 
+has_wildcard(arg): returns true if the string contains *.
+is_quoted(arg): returns true if the string was quoted (e.g., "*.c"),
+in which case wildcards shouldn't be expanded.*/
 void	ft_wildcard(t_cmd *cmd, t_shell *shell)
 {
 	int		i;
@@ -66,6 +72,19 @@ static void	join_matches_to_string(t_collect *coll, char *out)
 	}
 }
 
+/*
+Steps:
+	Sorts the collected matches (if more than one).
+	Calculates total memory size needed to join them with spaces.
+
+total = calculate_total_length(coll);
+
+Allocates a new string out, concatenates all matches with space:
+	join_matches_to_string(coll, out);
+	Frees old argument and replaces it with out.
+	
+This makes sure the command line now has the expanded wildcard result.
+*/
 static void	handle_successful_matches(t_cmd *cmd, int i, t_collect *coll)
 {
 	char	*out;
@@ -81,6 +100,10 @@ static void	handle_successful_matches(t_cmd *cmd, int i, t_collect *coll)
 	cmd->args[i] = out;
 }
 
+/* t_collect is a dynamic array used to store matching results (paths).
+comps is the array of path components split from the argument pattern. */
+//f no matches were found, it just keeps the original string (non-expanded).
+// Otherwise, it replaces the original argument with the expanded matches.
 static void	process_wildcard_arg(t_cmd *cmd, int i, char *arg)
 {
 	t_collect	coll;
@@ -98,3 +121,26 @@ static void	process_wildcard_arg(t_cmd *cmd, int i, char *arg)
 	else
 		handle_successful_matches(cmd, i, &coll);
 }
+/*
+Summary of Flow
+
+ft_wildcard(cmd)
+└── iterates args[]
+	└── if wildcard and not quoted:
+		└── process_wildcard_arg()
+			├── collect_init
+			├── split_path(arg) => components
+			└── expand_recursive()
+				├── literal part → recurse
+				├── wildcard → scan_directory()
+					└── match_pat()
+						└── check chunks
+				└── handle_end_of_path → collect_add()
+			└── If matches:
+				└── handle_successful_matches()
+					├── sort
+					├── join with space
+					└── replace cmd->args[i]
+			└── If no matches:
+				└── restore_literal_pattern()
+*/

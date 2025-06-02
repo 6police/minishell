@@ -91,4 +91,5 @@ void	processor(t_cmd *cmd, t_shell *shell)
 		run_pipe(cmd, shell);
 	else
 		run_no_pipe(cmd, shell);
+	setup_signals(shell);
 }

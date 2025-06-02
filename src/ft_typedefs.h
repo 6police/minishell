@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_typedefs.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 18:19:14 by joao              #+#    #+#             */
-/*   Updated: 2025/06/01 17:50:43 by joao             ###   ########.fr       */
+/*   Updated: 2025/06/01 22:03:49 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,6 +160,7 @@ struct s_shell
 	pid_t	main_pid;					// process id of the command
 	bool	is_child;					// if the command is a child process
 	t_token	*token;						// tokens from the line after parsing
+	int		super_heredoc_fd;			// file descriptor for the super heredoc
 	int		debug;						// debug mode
 	int		fd[2];						// file descriptor for the redirections
 	int		ret;						// return value

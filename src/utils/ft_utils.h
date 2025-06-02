@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_utils.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joamiran <joamiran@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 18:18:00 by joao              #+#    #+#             */
-/*   Updated: 2025/06/02 03:03:51 by joamiran         ###   ########.fr       */
+/*   Updated: 2025/06/02 16:44:41 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ char	*ft_strstr(const char *haystack, const char *needle);
 char	*ft_strcat(char *dest, const char *src);
 
 // ft_realloc.c
-char	**ft_realloc_arr(char **ptr, size_t size, size_t old_size);
+char	**ft_realloc_arr(char **ptr, size_t new_cap);
 
 // function to check if a string starts with a redirection symbol
 bool	starts_with_redir(char *str);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_signal.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 17:36:58 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/06/01 18:12:10 by joao             ###   ########.fr       */
+/*   Updated: 2025/06/01 21:58:05 by nuno             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@
 
 typedef struct s_sig
 {
-	int		status;
+	int		exit_value;
+	int		fd;
 	t_shell	*shull;
 }			t_sig;
 

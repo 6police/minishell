@@ -6,67 +6,30 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 01:14:18 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/05/31 01:53:31 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/06/02 16:50:33 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_wildcard.h"
 
-static void	collect_add(t_collect *c, char *s);
-static bool	path_exists(const char *path);
-
-static void	handle_literal_component(char **comps, int lvl,
+/*
+This function:
+Opens the current directory.
+Iterates over all files.
+Skips hidden files via should_skip_entry().
+	For each entry:
+If it matches the pattern via match_pat(...),
+build its full path (join_path) and:
+If this is the last component, add it to out.
+Else, recurse into it.
+*/
+static void	scan_directory(char **comps, int lvl,
 		const char *base, t_collect *out)
-{
-	char	*next;
-
-	next = join_path(base, comps[lvl]);
-	if (path_exists(next))
-		expand_recursive(comps, lvl + 1, next, out);
-	free(next);
-}
-
-static void	handle_end_of_path(const char *base, t_collect *out)
-{
-	collect_add(out, ft_strdup(base));
-}
-
-static DIR	*open_directory(const char *base)
-{
-	if (base[0])
-		return (opendir(base));
-	return (opendir("."));
-}
-
-static bool	should_skip_entry(struct dirent *entry)
-{
-	if (entry->d_name[0] == '.')
-		return (true);
-	return (false);
-}
-
-static void	process_matching_entry(struct dirent *entry,
-		char **comps, int lvl, const char *base, t_collect *out)
-{
-	char	*next;
-	bool	is_last;
-
-	next = join_path(base, entry->d_name);
-	is_last = (comps[lvl + 1] == NULL);
-	if (is_last)
-		collect_add(out, next);
-	else
-	{
-		expand_recursive(comps, lvl + 1, next, out);
-		free(next);
-	}
-}
-
-static void	scan_directory(char **comps, int lvl, const char *base, t_collect *out)
 {
 	int				nch;
 	DIR				*d;
 	struct dirent	*entry;
+	char			*next;
 
 	nch = 0;
 	d = open_directory(base);
@@ -78,14 +41,35 @@ static void	scan_directory(char **comps, int lvl, const char *base, t_collect *o
 		if (!should_skip_entry(entry))
 		{
 			if (match_pat(entry->d_name, comps[lvl], nch))
-				process_matching_entry(entry, comps, lvl, base, out);
+			{
+				next = join_path(base, entry->d_name);
+				process_matching_entry(comps, lvl, out, next);
+			}
 		}
 		entry = readdir(d);
 	}
 	closedir(d);
 }
 
-void	expand_recursive(char **comps, int lvl, const char *base, t_collect *out)
+//This is the recursive traversal function that scans directories
+//and matches patterns at each level (component).
+//Purpose:
+//Traverse the path components (comps) level by level.
+//If the component contains a *, use pattern matching on directory entries.
+//Otherwise, append the literal part of the path and keep going.
+//Case 1: Component has no *
+//This means the path part is not a wildcard, like "src" in src /*.c.
+//It builds the full path and goes to the next component recursively.
+//Case 2: Component is NULL
+//We've reached the end of the path.
+//It adds the final full path to out.
+//Case 3: Component has *
+//This is where pattern matching happens.
+//We scan the directory at base, and for each entry, see if it matches the
+//wildcard pattern at level lvl.
+
+void	expand_recursive(char **comps, int lvl,
+		const char *base, t_collect *out)
 {
 	if (comps[lvl] && !has_wildcard(comps[lvl]))
 	{
@@ -100,17 +84,18 @@ void	expand_recursive(char **comps, int lvl, const char *base, t_collect *out)
 	scan_directory(comps, lvl, base, out);
 }
 
-static void	collect_add(t_collect *c, char *s)
+void	collect_add(t_collect *c, char *s)
 {
 	if (c->len + 1 >= c->cap)
 	{
 		c->cap *= 2;
-		c->arr = realloc(c->arr, sizeof(char *) * c->cap);
+		c->arr = realloc(c->arr, sizeof(char *) * c->cap); // adicionar ft_realloc e tirar realloc
+		/*if (c->arr*/
 	}
 	c->arr[c->len++] = s;
 }
 
-static bool	path_exists(const char *path)
+bool	path_exists(const char *path)
 {
 	struct stat	st;
 

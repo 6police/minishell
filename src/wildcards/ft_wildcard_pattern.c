@@ -6,7 +6,7 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 01:13:20 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/05/31 01:40:37 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/06/02 16:26:31 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,20 @@ static bool	match_middle_chunks(const char *name, char **chunks,
 	}
 	return (true);
 }
+/*
+What it does:
+Splits the pattern by * into chunks (like in shell globbing).
+Then checks if:
+	The filename starts with the first chunk (if pattern doesn't start with *).
+	Ends with the last chunk (if it doesn't end with *).
+	All middle chunks appear in order.
 
+Example:
+Pattern: a*b*c
+	chunks = {"a", "b", "c"}
+	matches: abc, a123b456c
+	doesn't match: ab, acb
+*/
 bool	match_pat(const char *name, const char *pat, int nch)
 {
 	bool	must_end;
