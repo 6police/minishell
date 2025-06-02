@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_wildcard.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 17:40:46 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/05/31 17:28:51 by joao             ###   ########.fr       */
+/*   Updated: 2025/06/02 15:05:12 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define FT_WILDCARD_H
 
 # include "../minishell.h"
-
 
 //— Collector struct —---------
 typedef struct s_collect
@@ -42,4 +41,14 @@ void	expand_recursive(char **comps, int lvl,
 			const char *base, t_collect *out);
 void	restore_literal_pattern(t_cmd *cmd, int i, char *arg);
 int		count_chunks(char **chunks);
+void	handle_literal_component(char **comps, int lvl,
+			const char *base, t_collect *out);
+void	handle_end_of_path(const char *base, t_collect *out);
+DIR		*open_directory(const char *base);
+bool	should_skip_entry(struct dirent *entry);
+void	process_matching_entry(char **comps, int lvl,
+			t_collect *out, char *next);
+void	collect_add(t_collect *c, char *s);
+bool	path_exists(const char *path);
+
 #endif
