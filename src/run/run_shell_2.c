@@ -6,7 +6,7 @@
 /*   By: joamiran <joamiran@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 17:21:02 by joao              #+#    #+#             */
-/*   Updated: 2025/06/02 03:16:53 by joamiran         ###   ########.fr       */
+/*   Updated: 2025/06/02 17:11:39 by joamiran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static int	check_line_length(char *line)
 void	run_shell(t_shell *shell)
 {
 	char	*prompt;
-	char	*line;
+	
 	while (1)
 	{
 		prompt = build_prompt();
@@ -62,11 +62,7 @@ void	run_shell(t_shell *shell)
 		if (isatty(STDIN_FILENO))
 			shell->line = readline(prompt);
 		else
-		{
-			line = get_next_line(STDIN_FILENO);
-			shell->line = ft_strdup(line);
-			free(line);
-		}
+			clean_exit(&shell);
 		free(prompt);
 		handle_status(shell);
 		if (!check_line_length(shell->line))
