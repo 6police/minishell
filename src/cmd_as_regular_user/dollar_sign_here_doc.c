@@ -6,7 +6,7 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 15:41:31 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/05/30 17:30:29 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/06/02 19:42:46 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	dollar_sign_here_doc(t_cmd *cmd, t_shell *shell)
 			quote_type = check_quotes_type(cmd->args[i]);
 		}
 		if ((quote_type != 2) && has_dollar == true)
-			shell->tokens[i] = handle_dollar(shell->tokens[i], shell);
+			cmd->args[i] = handle_dollar(cmd->args[i], shell);
 		i++;
 	}
 }
