@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: joamiran <joamiran@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 23:47:26 by nuno              #+#    #+#             */
-/*   Updated: 2025/06/01 17:58:35 by joao             ###   ########.fr       */
+/*   Updated: 2025/06/02 17:15:56 by joamiran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,13 +74,11 @@ void	export_no_args(t_env *env, t_cmd *cmd)
 	while (env_var)
 	{
 		if (!env_var->value)
-			ft_printf_fd(STDOUT_FILENO, "declare -x " RED "%s" RESET "\n",
-				env_var->key);
+			ft_printf_fd(STDOUT_FILENO, "declare -x %s\n", env_var->key);
 		else
 		{
-			ft_printf_fd(STDOUT_FILENO, "declare -x " RED "%s" RESET);
-			ft_printf_fd(STDOUT_FILENO, "=\"%s\"\n", env_var->key,
-				env_var->value);
+			ft_printf_fd(STDOUT_FILENO, "declare -x %s", env_var->key);
+			ft_printf_fd(STDOUT_FILENO, "=\"%s\"\n", env_var->value);
 		}
 		env_var = env_var->next;
 	}
