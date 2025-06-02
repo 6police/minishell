@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   run_shell_2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: joamiran <joamiran@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 17:21:02 by joao              #+#    #+#             */
-/*   Updated: 2025/06/01 17:21:11 by joao             ###   ########.fr       */
+/*   Updated: 2025/06/02 03:08:58 by joamiran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,20 @@ static int	check_line_length(char *line)
 void	run_shell(t_shell *shell)
 {
 	char	*prompt;
-
+	char	*line;
 	while (1)
 	{
 		prompt = build_prompt();
 		if (!prompt)
 			exit_shell(&(t_cmd){0}, shell);
-		shell->line = readline(prompt);
+		if (isatty(STDIN_FILENO))
+			shell->line = readline(prompt);
+		else
+		{
+			line = get_next_line(STDIN_FILENO);
+			shell->line = ft_strdup(line);
+			free(line);
+		}
 		free(prompt);
 		handle_status(shell);
 		if (!check_line_length(shell->line))
