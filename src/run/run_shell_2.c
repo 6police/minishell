@@ -53,13 +53,16 @@ static int	check_line_length(char *line)
 void	run_shell(t_shell *shell)
 {
 	char	*prompt;
-
+	
 	while (1)
 	{
 		prompt = build_prompt();
 		if (!prompt)
 			exit_shell(&(t_cmd){0}, shell);
-		shell->line = readline(prompt);
+		if (isatty(STDIN_FILENO))
+			shell->line = readline(prompt);
+		else
+			clean_exit(&shell);
 		free(prompt);
 		handle_status(shell);
 		if (!check_line_length(shell->line))

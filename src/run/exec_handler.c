@@ -74,8 +74,7 @@ void	run_pipe(t_cmd *cmd, t_shell *shell)
 		manage_pipes(cmd, shell);
 		eggxecutor(cmd, shell, 1);
 		close_pipes(shell->cmds);
-		if (cmd->path != NULL)
-			cmd->builtin_func(cmd, shell);
+		cmd->builtin_func(cmd, shell);
 		close_fds(cmd);
 		clean_exit(&shell);
 	}

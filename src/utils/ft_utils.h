@@ -61,4 +61,6 @@ char	*ft_strcat(char *dest, const char *src);
 // ft_realloc.c
 char	**ft_realloc_arr(char **ptr, size_t new_cap);
 
+// function to check if a string starts with a redirection symbol
+bool	starts_with_redir(char *str);
 #endif

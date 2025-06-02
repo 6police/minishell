@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_run.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: joamiran <joamiran@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 18:17:12 by joao              #+#    #+#             */
-/*   Updated: 2025/06/01 17:21:49 by joao             ###   ########.fr       */
+/*   Updated: 2025/06/02 16:53:45 by joamiran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,6 @@ void	run_shell_debug(t_shell *shell);
 
 // function to print harambe
 void	ft_print_harambe(void);
-
-// function to print minishell
-void	ft_print_minishell(void);
 
 // function to shell
 void	shelling(t_shell *shell);
