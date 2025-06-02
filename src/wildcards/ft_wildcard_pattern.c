@@ -6,7 +6,7 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 01:13:20 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/06/02 16:26:31 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/06/02 18:30:24 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ static bool	match_middle_chunks(const char *name, char **chunks,
 	}
 	return (true);
 }
+
 /*
 What it does:
 Splits the pattern by * into chunks (like in shell globbing).

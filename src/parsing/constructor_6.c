@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   constructor_6.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joamiran <joamiran@student.42lisboa.com    +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:19:57 by joao              #+#    #+#             */
-/*   Updated: 2025/06/02 03:03:11 by joamiran         ###   ########.fr       */
+/*   Updated: 2025/06/02 18:33:00 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ static int	handle_redir_count(char **args, int *i)
 	if (starts_with_redir(args[*i]))
 	{
 		(*i)++;
+		if (args[*i])
+			(*i)++;
 		return (1);
 	}
 	return (-1);
@@ -50,6 +52,8 @@ static int	handle_redir_copy(char **args, int *i)
 	if (starts_with_redir(args[*i]))
 	{
 		(*i)++;
+		if (args[*i])
+			(*i)++;
 		return (1);
 	}
 	return (-1);

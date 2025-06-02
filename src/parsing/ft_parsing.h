@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parsing.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:20:13 by joao              #+#    #+#             */
-/*   Updated: 2025/06/01 17:57:12 by joao             ###   ########.fr       */
+/*   Updated: 2025/06/02 18:06:34 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,5 +159,8 @@ t_cmd	*invalid_exit(t_cmd *cmd, t_shell *shell);
 
 // parse the command
 t_cmd	*parse_cmd(t_shell *shell, int i);
+
+// check if the command is a valid path
+bool	ft_valid_pather(char *cmd);
 
 #endif

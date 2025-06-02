@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_checker.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 18:18:26 by joao              #+#    #+#             */
-/*   Updated: 2025/06/01 18:13:41 by joao             ###   ########.fr       */
+/*   Updated: 2025/06/02 18:09:23 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ char	*checkforpath(char *cmd, t_env *env)
 	char		**paths;
 	char		*full_cmd;
 
+	if (ft_valid_pather(cmd) == false)
+		return (NULL);
 	tmp = find_env_var(env, "PATH");
 	if (!tmp || !tmp->value || !tmp->value[0])
 		return (NULL);

@@ -6,7 +6,7 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 01:14:18 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/06/02 16:50:33 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/06/02 18:29:28 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,7 @@ void	collect_add(t_collect *c, char *s)
 	if (c->len + 1 >= c->cap)
 	{
 		c->cap *= 2;
-		c->arr = realloc(c->arr, sizeof(char *) * c->cap); // adicionar ft_realloc e tirar realloc
-		/*if (c->arr*/
+		c->arr = ft_realloc_arr(c->arr, sizeof(char *) * c->cap);
 	}
 	c->arr[c->len++] = s;
 }

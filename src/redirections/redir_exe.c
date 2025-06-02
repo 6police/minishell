@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_exe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 18:09:36 by joao              #+#    #+#             */
-/*   Updated: 2025/06/01 18:09:55 by joao             ###   ########.fr       */
+/*   Updated: 2025/06/02 17:49:52 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ static int	handle_all_redirs(t_cmd *cmd, t_shell *shell, t_fd **last_in,
 			return (status);
 		update_last_in_out(tmp, last_in, last_out);
 		tmp = tmp->next;
+		shell->exit_value = 0;
 	}
 	return (0);
 }

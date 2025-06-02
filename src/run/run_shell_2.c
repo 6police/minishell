@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   run_shell_2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nuno <nuno@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/01 17:21:02 by joao              #+#    #+#             */
-/*   Updated: 2025/06/01 21:57:46 by nuno             ###   ########.fr       */
+/*   Updated: 2025/06/02 18:32:21 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static int	check_line_length(char *line)
 void	run_shell(t_shell *shell)
 {
 	char	*prompt;
-	
+
 	while (1)
 	{
 		prompt = build_prompt();

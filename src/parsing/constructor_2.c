@@ -3,14 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   constructor_2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:19:21 by joao              #+#    #+#             */
-/*   Updated: 2025/06/01 18:00:01 by joao             ###   ########.fr       */
+/*   Updated: 2025/06/02 18:33:21 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_parsing.h"
+
+bool	is_all_slashes(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] != '/')
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
+// function to check if a command is a valid path
+bool	ft_valid_pather(char *cmd)
+{
+	if (ft_strcmp(cmd, ".") == 0 || ft_strcmp(cmd, "..") == 0)
+		return (false);
+	if (is_all_slashes(cmd) == true)
+		return (false);
+	return (true);
+}
 
 // function to create a new t_cmd
 t_cmd	*init_cmd(char *name, char **args)
