@@ -6,7 +6,7 @@
 /*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 17:36:06 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/06/02 18:37:22 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/06/02 20:49:40 by nneves-a         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,11 @@ void	setup_signals(t_shell *shell)
 	struct sigaction	sa;
 
 	(void)shell;
+	signal(SIGQUIT, SIG_IGN);
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = SA_SIGINFO | SA_RESTART;
 	sa.sa_sigaction = siginfo_handler;
 	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sa, NULL);
 }
 
 static void	siginfo_handler(int sig, siginfo_t *info, void *context)
@@ -45,8 +45,6 @@ static void	siginfo_handler(int sig, siginfo_t *info, void *context)
 		t_pid()->exit_value = 130;
 		new_prompt();
 	}
-	if (sig == SIGQUIT)
-		return ;
 }
 
 void	setup_signals_heredoc(t_shell *shell)
