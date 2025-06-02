@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_utils.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: joamiran <joamiran@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 18:18:00 by joao              #+#    #+#             */
-/*   Updated: 2025/06/02 16:44:41 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/06/02 20:57:31 by joamiran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,8 @@ char	**ft_realloc_arr(char **ptr, size_t new_cap);
 
 // function to check if a string starts with a redirection symbol
 bool	starts_with_redir(char *str);
+
+// function to strip quotes from a string
+char	*strip_quotes(const char *s);
+
 #endif

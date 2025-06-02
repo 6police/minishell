@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   constructor_6.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nneves-a <nneves-a@student.42.fr>          +#+  +:+       +#+        */
+/*   By: joamiran <joamiran@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:19:57 by joao              #+#    #+#             */
-/*   Updated: 2025/06/02 18:33:00 by nneves-a         ###   ########.fr       */
+/*   Updated: 2025/06/02 20:57:48 by joamiran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,25 +81,59 @@ int	count_valid_args(char **args)
 	return (count);
 }
 
+// char	**copy_valid_args(char **args, int count)
+// {
+// 	char	**newargs;
+// 	int		i;
+// 	int		j;
+// 	int		ret;
+
+// 	newargs = ft_calloc(sizeof(char *), count + 1);
+// 	if (!newargs)
+// 		return (NULL);
+// 	i = 0;
+// 	j = 0;
+// 	while (args[i] && args[i][0] != '\0')
+// 	{
+// 		ret = handle_redir_copy(args, &i);
+// 		if (ret == 0)
+// 			break ;
+// 		if (ret == -1)
+// 			newargs[j++] = ft_strdup(args[i++]);
+// 	}
+// 	return (newargs);
+// }
+
 char	**copy_valid_args(char **args, int count)
 {
 	char	**newargs;
-	int		i;
-	int		j;
+	int		i = 0;
+	int		j = 0;
 	int		ret;
+	char	*stripped;
 
 	newargs = ft_calloc(sizeof(char *), count + 1);
 	if (!newargs)
 		return (NULL);
-	i = 0;
-	j = 0;
 	while (args[i] && args[i][0] != '\0')
 	{
 		ret = handle_redir_copy(args, &i);
 		if (ret == 0)
 			break ;
 		if (ret == -1)
-			newargs[j++] = ft_strdup(args[i++]);
+		{
+			stripped = strip_quotes(args[i]);
+			if (!stripped)
+			{
+				// Clean up previously allocated strings
+				while (j > 0)
+					free(newargs[--j]);
+				free(newargs);
+				return (NULL);
+			}
+			newargs[j++] = stripped;
+			i++;
+		}
 	}
 	return (newargs);
 }
