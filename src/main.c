@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: joao <joao@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: joamiran <joamiran@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 20:56:36 by nneves-a          #+#    #+#             */
-/*   Updated: 2025/05/31 21:08:39 by joao             ###   ########.fr       */
+/*   Updated: 2025/06/02 03:19:31 by joamiran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,13 @@ static int	invalid_args(int argc, char **argv)
 int	main(int argc, char **argv, char **env)
 {
 	t_shell	*shell;
+	int		exit_status;
 
+	if (argc >= 3 && !ft_strncmp(argv[1], "-c", 3))
+	{
+		exit_status = ft_launch_minishell(argv[2]);
+		exit(exit_status);
+	}
 	if (invalid_args(argc, argv))
 		return (1);
 	if (!env || !*env)
